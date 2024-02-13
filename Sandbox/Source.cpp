@@ -1,13 +1,12 @@
 #include <Genesis.h>
 
 #include <iostream>
-#include <memory>
 class SandBox : public Genesis::Application {
  public:
   SandBox() {}
   ~SandBox() {}
 };
 
-Genesis::Application* Genesis::CreateApplication() {
-  return new SandBox();
+std::unique_ptr<Genesis::Application> Genesis::CreateApplication() {
+  return std::make_unique<SandBox>();
 }

@@ -32,5 +32,5 @@ class DLL_API Application {
   std::unique_ptr<Window> window_;
 };
 
-Application* CreateApplication();
+std::unique_ptr<Application> CreateApplication();
 };  // namespace Genesis
