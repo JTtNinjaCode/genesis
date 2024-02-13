@@ -44,19 +44,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)\binary\$(Configuration)-$(Platform)\$(ProjectName)</OutDir>
+    <OutDir>$(SolutionDir)\binary\$(Configuration)-$(Platform)</OutDir>
     <IntDir>$(SolutionDir)\binary\intermediate\$(Configuration)-$(Platform)\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)\binary\$(Configuration)-$(Platform)\$(ProjectName)</OutDir>
+    <OutDir>$(SolutionDir)\binary\$(Configuration)-$(Platform)</OutDir>
     <IntDir>$(SolutionDir)\binary\intermediate\$(Configuration)-$(Platform)\$(ProjectName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DLL_EXPORT;GLFW_WINDOW</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -71,6 +72,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -82,10 +84,23 @@
   <ItemGroup>
     <ClInclude Include="core\application.h" />
     <ClInclude Include="core\core.h" />
+    <ClInclude Include="core\entry_point.h" />
+    <ClInclude Include="core\window.h" />
+    <ClInclude Include="events\event.h" />
+    <ClInclude Include="events\key_event.h" />
+    <ClInclude Include="events\window_event.h" />
     <ClInclude Include="Genesis.h" />
+    <ClInclude Include="core\log.h" />
+    <ClInclude Include="platform\window\glfw_window.h" />
+    <ClInclude Include="platform\window\sdl_window.h" />
+    <ClInclude Include="core\window_factory.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\application.cc" />
+    <ClCompile Include="core\application.cpp" />
+    <ClCompile Include="core\log.cpp" />
+    <ClCompile Include="platform\window\glfw_window.cpp" />
+    <ClCompile Include="platform\window\sdl_window.cpp" />
+    <ClCompile Include="core\window_factory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

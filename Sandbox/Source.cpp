@@ -1,13 +1,13 @@
 #include <Genesis.h>
 
 #include <iostream>
+#include <memory>
 class SandBox : public Genesis::Application {
  public:
   SandBox() {}
-  void Run() { std::cout << "Hi" << std::endl; }
   ~SandBox() {}
 };
-int main() {
-  SandBox s;
-  s.Run();
+
+Genesis::Application* Genesis::CreateApplication() {
+  return new SandBox();
 }
