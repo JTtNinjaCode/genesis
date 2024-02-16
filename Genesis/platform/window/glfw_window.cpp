@@ -1,7 +1,12 @@
 #include "glfw_window.h"
 
+#include <glad/glad.h>
+
 #include "core/log.h"
+#include "events/key_event.h"
+#include "events/mouse_event.h"
 #include "events/window_event.h"
+
 namespace Genesis {
 bool GLFWWindow::is_glfw_initialized_ = false;
 
@@ -21,6 +26,8 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
   window_ = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
   data_.is_vsync = false;
   glfwMakeContextCurrent(window_);
+  int glad_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+  CORE_ASSERT(glad_status, "Failed to Initailized GLAD");
   glfwSetWindowUserPointer(window_,
                            &data_);  // set user poing so that we can get data_
                                      // in event handle function
@@ -29,23 +36,47 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
     WindowCloseEvent event;
     WindowData data =
         *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-    if (data.event_listener_) {
-      data.event_listener_(event);  // pass event to Application's method
-    } else {
+    if (!data.event_listener_) {
       CORE_LOG_WARN("event callback function has not been set yet.");
     }
+    data.event_listener_(event);  // pass event to Application's method
   });
 
   glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int x, int y) {
     WindowResizeEvent event(x, y);
     WindowData data =
         *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-    if (data.event_listener_) {
-      data.event_listener_(event);  // pass event to Application's method
-    } else {
+    if (!data.event_listener_) {
       CORE_LOG_WARN("event callback function has not been set yet.");
     }
+    data.event_listener_(event);  // pass event to Application's method
   });
+
+  glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double x, double y) {
+    MouseMovedEvent event(x, y);
+    WindowData data =
+        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    if (!data.event_listener_) {
+      CORE_LOG_WARN("event callback function has not been set yet.");
+    }
+    data.event_listener_(event);  // pass event to Application's method
+  });
+
+  glfwSetMouseButtonCallback(
+      window_, [](GLFWwindow* window, int button, int action, int mods) {
+        WindowData data =
+            *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+        if (!data.event_listener_) {
+          CORE_LOG_WARN("event callback function has not been set yet.");
+        }
+        if (action == GLFW_PRESS) {
+          MouseButtonPressedEvent event(button);
+          data.event_listener_(event);  // pass event to Application's method
+        } else if (action == GLFW_RELEASE) {
+          MouseButtonReleasedEvent event(button);
+          data.event_listener_(event);  // pass event to Application's method
+        }
+      });
 }
 
 GLFWWindow::~GLFWWindow() { glfwDestroyWindow(window_); }
