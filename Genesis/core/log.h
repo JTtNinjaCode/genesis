@@ -20,15 +20,7 @@ class DLL_API Log {
   static std::shared_ptr<spdlog::logger> core_logger;
   static std::shared_ptr<spdlog::logger> client_logger;
 };
-
 }  // namespace Genesis
-
-// assert
-#ifdef ASSERT
-#define CORE_ASSERT
-#else
-#define CORE_ASSERT
-#endif
 
 // Core log macros
 #define CORE_LOG_TRACE(...) Genesis::Log::GetCoreLogger()->trace(__VA_ARGS__)
@@ -38,10 +30,20 @@ class DLL_API Log {
 #define CORE_LOG_CRITICAL(...) \
   Genesis::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
+// assert
+#ifdef ASSERT
+#define CORE_ASSERT(x, msg) \
+  if (!(x)) {               \
+    CORE_LOG_ERROR(msg);    \
+    __debugbreak();         \
+  }
+#else
+#define CORE_ASSERT(x, msg)
+#endif
+
 // Client log macros
 #define LOG_TRACE(...) Genesis::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define LOG_INFO(...) Genesis::Log::GetClientLogger()->info(__VA_ARGS__)
 #define LOG_WARN(...) Genesis::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define LOG_ERROR(...) Genesis::Log::GetClientLogger()->error(__VA_ARGS__)
-#define LOG_CRITICAL(...) \
-  Genesis::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define LOG_CRITICAL(...) Genesis::Log::GetClientLogger()->critical(__VA_ARGS__)
