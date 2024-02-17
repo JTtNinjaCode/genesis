@@ -1,27 +1,29 @@
 #include "core/application.h"
 
+#include "core/core.h"
 #include "core/log.h "
 #include "core/window_factory.h"
 
 namespace Genesis {
-#define BIND_METHOD(method_name) \
-  std::bind(&Application::method_name, this, std::placeholders::_1)
+Application* Application::instance_;
 
 Application::Application()
     : window_(
           std::unique_ptr<Window>(WindowFactory::Create("Genesis", 900, 600))) {
-  window_->SetEventListener(BIND_METHOD(OnEvent));
+  CORE_ASSERT(!instance_, "Application had exist.");
+  instance_ = this;
+
+  window_->SetEventListener(BIND_METHOD(Application::OnEvent));
 }
 
 Application::~Application() {}
 
 void Application::OnEvent(Event& event) {
   EventDispatcher event_dispatcher(event);
-  event_dispatcher.Dispatch<WindowCloseEvent>(BIND_METHOD(OnWindowClose));
-  event_dispatcher.Dispatch<WindowResizeEvent>(BIND_METHOD(OnWindowResize));
-  // event_dispatcher.Dispatch<MouseMovedEvent>(BIND_METHOD(OnMouseMoved));
-  event_dispatcher.Dispatch<MouseButtonPressedEvent>(
-      BIND_METHOD(OnMousePressed));
+  event_dispatcher.Dispatch<WindowCloseEvent>(
+      BIND_METHOD(Application::OnWindowClose));
+  event_dispatcher.Dispatch<WindowResizeEvent>(
+      BIND_METHOD(Application::OnWindowResize));
 
   for (auto iter = layer_stack_.rbegin(); iter != layer_stack_.rend(); iter++) {
     (*iter)->OnEvent(event);
@@ -44,14 +46,13 @@ bool Application::OnMouseMoved(MouseMovedEvent& event) {
   return true;
 }
 
-bool Application::OnMousePressed(MouseButtonPressedEvent& event) {
-  CORE_LOG_TRACE("mouse pressed event:{0}", event.ToString());
-  return true;
+void Application::PushLayer(Layer* layer) {
+  layer_stack_.PushLayer(layer);
+  layer->OnAttach();
 }
-
-void Application::PushLayer(Layer* layer) { layer_stack_.PushLayer(layer); }
 
 void Application::PushOverLayer(Layer* layer) {
   layer_stack_.PushOverLayer(layer);
+  layer->OnAttach();
 }
 }  // namespace Genesis

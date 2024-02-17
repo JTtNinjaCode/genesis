@@ -94,6 +94,7 @@
     <ClInclude Include="core\log.h" />
     <ClInclude Include="core\layer.h" />
     <ClInclude Include="core\layer_stack.h" />
+    <ClInclude Include="imgui\imgui_layer.h" />
     <ClInclude Include="platform\window\glfw_window.h" />
     <ClInclude Include="platform\window\sdl_window.h" />
     <ClInclude Include="core\window_factory.h" />
@@ -103,6 +104,7 @@
     <ClCompile Include="core\log.cpp" />
     <ClCompile Include="core\layer.cpp" />
     <ClCompile Include="core\layer_stack.cpp" />
+    <ClCompile Include="imgui\imgui_layer.cpp" />
     <ClCompile Include="platform\window\glfw_window.cpp" />
     <ClCompile Include="platform\window\sdl_window.cpp" />
     <ClCompile Include="core\window_factory.cpp" />

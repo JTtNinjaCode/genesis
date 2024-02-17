@@ -77,6 +77,17 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
           data.event_listener_(event);  // pass event to Application's method
         }
       });
+
+  glfwSetScrollCallback(
+      window_, [](GLFWwindow* window, double offset_x, double offset_y) {
+        MouseScrolledEvent event(offset_x, offset_y);
+        WindowData data =
+            *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+        if (!data.event_listener_) {
+          CORE_LOG_WARN("event callback function has not been set yet.");
+        }
+          data.event_listener_(event);  // pass event to Application's method
+      });
 }
 
 GLFWWindow::~GLFWWindow() { glfwDestroyWindow(window_); }

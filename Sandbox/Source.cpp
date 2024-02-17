@@ -1,20 +1,13 @@
 #include <Genesis.h>
 
 #include <iostream>
+#include <memory>
 
-class ExampleLayer : public Genesis::Layer {
- public:
-  ExampleLayer() : Layer("exmaple") {}
-  //void OnUpdate() { LOG_TRACE("{0} layer call OnUpdate", GetName()); }
-  //void OnEvent() { LOG_TRACE("{0} layer call OnEvent", GetName()); }
-};
 
 class SandBox : public Genesis::Application {
  public:
-  SandBox() { PushLayer(new ExampleLayer); }
+  SandBox() { PushOverLayer(new Genesis::ImGuiLayer); }
   ~SandBox() {}
 };
 
-std::unique_ptr<Genesis::Application> Genesis::CreateApplication() {
-  return std::make_unique<SandBox>();
-}
+Genesis::Application* Genesis::CreateApplication() { return new SandBox; }
