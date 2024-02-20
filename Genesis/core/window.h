@@ -16,6 +16,7 @@ class DLL_API Window {
   virtual void SetVSync(bool open) = 0;
   virtual bool IsVSync() const = 0;
   virtual void SetEventListener(const EventCallbackFunc& event_listener) = 0;
+  virtual void* GetNativeWindow() = 0;
 
   virtual void OnUpdate() = 0;
 };

@@ -86,8 +86,18 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
         if (!data.event_listener_) {
           CORE_LOG_WARN("event callback function has not been set yet.");
         }
-          data.event_listener_(event);  // pass event to Application's method
+        data.event_listener_(event);  // pass event to Application's method
       });
+
+  glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int character) {
+    KeyTypedEvent event(character);
+    WindowData data =
+        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    if (!data.event_listener_) {
+      CORE_LOG_WARN("event callback function has not been set yet.");
+    }
+    data.event_listener_(event);  // pass event to Application's method
+  });
 }
 
 GLFWWindow::~GLFWWindow() { glfwDestroyWindow(window_); }
@@ -96,6 +106,8 @@ void GLFWWindow::OnUpdate() {
   glfwPollEvents();
   glfwSwapBuffers(window_);
 }
+
+void* GLFWWindow::GetNativeWindow() { return window_; }
 
 unsigned int GLFWWindow::GetWidth() const {
   int x;

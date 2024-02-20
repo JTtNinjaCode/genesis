@@ -63,6 +63,9 @@
     <ClInclude Include="imgui\imgui_layer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="glfw_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\application.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glfw_input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

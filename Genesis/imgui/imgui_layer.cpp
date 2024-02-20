@@ -17,19 +17,11 @@ void ImGuiLayer::OnAttach() {
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
 
-  // ImGuiIO& io = ImGui::GetIO();
-  // io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-  // io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-
-  ImGuiIO& io = ImGui::GetIO();
-  (void)io;
-  io.ConfigFlags |=
-      ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-  io.ConfigFlags |=
-      ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-
   // Setup Platform/Renderer backends
-  // ImGui_ImplGlfw_InitForOpenGL(&(Application::Get().GetWindow()), true);
+  ImGui_ImplGlfw_InitForOpenGL(
+      static_cast<GLFWwindow*>(
+          Application::Get().GetWindow().GetNativeWindow()),
+      true);
   ImGui_ImplOpenGL3_Init("#version 410");
 }
 
@@ -60,32 +52,42 @@ void ImGuiLayer::OnEvent(Event& event) {
       BIND_METHOD(ImGuiLayer::OnMouseMoved));
   event_dispathcer.Dispatch<MouseScrolledEvent>(
       BIND_METHOD(ImGuiLayer::OnMouseScrolled));
+  event_dispathcer.Dispatch<KeyTypedEvent>(
+      BIND_METHOD(ImGuiLayer::OnKeyTyped));
 }
 
 bool ImGuiLayer::OnMousePressed(MouseButtonPressedEvent& event) {
-  ImGuiIO& io = ImGui::GetIO();
-  io.MouseDown[event.GetMouseButton()] = true;
+  //ImGuiIO& io = ImGui::GetIO();
+  //io.MouseDown[event.GetMouseButton()] = true;
   return true;
 }
 
 bool ImGuiLayer::OnMouseReleased(MouseButtonReleasedEvent& event) {
-  ImGuiIO& io = ImGui::GetIO();
-  io.MouseDown[event.GetMouseButton()] = false;
+  //ImGuiIO& io = ImGui::GetIO();
+  //io.MouseDown[event.GetMouseButton()] = false;
   return true;
 }
 
 bool ImGuiLayer::OnMouseMoved(MouseMovedEvent& event) {
-  ImGuiIO& io = ImGui::GetIO();
-  io.MousePos = ImVec2(event.GetX(), event.GetY());
+  //ImGuiIO& io = ImGui::GetIO();
+  //io.MousePos = ImVec2(event.GetX(), event.GetY());
 
   return true;
 }
 
 bool ImGuiLayer::OnMouseScrolled(MouseScrolledEvent& event) {
-  CORE_LOG_TRACE("{0}", event.ToString());
-  ImGuiIO& io = ImGui::GetIO();
-  io.MouseWheelH += event.GetXOffset();
-  io.MouseWheel += event.GetYOffset();
+  //CORE_LOG_TRACE("{0}", event.ToString());
+  //ImGuiIO& io = ImGui::GetIO();
+  //io.MouseWheelH += event.GetXOffset();
+  //io.MouseWheel += event.GetYOffset();
+
+  return true;
+}
+
+bool ImGuiLayer::OnKeyTyped(KeyTypedEvent& event) {
+  //CORE_LOG_TRACE("{0}", event.ToString());
+  //ImGuiIO& io = ImGui::GetIO();
+  //io.AddInputCharacter(event.GetKeyCode());
 
   return true;
 }

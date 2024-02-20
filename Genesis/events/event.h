@@ -23,6 +23,7 @@ enum class EventType {
 
   kKeyPressed,
   kKeyReleased,
+  kKeyTyped,
 
   kMouseButtonPressed,
   kMouseButtonReleased,

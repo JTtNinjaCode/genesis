@@ -15,6 +15,8 @@ class DLL_API GLFWWindow : public Window {
   unsigned int GetHeight() const override;
   void SetVSync(bool open) override;
   bool IsVSync() const override;
+  void* GetNativeWindow() override;
+
 
   void SetEventListener(const EventCallbackFunc& event_listener) override {
     data_.event_listener_ = event_listener;
