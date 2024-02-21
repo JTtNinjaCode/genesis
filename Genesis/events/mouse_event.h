@@ -15,7 +15,7 @@ class DLL_API MouseMovedEvent : public Event {
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << "MouseMovedEvent: " << mouse_x_ << ", " << mouse_y_;
+    ss << GetEventTypeString() << mouse_x_ << ", " << mouse_y_;
     return ss.str();
   }
 
@@ -35,7 +35,7 @@ class DLL_API MouseScrolledEvent : public Event {
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << "MouseScrolledEvent: " << GetXOffset() << ", " << GetYOffset();
+    ss << GetEventTypeString() << GetXOffset() << ", " << GetYOffset();
     return ss.str();
   }
 
@@ -62,7 +62,7 @@ class DLL_API MouseButtonPressedEvent : public MouseButtonEvent {
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << "MouseButtonPressedEvent: " << button_;
+    ss << GetEventTypeString() << button_;
     return ss.str();
   }
 
@@ -75,7 +75,7 @@ class DLL_API MouseButtonReleasedEvent : public MouseButtonEvent {
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << "MouseButtonReleasedEvent: " << button_;
+    ss << GetEventTypeString() << button_;
     return ss.str();
   }
 

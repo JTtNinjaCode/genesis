@@ -47,7 +47,9 @@ enum EventCategory {
   virtual EventType GetEventType() const override {                   \
     return GetStaticEventType();                                      \
   }                                                                   \
-  virtual const char* GetEventTypeString() const override { return #type; }
+  virtual const char* GetEventTypeString() const override {           \
+    return static_cast<const char*>(#type + 1);                       \
+  }
 
 // return int, because the enum EventCategory after do some or operating (ex. or
 // operation)that cant convert to EventCategory
