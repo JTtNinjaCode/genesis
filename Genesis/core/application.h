@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "core/core.h"
+#include "core/input.h"
 #include "core/layer_stack.h"
 #include "core/window.h"
 #include "events/event.h"
@@ -22,6 +23,8 @@ class DLL_API Application {
     while (running_) {
       glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
+
+      CORE_LOG_TRACE("{0}", Input::GetInstance().IsKeyPressed(Keycode::kKey9));
 
       for (auto& layer : layer_stack_) {
         layer->OnUpdate();
