@@ -2,16 +2,16 @@
 
 #include <sstream>
 
-#include "event.h"
+#include "events/event.h"
 
 namespace genesis {
 
 class DLL_API MouseMovedEvent : public Event {
  public:
-  MouseMovedEvent(float x, float y) : mouse_x_(x), mouse_y_(y) {}
+  MouseMovedEvent(double x, double y) : mouse_x_(x), mouse_y_(y) {}
 
-  inline float GetX() const { return mouse_x_; }
-  inline float GetY() const { return mouse_y_; }
+  inline double GetX() const { return mouse_x_; }
+  inline double GetY() const { return mouse_y_; }
 
   std::string ToString() const override {
     std::stringstream ss;
@@ -22,16 +22,16 @@ class DLL_API MouseMovedEvent : public Event {
   EVENT_CLASS_TYPE(kMouseMoved)
   EVENT_CLASS_CATEGORY(kMouseEventCategory | kInputEventCategory)
  private:
-  float mouse_x_, mouse_y_;
+  double mouse_x_, mouse_y_;
 };
 
 class DLL_API MouseScrolledEvent : public Event {
  public:
-  MouseScrolledEvent(float xOffset, float yOffset)
-      : offset_x_(xOffset), offset_y_(yOffset) {}
+  MouseScrolledEvent(double offset_x, double offset_y)
+      : offset_x_(offset_x), offset_y_(offset_y) {}
 
-  inline float GetXOffset() const { return offset_x_; }
-  inline float GetYOffset() const { return offset_y_; }
+  inline double GetXOffset() const { return offset_x_; }
+  inline double GetYOffset() const { return offset_y_; }
 
   std::string ToString() const override {
     std::stringstream ss;
@@ -42,7 +42,8 @@ class DLL_API MouseScrolledEvent : public Event {
   EVENT_CLASS_TYPE(kMouseScrolled)
   EVENT_CLASS_CATEGORY(kMouseEventCategory | kInputEventCategory)
  private:
-  float offset_x_, offset_y_;
+  double offset_x_;
+  double offset_y_;
 };
 
 class DLL_API MouseButtonEvent : public Event {

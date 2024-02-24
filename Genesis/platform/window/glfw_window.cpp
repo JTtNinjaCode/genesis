@@ -1,6 +1,9 @@
-#include "glfw_window.h"
+#include "platform/window/glfw_window.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4005)
 #include <glad/glad.h>
+#pragma warning(pop)
 
 #include "core/log.h"
 #include "events/key_event.h"
@@ -24,7 +27,7 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
   }
 
   window_ = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-  data_.is_vsync = false;
+  data_.is_vsync_ = false;
   glfwMakeContextCurrent(window_);
   int glad_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
   CORE_ASSERT(glad_status, "Failed to Initailized GLAD");
@@ -127,8 +130,8 @@ void GLFWWindow::SetVSync(bool open) {
   } else {
     glfwSwapInterval(0);
   }
-  data_.is_vsync = open;
+  data_.is_vsync_ = open;
 }
 
-bool GLFWWindow::IsVSync() const { return data_.is_vsync; }
+bool GLFWWindow::IsVSync() const { return data_.is_vsync_; }
 }  // namespace genesis

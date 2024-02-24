@@ -1,17 +1,18 @@
 #include "imgui_layer.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4005)
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-
-#include "core/application.h"
-#include "core/core.h"
-#include "events/event.h"
-#include "events/mouse_event.h"
-
 // TEMPORARY
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#pragma warning(pop)
+
+#include "core/application.h"
+#include "events/event.h"
+#include "events/mouse_event.h"
 
 namespace genesis {
 ImGuiLayer::ImGuiLayer() : Layer("imgui layer") {}

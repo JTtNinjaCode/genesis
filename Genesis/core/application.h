@@ -1,5 +1,8 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable: 4005)
 #include <glad/glad.h>
+#pragma warning(pop)
 
 #include <functional>
 #include <memory>
@@ -8,9 +11,12 @@
 #include "core/input.h"
 #include "core/layer_stack.h"
 #include "core/window.h"
+#include "core/log.h"
+
 #include "events/event.h"
 #include "events/mouse_event.h"
 #include "events/window_event.h"
+
 namespace genesis {
 class DLL_API Application {
  public:

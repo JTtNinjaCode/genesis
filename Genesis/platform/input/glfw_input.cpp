@@ -1,6 +1,9 @@
-#include "glfw_input.h"
+#include "platform/input/glfw_input.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4005)
 #include <GLFW/glfw3.h>
+#pragma warning(pop)
 
 #include "core/application.h"
 namespace genesis {
@@ -17,7 +20,7 @@ bool GLFWInput::IsKeyPressed(Keycode keycode) const {
                      glfw_keycode));
 }
 
-float GLFWInput::GetMouseButton(MouseButton button) const {
+int GLFWInput::GetMouseButton(MouseButton button) const {
   int glfw_button = GetGLFWMouseButtonFromGenesisMouseButton(button);
   return (
       GLFW_PRESS ==
@@ -26,7 +29,7 @@ float GLFWInput::GetMouseButton(MouseButton button) const {
                          glfw_button));
 }
 
-std::pair<float, float> GLFWInput::GetMousePosition() const {
+std::pair<double, double> GLFWInput::GetMousePosition() const {
   double xpos, ypos;
   glfwGetCursorPos(static_cast<GLFWwindow*>(
                        Application::Get().GetWindow().GetNativeWindow()),
@@ -34,7 +37,7 @@ std::pair<float, float> GLFWInput::GetMousePosition() const {
   return {xpos, ypos};
 }
 
-float GLFWInput::GetMousePositionX() const {
+double GLFWInput::GetMousePositionX() const {
   double xpos;
   glfwGetCursorPos(static_cast<GLFWwindow*>(
                        Application::Get().GetWindow().GetNativeWindow()),
@@ -42,7 +45,7 @@ float GLFWInput::GetMousePositionX() const {
   return xpos;
 }
 
-float GLFWInput::GetMousePositionY() const {
+double GLFWInput::GetMousePositionY() const {
   double ypos;
   glfwGetCursorPos(static_cast<GLFWwindow*>(
                        Application::Get().GetWindow().GetNativeWindow()),

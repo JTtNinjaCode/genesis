@@ -1,5 +1,8 @@
 #pragma once
+#pragma warning(push)
+#pragma warning(disable : 4005)
 #include <GLFW/glfw3.h>
+#pragma warning(pop)
 
 #include <string>
 
@@ -27,7 +30,7 @@ class DLL_API GLFWWindow : public Window {
   ::GLFWwindow* window_;
 
   struct WindowData {
-    bool is_vsync;
+    bool is_vsync_ = false;
     EventCallbackFunc event_listener_;
   };
 

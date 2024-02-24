@@ -3,7 +3,7 @@
 #include <string>
 
 #include "core/core.h"
-#include "event.h"
+#include "events/event.h"
 
 namespace genesis {
 class WindowCloseEvent : public Event {
@@ -24,15 +24,15 @@ class WindowResizeEvent : public Event {
     ss << GetEventTypeString() << ' ' << width_ << ", " << height_;
     return ss.str();
   }
-  float GetWidth() const { return width_; }
-  float GetHeight() const { return height_; }
+  int GetWidth() const { return width_; }
+  int GetHeight() const { return height_; }
 
   EVENT_CLASS_TYPE(kWindowResize)
   EVENT_CLASS_CATEGORY(kWindowEventCategory)
 
  private:
-  float width_;
-  float height_;
+  int width_;
+  int height_;
 };
 
 // TODO: add WindowMoved, WindowFocus, WindowLostFocus

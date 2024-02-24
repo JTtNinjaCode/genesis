@@ -11,10 +11,10 @@ class GLFWInput : public Input {
   GLFWInput();
 
   bool IsKeyPressed(Keycode keycode) const override;
-  float GetMouseButton(MouseButton button) const override;
-  std::pair<float, float> GetMousePosition() const override;
-  float GetMousePositionX() const override;
-  float GetMousePositionY() const override;
+  int GetMouseButton(MouseButton button) const override;
+  std::pair<double, double> GetMousePosition() const override;
+  double GetMousePositionX() const override;
+  double GetMousePositionY() const override;
 
   void initializeKeycodeTable();
   void initializeMouseButtonTable();

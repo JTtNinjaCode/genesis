@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "application.h"
+#include "core/application.h"
 #include "core/core.h"
-#include "log.h"
+#include "core/log.h"
 
 int main(int argc, char** argv) {
   genesis::Log::Init();

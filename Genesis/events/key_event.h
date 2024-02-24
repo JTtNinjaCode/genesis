@@ -3,7 +3,7 @@
 #include <string>
 
 #include "core/core.h"
-#include "event.h"
+#include "events/event.h"
 namespace genesis {
 class DLL_API KeyEvent : public Event {
  public:

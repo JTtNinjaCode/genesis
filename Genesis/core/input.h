@@ -1,7 +1,7 @@
 #pragma once
-#include <core/core.h>
-
 #include <utility>
+
+#include "core/core.h"
 namespace genesis {
 enum class Keycode;
 enum class MouseButton;
@@ -10,10 +10,10 @@ enum class MouseButton;
 class DLL_API Input {
  public:
   virtual bool IsKeyPressed(Keycode key) const = 0;
-  virtual float GetMouseButton(MouseButton button) const = 0;
-  virtual std::pair<float, float> GetMousePosition() const = 0;
-  virtual float GetMousePositionX() const = 0;
-  virtual float GetMousePositionY() const = 0;
+  virtual int GetMouseButton(MouseButton button) const = 0;
+  virtual std::pair<double, double> GetMousePosition() const = 0;
+  virtual double GetMousePositionX() const = 0;
+  virtual double GetMousePositionY() const = 0;
   static Input& GetInstance();
 
  protected:
