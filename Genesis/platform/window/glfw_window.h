@@ -4,7 +4,7 @@
 #include <string>
 
 #include "core/window.h"
-namespace Genesis {
+namespace genesis {
 class DLL_API GLFWWindow : public Window {
  public:
   GLFWWindow(const std::string& title, unsigned int width, unsigned height);
@@ -16,7 +16,6 @@ class DLL_API GLFWWindow : public Window {
   void SetVSync(bool open) override;
   bool IsVSync() const override;
   void* GetNativeWindow() override;
-
 
   void SetEventListener(const EventCallbackFunc& event_listener) override {
     data_.event_listener_ = event_listener;
@@ -34,4 +33,4 @@ class DLL_API GLFWWindow : public Window {
 
   WindowData data_;
 };
-}  // namespace Genesis
+}  // namespace genesis

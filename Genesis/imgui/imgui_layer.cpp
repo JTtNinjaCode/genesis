@@ -1,5 +1,6 @@
 #include "imgui_layer.h"
 
+#include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
@@ -8,88 +9,83 @@
 #include "events/event.h"
 #include "events/mouse_event.h"
 
-namespace Genesis {
+// TEMPORARY
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+
+namespace genesis {
 ImGuiLayer::ImGuiLayer() : Layer("imgui layer") {}
 
 ImGuiLayer::~ImGuiLayer() {}
 
 void ImGuiLayer::OnAttach() {
+  // Setup Dear ImGui context
+  IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGui::StyleColorsDark();
+  ImGuiIO& io = ImGui::GetIO();
+  (void)io;
+  io.ConfigFlags |=
+      ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
+  // Controls
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;    // Enable Docking
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport
+                                                       // / Platform Windows
+  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
+  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-  // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(
-      static_cast<GLFWwindow*>(
-          Application::Get().GetWindow().GetNativeWindow()),
-      true);
+  // Setup Dear ImGui style
+  ImGui::StyleColorsDark();
+  // ImGui::StyleColorsClassic();
+
+  // When viewports are enabled we tweak WindowRounding/WindowBg so platform
+  // windows can look identical to regular ones.
+  ImGuiStyle& style = ImGui::GetStyle();
+  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    style.WindowRounding = 0.0f;
+    style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+  }
+
+  Application& app = Application::Get();
+  GLFWwindow* window =
+      static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+
+  // Setup Platform/Renderer bindings
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 410");
 }
 
-void ImGuiLayer::OnDetach() {}
+void ImGuiLayer::OnDetach() {
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+}
 
 void ImGuiLayer::OnUpdate() {
-  ImGuiIO& io = ImGui::GetIO();
-  auto& app = Application::Get();
-  io.DisplaySize =
-      ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
-
   ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  bool show = true;
+  static bool show = true;
   ImGui::ShowDemoWindow(&show);
 
+  ImGuiIO& io = ImGui::GetIO();
+  Application& app = Application::Get();
+  io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(),
+                          (float)app.GetWindow().GetHeight());
+
+  // Rendering
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    GLFWwindow* backup_current_context = glfwGetCurrentContext();
+    ImGui::UpdatePlatformWindows();
+    ImGui::RenderPlatformWindowsDefault();
+    glfwMakeContextCurrent(backup_current_context);
+  }
 }
 void ImGuiLayer::OnEvent(Event& event) {
   EventDispatcher event_dispathcer(event);
-  event_dispathcer.Dispatch<MouseButtonPressedEvent>(
-      BIND_METHOD(ImGuiLayer::OnMousePressed));
-  event_dispathcer.Dispatch<MouseButtonReleasedEvent>(
-      BIND_METHOD(ImGuiLayer::OnMouseReleased));
-  event_dispathcer.Dispatch<MouseMovedEvent>(
-      BIND_METHOD(ImGuiLayer::OnMouseMoved));
-  event_dispathcer.Dispatch<MouseScrolledEvent>(
-      BIND_METHOD(ImGuiLayer::OnMouseScrolled));
-  event_dispathcer.Dispatch<KeyTypedEvent>(
-      BIND_METHOD(ImGuiLayer::OnKeyTyped));
 }
-
-bool ImGuiLayer::OnMousePressed(MouseButtonPressedEvent& event) {
-  //ImGuiIO& io = ImGui::GetIO();
-  //io.MouseDown[event.GetMouseButton()] = true;
-  return true;
-}
-
-bool ImGuiLayer::OnMouseReleased(MouseButtonReleasedEvent& event) {
-  //ImGuiIO& io = ImGui::GetIO();
-  //io.MouseDown[event.GetMouseButton()] = false;
-  return true;
-}
-
-bool ImGuiLayer::OnMouseMoved(MouseMovedEvent& event) {
-  //ImGuiIO& io = ImGui::GetIO();
-  //io.MousePos = ImVec2(event.GetX(), event.GetY());
-
-  return true;
-}
-
-bool ImGuiLayer::OnMouseScrolled(MouseScrolledEvent& event) {
-  //CORE_LOG_TRACE("{0}", event.ToString());
-  //ImGuiIO& io = ImGui::GetIO();
-  //io.MouseWheelH += event.GetXOffset();
-  //io.MouseWheel += event.GetYOffset();
-
-  return true;
-}
-
-bool ImGuiLayer::OnKeyTyped(KeyTypedEvent& event) {
-  //CORE_LOG_TRACE("{0}", event.ToString());
-  //ImGuiIO& io = ImGui::GetIO();
-  //io.AddInputCharacter(event.GetKeyCode());
-
-  return true;
-}
-
-}  // namespace Genesis
+}  // namespace genesis

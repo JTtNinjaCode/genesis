@@ -1,5 +1,5 @@
 #include "layer_stack.h"
-namespace Genesis {
+namespace genesis {
 
 LayerStack::LayerStack() : overlayer_insert_index(0) {}
 
@@ -34,4 +34,4 @@ void LayerStack::PopOverLayer(Layer* over_layer) {
     layers_.erase(iter);
   }
 }
-}  // namespace Genesis
+}  // namespace genesis

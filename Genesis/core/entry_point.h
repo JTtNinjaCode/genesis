@@ -7,9 +7,9 @@
 #include "log.h"
 
 int main(int argc, char** argv) {
-  Genesis::Log::Init();
+  genesis::Log::Init();
   CORE_LOG_WARN("Initialized Log!");
 
-  auto app = Genesis::CreateApplication();
+  auto app = genesis::CreateApplication();
   app->Run();
 }

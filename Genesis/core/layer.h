@@ -4,7 +4,7 @@
 #include "core.h"
 #include "events/event.h"
 
-namespace Genesis {
+namespace genesis {
 class DLL_API Layer {
  public:
   Layer(const std::string& layer_name);
@@ -19,4 +19,4 @@ class DLL_API Layer {
  private:
   std::string layer_name_;
 };
-}  // namespace Genesis
+}  // namespace genesis

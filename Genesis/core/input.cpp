@@ -1,7 +1,7 @@
 #include "input.h"
 
 #include "platform/input/glfw_input.h"
-namespace Genesis {
+namespace genesis {
 Input* Input::instanced_ = nullptr;
 
 Input& Input::GetInstance() {
@@ -10,4 +10,4 @@ Input& Input::GetInstance() {
   }
   return *instanced_;
 };
-}  // namespace Genesis
+}  // namespace genesis

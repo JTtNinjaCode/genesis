@@ -4,7 +4,7 @@
 
 #include "event.h"
 
-namespace Genesis {
+namespace genesis {
 
 class DLL_API MouseMovedEvent : public Event {
  public:
@@ -82,4 +82,4 @@ class DLL_API MouseButtonReleasedEvent : public MouseButtonEvent {
   EVENT_CLASS_TYPE(kMouseButtonReleased)
 };
 
-}  // namespace Genesis
+}  // namespace genesis

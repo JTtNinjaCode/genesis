@@ -4,7 +4,7 @@
 
 #include "core/core.h"
 #include "events/event.h"
-namespace Genesis {
+namespace genesis {
 class DLL_API Window {
  public:
   using EventCallbackFunc = std::function<void(Event&)>;
@@ -20,4 +20,4 @@ class DLL_API Window {
 
   virtual void OnUpdate() = 0;
 };
-}  // namespace Genesis
+}  // namespace genesis

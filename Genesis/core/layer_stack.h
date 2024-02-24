@@ -5,7 +5,7 @@
 #include "core/Layer.h"
 #include "core/core.h"
 
-namespace Genesis {
+namespace genesis {
 class DLL_API LayerStack {
   using LayerContainer = std::vector<Layer*>;
 
@@ -27,4 +27,4 @@ class DLL_API LayerStack {
   LayerContainer layers_;
   unsigned int overlayer_insert_index;
 };
-}  // namespace Genesis
+}  // namespace genesis

@@ -11,7 +11,7 @@
 #include "events/event.h"
 #include "events/mouse_event.h"
 #include "events/window_event.h"
-namespace Genesis {
+namespace genesis {
 class DLL_API Application {
  public:
   Application();
@@ -49,4 +49,4 @@ class DLL_API Application {
 };
 
 Application* CreateApplication();
-};  // namespace Genesis
+};  // namespace genesis

@@ -5,7 +5,7 @@
 #include "core/core.h"
 #include "event.h"
 
-namespace Genesis {
+namespace genesis {
 class WindowCloseEvent : public Event {
  public:
   WindowCloseEvent() {}
@@ -46,4 +46,4 @@ class WindowResizeEvent : public Event {
 //  WindowMoved(){
 //  }
 //};
-}  // namespace Genesis
+}  // namespace genesis

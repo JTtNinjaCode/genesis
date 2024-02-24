@@ -1,11 +1,13 @@
 #pragma once
+#include <core/core.h>
+
 #include <utility>
-namespace Genesis {
+namespace genesis {
 enum class Keycode;
 enum class MouseButton;
 
 // singleton
-class Input {
+class DLL_API Input {
  public:
   virtual bool IsKeyPressed(Keycode key) const = 0;
   virtual float GetMouseButton(MouseButton button) const = 0;
@@ -165,4 +167,4 @@ enum class MouseButton {
   /* Unknown */
   kButtonUnknown
 };
-}  // namespace Genesis
+}  // namespace genesis

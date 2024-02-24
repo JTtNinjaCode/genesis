@@ -3,7 +3,7 @@
 #include "core/layer.h"
 #include "events/key_event.h"
 #include "events/mouse_event.h"
-namespace Genesis {
+namespace genesis {
 class DLL_API ImGuiLayer : public Layer {
  public:
   ImGuiLayer();
@@ -14,12 +14,6 @@ class DLL_API ImGuiLayer : public Layer {
   void OnUpdate() override;
   void OnEvent(Event& event) override;
 
-  bool OnMousePressed(MouseButtonPressedEvent& event);
-  bool OnMouseReleased(MouseButtonReleasedEvent& event);
-  bool OnMouseMoved(MouseMovedEvent& event);
-  bool OnMouseScrolled(MouseScrolledEvent& event);
-  bool OnKeyTyped(KeyTypedEvent& event);
-
  private:
 };
-}  // namespace Genesis
+}  // namespace genesis

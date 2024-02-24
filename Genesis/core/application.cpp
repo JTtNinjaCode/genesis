@@ -4,7 +4,7 @@
 #include "core/log.h "
 #include "core/window_factory.h"
 
-namespace Genesis {
+namespace genesis {
 Application* Application::instance_;
 
 Application::Application()
@@ -55,4 +55,4 @@ void Application::PushOverLayer(Layer* layer) {
   layer_stack_.PushOverLayer(layer);
   layer->OnAttach();
 }
-}  // namespace Genesis
+}  // namespace genesis

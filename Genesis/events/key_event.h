@@ -4,7 +4,7 @@
 
 #include "core/core.h"
 #include "event.h"
-namespace Genesis {
+namespace genesis {
 class DLL_API KeyEvent : public Event {
  public:
   KeyEvent(int key_code) : key_code_(key_code) {}
@@ -54,4 +54,4 @@ class DLL_API KeyTypedEvent : public KeyEvent {
 
   EVENT_CLASS_TYPE(kKeyTyped)
 };
-}  // namespace Genesis
+}  // namespace genesis

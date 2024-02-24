@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "core/input.h"
-namespace Genesis {
+namespace genesis {
 class GLFWInput : public Input {
   friend class Input;
 
@@ -29,4 +29,4 @@ class GLFWInput : public Input {
   std::unordered_map<Keycode, int> lookup_glfw_keycode_table;
   std::unordered_map<MouseButton, int> lookup_glfw_mouse_button_table;
 };
-}  // namespace Genesis
+}  // namespace genesis

@@ -1,7 +1,7 @@
 #pragma once
 #include "core/log.h"
 
-namespace Genesis {
+namespace genesis {
 
 void Log::Init() {
   spdlog::set_pattern("%^[%T] %n: %v%$");
@@ -14,4 +14,4 @@ void Log::Init() {
 
 std::shared_ptr<spdlog::logger> Log::core_logger;
 std::shared_ptr<spdlog::logger> Log::client_logger;
-};  // namespace Genesis
+};  // namespace genesis

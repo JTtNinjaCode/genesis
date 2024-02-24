@@ -7,7 +7,7 @@
 #include "events/mouse_event.h"
 #include "events/window_event.h"
 
-namespace Genesis {
+namespace genesis {
 bool GLFWWindow::is_glfw_initialized_ = false;
 
 static void GLFWErrorCallback(int error_code, const char* description) {
@@ -131,4 +131,4 @@ void GLFWWindow::SetVSync(bool open) {
 }
 
 bool GLFWWindow::IsVSync() const { return data_.is_vsync; }
-}  // namespace Genesis
+}  // namespace genesis

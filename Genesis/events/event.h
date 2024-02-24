@@ -6,7 +6,7 @@
 #include "core/core.h"
 #include "core/log.h"
 
-namespace Genesis {
+namespace genesis {
 // EventType can be used to compare whether events are of the same type
 enum class EventType {
   kNone,
@@ -77,10 +77,6 @@ class DLL_API Event {
   bool handled_ = false;
 };
 
-// EventDispatcher used to distribute event and call corresponding function to
-// handle the events, It provide a method to Dispath, which is call the
-// corresponding processing function according to event type and pass the event
-// as a parameter to the function
 class DLL_API EventDispatcher {
  public:
   template <typename T>
@@ -105,4 +101,4 @@ inline std::ostream& operator<<(std::ostream& os, const Event& e) {
   return os << e.ToString();
 }
 
-}  // namespace Genesis
+}  // namespace genesis

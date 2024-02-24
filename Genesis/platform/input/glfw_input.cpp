@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "core/application.h"
-namespace Genesis {
+namespace genesis {
 GLFWInput::GLFWInput() {
   initializeKeycodeTable();
   initializeMouseButtonTable();
@@ -318,4 +318,4 @@ void GLFWInput::initializeMouseButtonTable() {
   lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_3] =
       MouseButton::kButton3;
 }
-}  // namespace Genesis
+}  // namespace genesis
