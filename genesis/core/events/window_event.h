@@ -3,7 +3,7 @@
 #include <string>
 
 #include "core/core.h"
-#include "events/event.h"
+#include "core/events/event.h"
 
 namespace genesis {
 class WindowCloseEvent : public Event {

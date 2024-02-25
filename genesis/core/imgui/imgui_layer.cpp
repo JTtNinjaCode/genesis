@@ -11,8 +11,8 @@
 #pragma warning(pop)
 
 #include "core/application.h"
-#include "events/event.h"
-#include "events/mouse_event.h"
+#include "core/events/event.h"
+#include "core/events/mouse_event.h"
 
 namespace genesis {
 ImGuiLayer::ImGuiLayer() : Layer("imgui layer") {}

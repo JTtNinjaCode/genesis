@@ -6,9 +6,9 @@
 #pragma warning(pop)
 
 #include "core/log.h"
-#include "events/key_event.h"
-#include "events/mouse_event.h"
-#include "events/window_event.h"
+#include "core/events/key_event.h"
+#include "core/events/mouse_event.h"
+#include "core/events/window_event.h"
 
 namespace genesis {
 bool GLFWWindow::is_glfw_initialized_ = false;

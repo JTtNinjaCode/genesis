@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include "events/event.h"
+#include "core/events/event.h"
 
 namespace genesis {
 
