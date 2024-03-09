@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "core/renderer/graphic_context.h"
 #include "core/window.h"
 namespace genesis {
 class DLL_API GLFWWindow : public Window {
@@ -27,7 +28,8 @@ class DLL_API GLFWWindow : public Window {
  private:
   static bool is_glfw_initialized_;
 
-  ::GLFWwindow* window_;
+  GLFWwindow* window_;
+  GraphicContext *context_;
 
   struct WindowData {
     bool is_vsync_ = false;

@@ -5,10 +5,12 @@
 #include <glad/glad.h>
 #pragma warning(pop)
 
-#include "core/log.h"
 #include "core/events/key_event.h"
 #include "core/events/mouse_event.h"
 #include "core/events/window_event.h"
+#include "core/log.h"
+#include "core/renderer/graphic_context.h"
+#include "platform/render_api/opengl/opengl_context.h"
 
 namespace genesis {
 bool GLFWWindow::is_glfw_initialized_ = false;
@@ -20,17 +22,21 @@ static void GLFWErrorCallback(int error_code, const char* description) {
 GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
                        unsigned height) {
   if (!is_glfw_initialized_) {
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwSetErrorCallback(GLFWErrorCallback);
     bool success = glfwInit();
     CORE_ASSERT(success, "Failed to initialized glfw.");
-    is_glfw_initialized_ = success;
+    is_glfw_initialized_ = true;
   }
 
   window_ = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-  data_.is_vsync_ = false;
-  glfwMakeContextCurrent(window_);
-  int glad_status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-  CORE_ASSERT(glad_status, "Failed to Initailized GLAD");
+
+  context_ = new OpenGLContext(window_); // window_ contain opengl context
+  context_->Init();
+
+  SetVSync(false);
   glfwSetWindowUserPointer(window_,
                            &data_);  // set user poing so that we can get data_
                                      // in event handle function
@@ -107,7 +113,7 @@ GLFWWindow::~GLFWWindow() { glfwDestroyWindow(window_); }
 
 void GLFWWindow::OnUpdate() {
   glfwPollEvents();
-  glfwSwapBuffers(window_);
+  context_->SwapBuffers();
 }
 
 void* GLFWWindow::GetNativeWindow() { return window_; }
