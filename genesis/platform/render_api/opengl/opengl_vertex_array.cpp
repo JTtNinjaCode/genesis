@@ -51,5 +51,7 @@ void OpenGLVertexArray::AddVertexBuffer(const VertexBuffer& vertex_buffer) {
 void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer& index_buffer) {
   glBindVertexArray(id_);
   index_buffer.Bind();
+  count_ = index_buffer.GetCount();
+  has_index_ = true;
 }
 }  // namespace genesis

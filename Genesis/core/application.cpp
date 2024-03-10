@@ -1,9 +1,8 @@
 #include "core/application.h"
 
-#include <core/renderer/buffer_layout.h>
-#include <core/window_factory.h>
-
 #include <iostream>
+
+#include "core/renderer/buffer_layout.h"
 namespace genesis {
 
 void APIENTRY DebugOutput(GLenum source, GLenum type, unsigned int id,
@@ -13,8 +12,7 @@ void APIENTRY DebugOutput(GLenum source, GLenum type, unsigned int id,
 Application* Application::instance_;
 
 Application::Application()
-    : window_(
-          std::unique_ptr<Window>(WindowFactory::Create("Genesis", 900, 600))) {
+    : window_(std::shared_ptr<Window>(Window::Create("Genesis", 900, 600))) {
   CORE_ASSERT(!instance_, "Application had exist.");
   instance_ = this;
 
@@ -26,15 +24,15 @@ Application::Application()
 
   float data[18] = {-0.5, -0.5, 0.0,  1.0f, 0.0f, 0.0f, 0.5,  -0.5, 0.0,
                     0.0f, 1.0f, 0.0f, 0.0,  0.5,  0.0,  0.0f, 0.0f, 1.0f};
-  vbo_.reset(VertexBuffer::Create(data, sizeof(data)));
+  vbo_ = VertexBuffer::Create(data, sizeof(data));
   vbo_->Bind();
 
   unsigned int elements[3] = {0, 1, 2};
-  ebo_.reset(IndexBuffer::Create(elements, sizeof(elements)));
+  ebo_ = IndexBuffer::Create(elements, sizeof(elements));
   ebo_->Bind();
 
   BufferLayout buffer_layout{{MathDataType::kFloat3}, {MathDataType::kFloat3}};
-  vao_.reset(VertexArray::Create(buffer_layout));
+  vao_ = VertexArray::Create(buffer_layout);
   vao_->AddVertexBuffer(*vbo_);
   vao_->SetIndexBuffer(*ebo_);
 }

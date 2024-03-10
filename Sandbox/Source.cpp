@@ -46,4 +46,9 @@ class SandBox : public genesis::Application {
   ~SandBox() {}
 };
 
-genesis::Application* genesis::CreateApplication() { return new SandBox; }
+genesis::Application* genesis::CreateApplication() {
+  genesis::Log::Init();
+  CORE_LOG_WARN("Initialized Log!");
+
+  return new SandBox;
+}

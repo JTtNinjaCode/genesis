@@ -56,7 +56,6 @@ enum EventCategory {
 #define EVENT_CLASS_CATEGORY(category) \
   virtual int GetEventCategoryFlags() const override { return category; }
 
-/* this classes are used to encapulate event to dispatch other application */
 class DLL_API Event {
   friend class EventDispatcher;
 

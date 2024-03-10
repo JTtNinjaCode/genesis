@@ -12,6 +12,7 @@
 #include "core/layer_stack.h"
 #include "core/log.h"
 #include "core/renderer/buffer.h"
+#include "core/renderer/renderer.h"
 #include "core/renderer/shader.h"
 #include "core/renderer/vertex_array.h"
 #include "core/window.h"
@@ -19,8 +20,6 @@
 #include "events/mouse_event.h"
 #include "events/window_event.h"
 namespace genesis {
-
-
 
 class DLL_API Application {
  public:
@@ -49,16 +48,18 @@ class DLL_API Application {
         }
     )";
 
-
-    shader_ = std::make_unique<Shader>(vertex_source, fragment_source);
+    shader_ = Shader::Create(vertex_source, fragment_source);
 
     while (running_) {
       glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
+      Renderer* renderer = Renderer::GetInstance();
+      renderer->BeginScene();
       shader_->Bind();
       vao_->Bind();
-      glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+      renderer->Submit(*vao_);  // function overloading, depend on vao, or mesh
+      renderer->EndScene();
 
       for (auto& layer : layer_stack_) {
         layer->OnUpdate();
@@ -78,8 +79,9 @@ class DLL_API Application {
  private:
   static Application* instance_;
   bool running_ = true;
-  std::unique_ptr<Window> window_;
   LayerStack layer_stack_;
+
+  std::shared_ptr<Window> window_;
 
   std::shared_ptr<Shader> shader_;
   std::shared_ptr<VertexBuffer> vbo_;

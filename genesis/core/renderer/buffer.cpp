@@ -5,22 +5,25 @@
 #include <platform/render_api/opengl/opengl_buffer.h>
 namespace genesis {
 
-VertexBuffer* VertexBuffer::Create(void* vertices, size_t size) {
+std::shared_ptr<VertexBuffer> VertexBuffer::Create(void* vertices,
+                                                   size_t size) {
   switch (Renderer::GetAPI()) {
-    case RenderAPI::OpenGL:
-      return new OpenGLVertexBuffer(vertices, size);
+    case Renderer::API::OpenGL:
+      return std::make_shared<OpenGLVertexBuffer>(vertices, size);
       break;
     default:
       CORE_ASSERT(false, "Not Valid RenderAPI.");
   }
+  return nullptr;
 }
-IndexBuffer* IndexBuffer::Create(void* vertices, size_t size) {
+std::shared_ptr<IndexBuffer> IndexBuffer::Create(void* vertices, size_t size) {
   switch (Renderer::GetAPI()) {
-    case RenderAPI::OpenGL:
-      return new OpenGLIndexBuffer(vertices, size);
+    case Renderer::API::OpenGL:
+      return std::make_shared<OpenGLIndexBuffer>(vertices, size);
       break;
     default:
       CORE_ASSERT(false, "Not Valid RenderAPI.");
   }
+  return nullptr;
 }
 }  // namespace genesis
