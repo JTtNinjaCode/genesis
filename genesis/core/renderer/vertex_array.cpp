@@ -8,8 +8,8 @@
 namespace genesis {
 std::shared_ptr<VertexArray> VertexArray::Create(
     const BufferLayout& buffer_layout) {
-  switch (Renderer::GetAPI()) {
-    case Renderer::API::OpenGL:
+  switch (RendererAPI::GetAPI()) {
+    case RendererAPI::API::OpenGL:
       return std::make_shared<OpenGLVertexArray>(buffer_layout);
       break;
     default:

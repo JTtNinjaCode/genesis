@@ -1,10 +1,13 @@
 #pragma once
+#include <memory>
+
+#include "core/renderer/renderer_api.h"
+#include "core/renderer/vertex_array.h"
 namespace genesis {
-enum class RenderAPI { None, OpenGL };
 class Renderer {
  public:
-  static RenderAPI GetAPI();
- private:
-  static RenderAPI api_;
+  void BeginScene() ;
+  void EndScene();
+  void Submit(const VertexArray& vertex_array);
 };
 }  // namespace genesis

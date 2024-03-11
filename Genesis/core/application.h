@@ -28,46 +28,7 @@ class DLL_API Application {
   static Application& Get() { return *instance_; }
 
   Window& GetWindow() { return *window_; }
-  virtual void Run() {
-    std::string vertex_source = R"(
-        #version 460 core
-        layout(location = 0) in vec3 position;
-        layout(location = 1) in vec3 color;
-        out vec3 v_color;
-        void main() {
-            gl_Position = vec4(position, 1.0);
-            v_color = color;
-        }
-    )";
-    std::string fragment_source = R"(
-        #version 460 core
-        in vec3 v_color;
-        out vec4 fragment_color;
-        void main() {
-            fragment_color = vec4(v_color, 1.0f);
-        }
-    )";
-
-    shader_ = Shader::Create(vertex_source, fragment_source);
-
-    while (running_) {
-      glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT);
-
-      Renderer* renderer = Renderer::GetInstance();
-      renderer->BeginScene();
-      shader_->Bind();
-      vao_->Bind();
-      renderer->Submit(*vao_);  // function overloading, depend on vao, or mesh
-      renderer->EndScene();
-
-      for (auto& layer : layer_stack_) {
-        layer->OnUpdate();
-      }
-
-      window_->OnUpdate();
-    }
-  }
+  virtual void Run();
   void OnEvent(Event& event);
   bool OnWindowClose(WindowCloseEvent& event);
   bool OnWindowResize(WindowResizeEvent& event);

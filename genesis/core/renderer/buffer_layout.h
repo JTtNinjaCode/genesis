@@ -29,11 +29,11 @@ class BufferLayout {
   const std::vector<BufferLayoutAttribute>& GetLayout() const {
     return layout_;
   }
-  unsigned int GetTotalStride() const { return total_stride_; }
+  size_t GetTotalStride() const { return total_stride_; }
 
  private:
   std::vector<BufferLayoutAttribute> layout_;
-  unsigned total_stride_ = 0;
+  size_t total_stride_ = 0;
 };
 
 }  // namespace genesis
