@@ -10,8 +10,7 @@ namespace genesis {
 void APIENTRY DebugOutput(GLenum source, GLenum type, unsigned int id,
                           GLenum severity, GLsizei length, const char* message,
                           const void* userParam);
-
-Application* Application::instance_;
+Application* Application::instance_ = nullptr;
 
 Application::Application()
     : window_(std::shared_ptr<Window>(Window::Create("Genesis", 900, 600))) {
@@ -23,62 +22,15 @@ Application::Application()
   glEnable(GL_DEBUG_OUTPUT);
   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
   glDebugMessageCallback(DebugOutput, nullptr);
-
-  float data[18] = {-0.5, -0.5, 0.0,  1.0f, 0.0f, 0.0f, 0.5,  -0.5, 0.0,
-                    0.0f, 1.0f, 0.0f, 0.0,  0.5,  0.0,  0.0f, 0.0f, 1.0f};
-  vbo_ = VertexBuffer::Create(data, sizeof(data));
-  vbo_->Bind();
-
-  unsigned int elements[3] = {0, 1, 2};
-  ebo_ = IndexBuffer::Create(elements, sizeof(elements));
-  ebo_->Bind();
-
-  BufferLayout buffer_layout{{MathDataType::kFloat3}, {MathDataType::kFloat3}};
-  vao_ = VertexArray::Create(buffer_layout);
-  vao_->AddVertexBuffer(*vbo_);
-  vao_->SetIndexBuffer(*ebo_);
 }
 
 Application::~Application() {}
 
 void Application::Run() {
-  std::string vertex_source = R"(
-        #version 460 core
-        layout(location = 0) in vec3 position;
-        layout(location = 1) in vec3 color;
-        out vec3 v_color;
-        void main() {
-            gl_Position = vec4(position, 1.0);
-            v_color = color;
-        }
-    )";
-  std::string fragment_source = R"(
-        #version 460 core
-        in vec3 v_color;
-        out vec4 fragment_color;
-        void main() {
-            fragment_color = vec4(v_color, 1.0f);
-        }
-    )";
-
-  shader_ = Shader::Create(vertex_source, fragment_source);
-
   while (running_) {
-    std::shared_ptr<RenderCommand> render_command =
-        RenderCommand::GetInstanced();
-    render_command->SetClearColor(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
-    render_command->Clear();
-
-    std::shared_ptr<Renderer> renderer;
-    renderer->BeginScene();
-    shader_->Bind();
-    renderer->Submit(*vao_);  // function overloading, depend on vao, or mesh
-    renderer->EndScene();
-
     for (auto& layer : layer_stack_) {
       layer->OnUpdate();
     }
-
     window_->OnUpdate();
   }
 }

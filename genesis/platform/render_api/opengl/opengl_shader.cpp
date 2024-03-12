@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
 #include "core/log.h"
@@ -81,4 +82,9 @@ OpenGLShader::~OpenGLShader() { glDeleteProgram(id_); }
 void OpenGLShader::Bind() const { glUseProgram(id_); }
 
 void OpenGLShader::Unbind() const { glUseProgram(0); }
+
+void OpenGLShader::SetUniform(const std::string &name, const glm::mat4 value) {
+  GLint location = glGetUniformLocation(id_, name.c_str());
+  glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+}
 }  // namespace genesis

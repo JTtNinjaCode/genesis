@@ -10,6 +10,7 @@
 #include "core/events/window_event.h"
 #include "core/log.h"
 #include "core/renderer/graphic_context.h"
+#include "platform/input/glfw_input.h"
 #include "platform/render_api/opengl/opengl_context.h"
 
 namespace genesis {
@@ -33,7 +34,7 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
 
   window_ = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
-  context_ = new OpenGLContext(window_); // window_ contain opengl context
+  context_ = new OpenGLContext(window_);  // window_ contain opengl context
   context_->Init();
 
   SetVSync(false);
@@ -97,6 +98,24 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
         }
         data.event_listener_(event);  // pass event to Application's method
       });
+
+  glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int scancode,
+                                 int action, int mods) {
+    WindowData data =
+        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    if (!data.event_listener_) {
+      CORE_LOG_WARN("event callback function has not been set yet.");
+    }
+    const GLFWInput& glfw_input =
+        dynamic_cast<GLFWInput&>(Input::GetInstance());
+    if (action == GLFW_PRESS) {
+      KeyPressedEvent event(glfw_input.GetGenesisKeycodeFromGLFWKeycode(key));
+      data.event_listener_(event);  // pass event to Application's method
+    } else if (action == GLFW_RELEASE) {
+      KeyReleasedEvent event(glfw_input.GetGenesisKeycodeFromGLFWKeycode(key));
+      data.event_listener_(event);  // pass event to Application's method
+    }
+  });
 
   glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int character) {
     KeyTypedEvent event(character);

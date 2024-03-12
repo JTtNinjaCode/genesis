@@ -12,6 +12,7 @@
 #include "core/layer_stack.h"
 #include "core/log.h"
 #include "core/renderer/buffer.h"
+#include "core/renderer/camera/perspective_camera.h"
 #include "core/renderer/renderer.h"
 #include "core/renderer/shader.h"
 #include "core/renderer/vertex_array.h"
@@ -44,10 +45,7 @@ class DLL_API Application {
 
   std::shared_ptr<Window> window_;
 
-  std::shared_ptr<Shader> shader_;
-  std::shared_ptr<VertexBuffer> vbo_;
-  std::shared_ptr<IndexBuffer> ebo_;
-  std::shared_ptr<VertexArray> vao_;
+
 };
 
 Application* CreateApplication();

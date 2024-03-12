@@ -10,9 +10,10 @@ class OpenGLShader : public Shader {
   virtual ~OpenGLShader();
   void Bind() const override;
   void Unbind() const override;
+  void SetUniform(const std::string& name,const glm::mat4 value) override;
 
  private:
-  unsigned int id_;
+  unsigned int id_ = 0;
 };
 
 }  // namespace genesis

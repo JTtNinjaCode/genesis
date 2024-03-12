@@ -1,13 +1,19 @@
 #pragma once
 #include <memory>
 
+#include "core/renderer/camera/perspective_camera.h"
 #include "core/renderer/renderer_api.h"
+#include "core/renderer/shader.h"
 #include "core/renderer/vertex_array.h"
+
 namespace genesis {
 class Renderer {
  public:
-  void BeginScene() ;
+  void BeginScene(PerspectiveCamera& camera);
   void EndScene();
-  void Submit(const VertexArray& vertex_array);
+  void Submit(Shader& shader, const VertexArray& vertex_array);
+
+ private:
+  PerspectiveCamera* camera_ = nullptr;
 };
 }  // namespace genesis

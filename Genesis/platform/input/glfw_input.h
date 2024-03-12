@@ -7,8 +7,11 @@ namespace genesis {
 class GLFWInput : public Input {
   friend class Input;
 
- private:
-  GLFWInput();
+ public:
+  Keycode GetGenesisKeycodeFromGLFWKeycode(int keycode) const;
+  int GetGLFWKeycdodeFromGenesisKeycode(Keycode keycode) const;
+  MouseButton GetGenesisMouseButtonFromGLFWMouseButton(int button) const;
+  int GetGLFWMouseButtonFromGenesisMouseButton(MouseButton button) const;
 
   bool IsKeyPressed(Keycode keycode) const override;
   int GetMouseButton(MouseButton button) const override;
@@ -16,13 +19,11 @@ class GLFWInput : public Input {
   double GetMousePositionX() const override;
   double GetMousePositionY() const override;
 
+ private:
+  GLFWInput();
+
   void initializeKeycodeTable();
   void initializeMouseButtonTable();
-
-  Keycode GetGenesisKeycodeFromGLFWKeycode(int keycode) const;
-  int GetGLFWKeycdodeFromGenesisKeycode(Keycode keycode) const;
-  MouseButton GetGenesisMouseButtonFromGLFWMouseButton(int button) const;
-  int GetGLFWMouseButtonFromGenesisMouseButton(MouseButton button) const;
 
   std::unordered_map<int, Keycode> lookup_genesis_keycode_table;
   std::unordered_map<int, MouseButton> lookup_genesis_mouse_button_table;
