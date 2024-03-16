@@ -11,7 +11,7 @@ class DLL_API ImGuiLayer : public Layer {
 
   void OnAttach() override;
   void OnDetach() override;
-  void OnUpdate() override;
+  void OnUpdate(TimeStep time_step) override;
   void OnEvent(Event& event) override;
 };
 }  // namespace genesis

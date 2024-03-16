@@ -83,8 +83,18 @@ void OpenGLShader::Bind() const { glUseProgram(id_); }
 
 void OpenGLShader::Unbind() const { glUseProgram(0); }
 
-void OpenGLShader::SetUniform(const std::string &name, const glm::mat4 value) {
+void OpenGLShader::SetUniform(const std::string &name, const glm::mat4 &value) {
   GLint location = glGetUniformLocation(id_, name.c_str());
   glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+}
+
+void OpenGLShader::SetUniform(const std::string &name, const glm::vec3 value) {
+  GLint location = glGetUniformLocation(id_, name.c_str());
+  glUniform3f(location, value.x, value.y, value.z);
+}
+
+void OpenGLShader::SetUniform(const std::string &name, const glm::vec2 value) {
+  GLint location = glGetUniformLocation(id_, name.c_str());
+  glUniform2f(location, value.x, value.y);
 }
 }  // namespace genesis

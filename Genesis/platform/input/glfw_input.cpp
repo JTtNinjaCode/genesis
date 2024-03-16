@@ -15,41 +15,45 @@ GLFWInput::GLFWInput() {
 bool GLFWInput::IsKeyPressed(Keycode keycode) const {
   int glfw_keycode = GetGLFWKeycdodeFromGenesisKeycode(keycode);
   return (GLFW_PRESS ==
-          glfwGetKey(static_cast<GLFWwindow*>(
-                         Application::Get().GetWindow().GetNativeWindow()),
-                     glfw_keycode));
+          glfwGetKey(
+              static_cast<GLFWwindow*>(
+                  Application::GetApplication()->GetWindow().GetNativeWindow()),
+              glfw_keycode));
 }
 
 int GLFWInput::GetMouseButton(MouseButton button) const {
   int glfw_button = GetGLFWMouseButtonFromGenesisMouseButton(button);
-  return (
-      GLFW_PRESS ==
-      glfwGetMouseButton(static_cast<GLFWwindow*>(
-                             Application::Get().GetWindow().GetNativeWindow()),
-                         glfw_button));
+  return (GLFW_PRESS ==
+          glfwGetMouseButton(
+              static_cast<GLFWwindow*>(
+                  Application::GetApplication()->GetWindow().GetNativeWindow()),
+              glfw_button));
 }
 
 std::pair<double, double> GLFWInput::GetMousePosition() const {
   double xpos, ypos;
-  glfwGetCursorPos(static_cast<GLFWwindow*>(
-                       Application::Get().GetWindow().GetNativeWindow()),
-                   &xpos, &ypos);
+  glfwGetCursorPos(
+      static_cast<GLFWwindow*>(
+          Application::GetApplication()->GetWindow().GetNativeWindow()),
+      &xpos, &ypos);
   return {xpos, ypos};
 }
 
 double GLFWInput::GetMousePositionX() const {
   double xpos;
-  glfwGetCursorPos(static_cast<GLFWwindow*>(
-                       Application::Get().GetWindow().GetNativeWindow()),
-                   &xpos, nullptr);
+  glfwGetCursorPos(
+      static_cast<GLFWwindow*>(
+          Application::GetApplication()->GetWindow().GetNativeWindow()),
+      &xpos, nullptr);
   return xpos;
 }
 
 double GLFWInput::GetMousePositionY() const {
   double ypos;
-  glfwGetCursorPos(static_cast<GLFWwindow*>(
-                       Application::Get().GetWindow().GetNativeWindow()),
-                   nullptr, &ypos);
+  glfwGetCursorPos(
+      static_cast<GLFWwindow*>(
+          Application::GetApplication()->GetWindow().GetNativeWindow()),
+      nullptr, &ypos);
   return ypos;
 }
 

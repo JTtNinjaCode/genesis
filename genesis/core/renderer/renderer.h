@@ -11,7 +11,8 @@ class Renderer {
  public:
   void BeginScene(PerspectiveCamera& camera);
   void EndScene();
-  void Submit(Shader& shader, const VertexArray& vertex_array);
+  void Submit(Shader& shader, const VertexArray& vertex_array,
+              const glm::mat4& model_matrix);
 
  private:
   PerspectiveCamera* camera_ = nullptr;

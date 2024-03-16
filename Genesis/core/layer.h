@@ -2,6 +2,7 @@
 #include <string>
 
 #include "core/core.h"
+#include "core/time_step.h"
 #include "events/event.h"
 
 namespace genesis {
@@ -11,7 +12,7 @@ class DLL_API Layer {
   virtual ~Layer();
   virtual void OnAttach() = 0;
   virtual void OnDetach() = 0;
-  virtual void OnUpdate() = 0;
+  virtual void OnUpdate(TimeStep time_step) = 0;
   virtual void OnEvent(Event& event) = 0;
 
   const std::string& GetName() const { return layer_name_; }

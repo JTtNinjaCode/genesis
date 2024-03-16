@@ -7,6 +7,8 @@ namespace genesis {
 
 GLenum MathDataTypeToOpenGLBaseType(MathDataType type) {
   switch (type) {
+    case MathDataType::kFloat2:
+      return GL_FLOAT;
     case MathDataType::kFloat3:
       return GL_FLOAT;
     case MathDataType::kFloat4:

@@ -1,23 +1,27 @@
 #include "core/application.h"
 
+#include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
 #include <iostream>
 
 #include "core/renderer/buffer_layout.h"
 #include "core/renderer/render_command.h"
+#
 namespace genesis {
 
 void APIENTRY DebugOutput(GLenum source, GLenum type, unsigned int id,
                           GLenum severity, GLsizei length, const char* message,
                           const void* userParam);
-Application* Application::instance_ = nullptr;
+std::shared_ptr<Application> Application::instance_;
 
 Application::Application()
     : window_(std::shared_ptr<Window>(Window::Create("Genesis", 900, 600))) {
   CORE_ASSERT(!instance_, "Application had exist.");
-  instance_ = this;
+  instance_.reset(this);
 
   window_->SetEventListener(BIND_METHOD(Application::OnEvent));
+  window_->SetVSync(true);
 
   glEnable(GL_DEBUG_OUTPUT);
   glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -28,8 +32,11 @@ Application::~Application() {}
 
 void Application::Run() {
   while (running_) {
+    float current_time = (float)glfwGetTime();
+    TimeStep delta_time((current_time - last_frame_time_) * 1000.0f);
+    last_frame_time_ = current_time;
     for (auto& layer : layer_stack_) {
-      layer->OnUpdate();
+      layer->OnUpdate(delta_time);
     }
     window_->OnUpdate();
   }

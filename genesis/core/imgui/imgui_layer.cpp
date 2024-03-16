@@ -47,9 +47,9 @@ void ImGuiLayer::OnAttach() {
     style.Colors[ImGuiCol_WindowBg].w = 1.0f;
   }
 
-  Application& app = Application::Get();
+  auto app = Application::GetApplication();
   GLFWwindow* window =
-      static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+      static_cast<GLFWwindow*>(app->GetWindow().GetNativeWindow());
 
   // Setup Platform/Renderer bindings
   ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -62,7 +62,7 @@ void ImGuiLayer::OnDetach() {
   ImGui::DestroyContext();
 }
 
-void ImGuiLayer::OnUpdate() {
+void ImGuiLayer::OnUpdate(TimeStep time_step) {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
@@ -71,9 +71,9 @@ void ImGuiLayer::OnUpdate() {
   ImGui::ShowDemoWindow(&show);
 
   ImGuiIO& io = ImGui::GetIO();
-  Application& app = Application::Get();
-  io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(),
-                          (float)app.GetWindow().GetHeight());
+  auto app = Application::GetApplication();
+  io.DisplaySize = ImVec2((float)app->GetWindow().GetWidth(),
+                          (float)app->GetWindow().GetHeight());
 
   // Rendering
   ImGui::Render();
