@@ -1,9 +1,4 @@
 #pragma once
-#pragma warning(push)
-#pragma warning(disable : 4005)
-#include <glad/glad.h>
-#pragma warning(pop)
-
 #include <functional>
 #include <memory>
 
@@ -17,10 +12,12 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/vertex_array.h"
 #include "core/time_step.h"
+#include "core/timer.h"
 #include "core/window.h"
 #include "events/event.h"
 #include "events/mouse_event.h"
 #include "events/window_event.h"
+
 namespace genesis {
 
 class DLL_API Application {
@@ -40,6 +37,7 @@ class DLL_API Application {
   void PushOverLayer(Layer* layer);
 
  private:
+  Timer timer;
   static std::shared_ptr<Application> instance_;
   bool running_ = true;
   LayerStack layer_stack_;

@@ -2,7 +2,7 @@
 namespace genesis {
 class TimeStep {
  public:
-  TimeStep(float time = 0.0f);
+  TimeStep(float time_ms = 0.0f);
   float GetSeconds() const;
   float GetMilliseconds() const;
 
