@@ -6,5 +6,6 @@ class OpenGLRenderCommand : public RenderCommand {
   void SetClearColor(glm::vec4 color) override;
   void Clear() override;
   void DrawIndexed(const VertexArray& vertex_array) override;
+  void SetBlend(bool enable) override;
 };
 }  // namespace genesis

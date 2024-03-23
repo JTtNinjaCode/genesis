@@ -12,4 +12,12 @@ void OpenGLRenderCommand::DrawIndexed(const VertexArray& vertex_array) {
   glDrawElements(GL_TRIANGLES, vertex_array.GetCount(), GL_UNSIGNED_INT,
                  nullptr);
 }
+void OpenGLRenderCommand::SetBlend(bool enable) {
+  if (enable) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  } else {
+    glDisable(GL_BLEND);
+  }
+}
 }  // namespace genesis

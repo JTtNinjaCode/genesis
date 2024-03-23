@@ -9,6 +9,7 @@
 namespace genesis {
 class Renderer {
  public:
+  Renderer();
   void BeginScene(PerspectiveCamera& camera);
   void EndScene();
   void Submit(Shader& shader, const VertexArray& vertex_array,
