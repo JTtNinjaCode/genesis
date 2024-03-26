@@ -12,14 +12,18 @@ PerspectiveCamera::PerspectiveCamera(float field_of_view, float ratio,
       field_of_view_(field_of_view),
       ratio_(ratio),
       near_(near),
-      far_(far) {}
+      far_(far),
+      projection_view_(glm::perspective(field_of_view, ratio, near, far) *
+                       glm::lookAtRH(position, target, glm::vec3(0, 1, 0))) {}
 
 void PerspectiveCamera::RecalculateProjection() {
   projection_ = glm::perspective(field_of_view_, ratio_, near_, far_);
+  projection_view_ = projection_ * view_;
 }
 
 void PerspectiveCamera::RecalculateView() {
   view_ = glm::lookAtRH(position_, position_ + direction_, glm::vec3(0, 1, 0));
+  projection_view_ = projection_ * view_;
 }
 
 }  // namespace genesis
