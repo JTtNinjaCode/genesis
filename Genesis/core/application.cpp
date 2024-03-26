@@ -59,17 +59,12 @@ bool Application::OnWindowResize(WindowResizeEvent& event) {
   return true;
 }
 
-bool Application::OnMouseMoved(MouseMovedEvent& event) {
-  CORE_LOG_TRACE("mouse moved event:{0}", event.ToString());
-  return true;
-}
-
-void Application::PushLayer(Layer* layer) {
+void Application::PushLayer(std::shared_ptr<Layer> layer) {
   layer_stack_.PushLayer(layer);
   layer->OnAttach();
 }
 
-void Application::PushOverLayer(Layer* layer) {
+void Application::PushOverLayer(std::shared_ptr<Layer> layer) {
   layer_stack_.PushOverLayer(layer);
   layer->OnAttach();
 }

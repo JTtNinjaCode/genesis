@@ -3,18 +3,13 @@ namespace genesis {
 
 LayerStack::LayerStack() : overlayer_insert_index(0) {}
 
-LayerStack ::~LayerStack() {
-  for (auto& layer : layers_) {
-    delete layer;
-  }
-}
 
-void LayerStack::PushLayer(Layer* layer) {
+void LayerStack::PushLayer(std::shared_ptr<Layer> layer) {
   layers_.emplace(layers_.begin() + overlayer_insert_index, layer);
   overlayer_insert_index++;
 }
 
-void LayerStack::PopLayer(Layer* layer) {
+void LayerStack::PopLayer(std::shared_ptr<Layer> layer) {
   auto iter = std::find(layers_.begin(),
                         layers_.begin() + overlayer_insert_index, layer);
   if (iter != layers_.begin() + overlayer_insert_index) {
@@ -23,11 +18,11 @@ void LayerStack::PopLayer(Layer* layer) {
   }
 }
 
-void LayerStack::PushOverLayer(Layer* over_layer) {
+void LayerStack::PushOverLayer(std::shared_ptr<Layer> over_layer) {
   layers_.emplace_back(over_layer);
 }
 
-void LayerStack::PopOverLayer(Layer* over_layer) {
+void LayerStack::PopOverLayer(std::shared_ptr<Layer> over_layer) {
   auto iter = std::find(layers_.begin() + overlayer_insert_index, layers_.end(),
                         over_layer);
   if (iter != layers_.end()) {

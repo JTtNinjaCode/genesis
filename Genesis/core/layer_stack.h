@@ -7,16 +7,15 @@
 
 namespace genesis {
 class DLL_API LayerStack {
-  using LayerContainer = std::vector<Layer*>;
+  using LayerContainer = std::vector<std::shared_ptr<Layer>>;
 
  public:
   LayerStack();
-  ~LayerStack();
 
-  void PushLayer(Layer* layer);
-  void PopLayer(Layer* over_layer);
-  void PushOverLayer(Layer* layer);
-  void PopOverLayer(Layer* over_layer);
+  void PushLayer(std::shared_ptr<Layer> layer);
+  void PopLayer(std::shared_ptr<Layer> over_layer);
+  void PushOverLayer(std::shared_ptr<Layer> layer);
+  void PopOverLayer(std::shared_ptr<Layer> over_layer);
 
   LayerContainer::iterator begin() { return layers_.begin(); }
   LayerContainer::iterator end() { return layers_.end(); }

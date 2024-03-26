@@ -10,12 +10,12 @@ namespace genesis {
 class Renderer {
  public:
   Renderer();
-  void BeginScene(PerspectiveCamera& camera);
+  void BeginScene(const PerspectiveCamera& camera);
   void EndScene();
   void Submit(Shader& shader, const VertexArray& vertex_array,
               const glm::mat4& model_matrix);
 
  private:
-  PerspectiveCamera* camera_ = nullptr;
+  const PerspectiveCamera* camera_ = nullptr;
 };
 }  // namespace genesis

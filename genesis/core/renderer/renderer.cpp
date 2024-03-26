@@ -7,7 +7,9 @@
 #include "platform/render_api/opengl/opengl_shader.h"
 namespace genesis {
 Renderer::Renderer() { RenderCommand::GetInstanced()->SetBlend(true); }
-void Renderer::BeginScene(PerspectiveCamera& camera) { camera_ = &camera; }
+void Renderer::BeginScene(const PerspectiveCamera& camera) {
+  camera_ = &camera;
+}
 void Renderer::EndScene() {}
 void Renderer::Submit(Shader& shader, const VertexArray& vertex_array,
                       const glm::mat4& model_matrix) {

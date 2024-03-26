@@ -31,10 +31,9 @@ class DLL_API Application {
   void OnEvent(Event& event);
   bool OnWindowClose(WindowCloseEvent& event);
   bool OnWindowResize(WindowResizeEvent& event);
-  bool OnMouseMoved(MouseMovedEvent& event);
 
-  void PushLayer(Layer* layer);
-  void PushOverLayer(Layer* layer);
+  void PushLayer(std::shared_ptr<Layer> layer);
+  void PushOverLayer(std::shared_ptr<Layer> layer);
 
  private:
   Timer timer;
