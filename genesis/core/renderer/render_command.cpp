@@ -5,7 +5,7 @@
 #include "platform/render_api/opengl/opengl_render_command.h"
 namespace genesis {
 std::shared_ptr<RenderCommand> RenderCommand::render_command_ = nullptr;
-std::shared_ptr<RenderCommand> RenderCommand::GetInstanced() {
+RenderCommand& RenderCommand::GetInstanced() {
   if (!render_command_) {
     switch (RendererAPI::GetAPI()) {
       case RendererAPI::API::OpenGL:
@@ -15,6 +15,6 @@ std::shared_ptr<RenderCommand> RenderCommand::GetInstanced() {
         CORE_ASSERT(false, "Not Valid API.");
     }
   }
-  return render_command_;
+  return *render_command_;
 }
 }  // namespace genesis

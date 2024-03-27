@@ -40,8 +40,6 @@ void Application::OnEvent(Event& event) {
   EventDispatcher event_dispatcher(event);
   event_dispatcher.Dispatch<WindowCloseEvent>(
       BIND_METHOD(Application::OnWindowClose));
-  event_dispatcher.Dispatch<WindowResizeEvent>(
-      BIND_METHOD(Application::OnWindowResize));
 
   for (auto iter = layer_stack_.rbegin(); iter != layer_stack_.rend(); iter++) {
     (*iter)->OnEvent(event);
@@ -51,11 +49,6 @@ void Application::OnEvent(Event& event) {
 
 bool Application::OnWindowClose(WindowCloseEvent& event) {
   running_ = false;
-  return true;
-}
-
-bool Application::OnWindowResize(WindowResizeEvent& event) {
-  CORE_LOG_TRACE("window resize event:{0}", event.ToString());
   return true;
 }
 
