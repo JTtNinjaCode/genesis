@@ -11,39 +11,26 @@
 #include <glm/gtc/type_ptr.hpp>
 #pragma warning(pop)
 
+#include <filesystem>
 #include <iostream>
 #include <memory>
 
+#include "core/renderer/camera/orthographic_camera_controller.h"
+#include "core/renderer/renderer_2d.h"
+#include "core/renderer/shader_library.h"
 #include "platform/render_api/opengl/opengl_shader.h"
 
 class ImGuiLayerImpl : public genesis::ImGuiLayer {
  public:
   ImGuiLayerImpl() {
-    std::string vertex_source = R"(
-        #version 460 core
-        layout(location = 0) in vec3 position;
-        layout(location = 1) in vec2 uv;
+    texture_ = genesis::Texture2D::Create(
+        "./assets/textures/small smoke checkerboard.jpg");
+    texture2_ = genesis::Texture2D::Create("./assets/textures/cherno.png");
 
-        uniform mat4 u_view_projection;
-        uniform mat4 u_model;
-
-        out vec2 a_uv;
-        void main() {
-            gl_Position = u_view_projection * u_model * vec4(position, 1.0);
-            a_uv = uv;
-        }
-    )";
-    std::string fragment_source = R"(
-        #version 460 core
-        in vec2 a_uv;
-        uniform vec3 u_color;
-        out vec4 fragment_color;
-        void main() {
-            fragment_color = vec4(a_uv.x, a_uv.y, 0.0f, 1.0f);
-        }
-    )";
-
-    shader_ = genesis::Shader::Create(vertex_source, fragment_source);
+    auto shader_library = genesis::ShaderLibrary::GetInstance();
+    shader_library.AddShader("test", "./assets/shaders/test.vert",
+                             "./assets/shaders/test.frag");
+    shader_ = shader_library.GetShader("test");
 
     float data[20] = {-0.5, -0.5, 0.0, 0.0, 0.0, 0.5, -0.5, 0.0, 1.0, 0.0,
                       -0.5, 0.5,  0.0, 0.0, 1.0, 0.5, 0.5,  0.0, 1.0, 1.0};
@@ -66,6 +53,9 @@ class ImGuiLayerImpl : public genesis::ImGuiLayer {
     camera_ = std::make_shared<genesis::PerspectiveCamera>(
         glm::radians(45.0f), ratio, 0.1, 100.0, glm::vec3(0, 0, 1),
         glm::vec3(0, 0, 0));
+    camera_2d_controller_ =
+        std::make_shared<genesis::OrthographicCameraController>(3.0f, ratio,
+                                                                0.01, 100);
   }
 
   virtual void OnUpdate(genesis::TimeStep time_step) override {
@@ -77,47 +67,33 @@ class ImGuiLayerImpl : public genesis::ImGuiLayer {
     shader_->Bind();
     dynamic_cast<genesis::OpenGLShader&>(*shader_).SetUniform("u_color",
                                                               square_color);
+    dynamic_cast<genesis::OpenGLShader&>(*shader_).SetUniform("tex", 0);
 
-    std::shared_ptr<genesis::Renderer> renderer =
-        std::make_shared<genesis::Renderer>();
-    renderer->BeginScene(*camera_);
-
+    std::shared_ptr<genesis::Renderer2D> renderer =
+        std::make_shared<genesis::Renderer2D>();
+    renderer->BeginScene(camera_2d_controller_->GetCamera());
     for (int i = 0; i < 10; i++) {
       for (int j = 0; j < 10; j++) {
+        texture_->Bind(0);
+        renderer->Submit(*shader_, *vao_,
+                         glm::translate(glm::scale(glm::mat4(1.0f),
+                                                   glm::vec3(0.05, 0.05, 0.05)),
+                                        {i + 0.1 * i, j + 0.1 * j, 0.0f}));
+        texture2_->Bind(0);
         renderer->Submit(*shader_, *vao_,
                          glm::translate(glm::scale(glm::mat4(1.0f),
                                                    glm::vec3(0.05, 0.05, 0.05)),
                                         {i + 0.1 * i, j + 0.1 * j, 0.0f}));
       }
     }
-
     renderer->EndScene();
 
-    auto& input = genesis::Input::GetInstance();
-    if (input.IsKeyPressed(genesis::Keycode::kKeyW)) {
-      camera_->SetPosition(camera_->GetPosition() +
-                           glm::vec3(0.0, 0.0, -1.0) * time_step.GetSeconds());
-      camera_->LookAt({0, 0, 0});
-    } else if (input.IsKeyPressed(genesis::Keycode::kKeyA)) {
-      camera_->SetPosition(camera_->GetPosition() +
-                           glm::vec3(-1.0, 0.0, 0.0) * time_step.GetSeconds());
-      camera_->LookAt({0, 0, 0});
-    } else if (input.IsKeyPressed(genesis::Keycode::kKeyS)) {
-      camera_->SetPosition(camera_->GetPosition() +
-                           glm::vec3(0.0, 0.0, 1.0) * time_step.GetSeconds());
-      camera_->LookAt({0, 0, 0});
-    } else if (input.IsKeyPressed(genesis::Keycode::kKeyD)) {
-      camera_->SetPosition(camera_->GetPosition() +
-                           glm::vec3(1.0, 0.0, 0.0) * time_step.GetSeconds());
-      camera_->LookAt({0, 0, 0});
-    }
-
+    camera_2d_controller_->OnUpdate(time_step);
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
     ImGui::Begin("window");
-    ImGui::ColorEdit3("Squre Color", glm::value_ptr(square_color));
     ImGui::End();
 
     ImGuiIO& io = ImGui::GetIO();
@@ -138,12 +114,9 @@ class ImGuiLayerImpl : public genesis::ImGuiLayer {
   }
 
   void OnEvent(genesis::Event& event) override {
+    camera_2d_controller_->OnEvent(event);
     genesis::EventDispatcher dispatcher(event);
-    dispatcher.Dispatch<genesis::KeyPressedEvent>(
-        BIND_METHOD(ImGuiLayerImpl::OnKeyPressed));
   }
-
-  bool OnKeyPressed(genesis::KeyPressedEvent& event) { return false; }
 
  private:
   std::shared_ptr<genesis::Shader> shader_;
@@ -151,13 +124,17 @@ class ImGuiLayerImpl : public genesis::ImGuiLayer {
   std::shared_ptr<genesis::IndexBuffer> ebo_;
   std::shared_ptr<genesis::VertexArray> vao_;
   std::shared_ptr<genesis::PerspectiveCamera> camera_;
+  std::shared_ptr<genesis::OrthographicCameraController> camera_2d_controller_;
+
+  std::shared_ptr<genesis::Texture2D> texture_;
+  std::shared_ptr<genesis::Texture2D> texture2_;
 
   glm::vec3 square_color;
 };
 
 class SandBox : public genesis::Application {
  public:
-  SandBox() { PushOverLayer(new ImGuiLayerImpl); }
+  SandBox() { PushOverLayer(std::make_shared<ImGuiLayerImpl>()); }
   ~SandBox() {}
 };
 
