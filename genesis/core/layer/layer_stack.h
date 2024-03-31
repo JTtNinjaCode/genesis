@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "core/Layer.h"
+#include "core/layer/layer.h"
 #include "core/core.h"
 
 namespace genesis {

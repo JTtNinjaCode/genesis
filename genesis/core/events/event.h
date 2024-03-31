@@ -4,7 +4,7 @@
 #include <string>
 
 #include "core/core.h"
-#include "core/log.h"
+#include "core/log/log.h"
 
 namespace genesis {
 // EventType can be used to compare whether events are of the same type

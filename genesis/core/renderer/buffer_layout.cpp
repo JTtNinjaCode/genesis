@@ -1,6 +1,6 @@
 #include "buffer_layout.h"
 
-#include "core/log.h"
+#include "core/log/log.h"
 namespace genesis {
 std::vector<BufferLayoutAttribute>::const_iterator BufferLayout::begin()
     const {

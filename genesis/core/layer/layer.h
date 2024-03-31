@@ -3,7 +3,7 @@
 
 #include "core/core.h"
 #include "core/time_step.h"
-#include "events/event.h"
+#include "core/events/event.h"
 
 namespace genesis {
 class DLL_API Layer {

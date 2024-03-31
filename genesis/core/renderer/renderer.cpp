@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include "core/log.h"
+#include "core/log/log.h"
 #include "core/renderer/render_command.h"
 #include "platform/render_api/opengl/opengl_shader.h"
 namespace genesis {

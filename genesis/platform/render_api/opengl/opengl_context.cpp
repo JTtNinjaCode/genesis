@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #pragma warning(pop)
 
-#include "core/log.h"
+#include "core/log/log.h"
 
 namespace genesis {
 

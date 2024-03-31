@@ -8,7 +8,7 @@
 #include "core/events/key_event.h"
 #include "core/events/mouse_event.h"
 #include "core/events/window_event.h"
-#include "core/log.h"
+#include "core/log/log.h"
 #include "core/renderer/graphic_context.h"
 #include "platform/input/glfw_input.h"
 #include "platform/render_api/opengl/opengl_context.h"

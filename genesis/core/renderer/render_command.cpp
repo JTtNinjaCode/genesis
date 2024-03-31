@@ -1,6 +1,6 @@
 #include "render_command.h"
 
-#include "core/log.h"
+#include "core/log/log.h"
 #include "core/renderer/renderer_api.h"
 #include "platform/render_api/opengl/opengl_render_command.h"
 namespace genesis {

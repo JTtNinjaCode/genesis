@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <stb_image.h>
 
-#include "core/log.h"
+#include "core/log/log.h"
 namespace genesis {
 OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& path) {
   using namespace std;

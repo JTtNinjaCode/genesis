@@ -1,6 +1,6 @@
 #include "shader_library.h"
 
-#include "core/log.h"
+#include "core/log/log.h"
 namespace genesis {
 std::unique_ptr<ShaderLibrary> ShaderLibrary::instance_;
 

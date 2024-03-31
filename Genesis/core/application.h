@@ -4,8 +4,8 @@
 
 #include "core/core.h"
 #include "core/input.h"
-#include "core/layer_stack.h"
-#include "core/log.h"
+#include "core/layer/layer_stack.h"
+#include "core/log/log.h"
 #include "core/renderer/buffer.h"
 #include "core/renderer/camera/perspective_camera.h"
 #include "core/renderer/renderer.h"

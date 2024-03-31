@@ -3,13 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# /binary contain all build file
+# /binary contain all binary file
 /binary/
+# /build
+/build/
 # ini file contain imgui layout information
 *.ini
-# /third_party
-/third_party/
-# .vs is visual studio config file
-.vs
 # make sure all file in genesis(source file) wont be excluded
 !/genesis/

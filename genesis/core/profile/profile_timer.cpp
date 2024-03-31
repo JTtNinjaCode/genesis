@@ -1,6 +1,6 @@
 #include "profile_timer.h"
 
-#include "core/log.h"
+#include "core/log/log.h"
 namespace genesis::profile {
 void ProfileTimer::Stop() {
   auto end = std::chrono::high_resolution_clock::now();

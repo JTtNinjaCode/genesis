@@ -5,7 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-#include "core/log.h"
+#include "core/log/log.h"
 namespace genesis {
 OpenGLShader::OpenGLShader(const std::string &vertex_source,
                            const std::string &fragment_source) {

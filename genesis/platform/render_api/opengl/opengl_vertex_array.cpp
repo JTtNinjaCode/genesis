@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include "core/log.h"
+#include "core/log/log.h"
 namespace genesis {
 
 GLenum MathDataTypeToOpenGLBaseType(MathDataType type) {

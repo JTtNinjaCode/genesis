@@ -1,6 +1,6 @@
 #include "math_struct.h"
 
-#include "core/log.h"
+#include "core/log/log.h"
 namespace genesis {
 unsigned int Math::GetMathDataTypeSize(MathDataType math_data_type) {
   switch (math_data_type) {
