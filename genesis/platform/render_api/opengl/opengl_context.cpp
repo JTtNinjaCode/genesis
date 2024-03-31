@@ -37,7 +37,7 @@ void APIENTRY DebugOutput(GLenum source, GLenum type, unsigned int id,
   // ignore non-significant error/warning codes
   if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
-  CORE_LOG_TRACE("Debug message ({0}):\n", message);
+  CORE_LOG_TRACE("Debug message ({0}):", message);
 
   switch (source) {
     case GL_DEBUG_SOURCE_API:

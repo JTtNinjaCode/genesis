@@ -32,6 +32,10 @@ void Application::Run() {
       layer->OnUpdate(duration);
     }
 
+    for (auto& layer : layer_stack_) {
+      layer->OnRender();
+    }
+
     window_->OnUpdate();
   }
 }

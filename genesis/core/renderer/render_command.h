@@ -12,6 +12,7 @@ class RenderCommand {
   virtual void Clear() = 0;
   virtual void DrawIndexed(const VertexArray& vertex_array) = 0;
   virtual void SetBlend(bool enable) = 0;
+  virtual void SetDepthTest(bool enable) = 0;
   virtual void SetViewport(int x, int y, int width, int height) = 0;
 
  private:

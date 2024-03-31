@@ -7,5 +7,7 @@ class OpenGLRenderCommand : public RenderCommand {
   void Clear() override;
   void DrawIndexed(const VertexArray& vertex_array) override;
   void SetBlend(bool enable) override;
+  void SetViewport(int x, int y, int width, int height) override;
+  void SetDepthTest(bool enable) override;
 };
 }  // namespace genesis

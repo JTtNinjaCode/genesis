@@ -6,7 +6,10 @@
 #include "core/renderer/render_command.h"
 #include "platform/render_api/opengl/opengl_shader.h"
 namespace genesis {
-Renderer::Renderer() { RenderCommand::GetInstanced().SetBlend(true); }
+Renderer::Renderer() {
+  RenderCommand::GetInstanced().SetBlend(true);
+  RenderCommand::GetInstanced().SetDepthTest(true);
+}
 void Renderer::BeginScene(const PerspectiveCamera& camera) {
   camera_ = &camera;
 }

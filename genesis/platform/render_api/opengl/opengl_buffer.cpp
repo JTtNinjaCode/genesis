@@ -18,7 +18,7 @@ OpenGLIndexBuffer::OpenGLIndexBuffer(void* vertices, size_t size) {
   glCreateBuffers(1, &id_);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
-  count = size;
+  count_ = size / sizeof(unsigned int);
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer() { glDeleteBuffers(1, &id_); }

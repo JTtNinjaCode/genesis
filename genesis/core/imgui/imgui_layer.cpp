@@ -49,7 +49,7 @@ void ImGuiLayer::OnAttach() {
 
   auto app = Application::GetApplication();
   GLFWwindow* window =
-      static_cast<GLFWwindow*>(app->GetWindow().GetNativeWindow());
+      static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
   // Setup Platform/Renderer bindings
   ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -63,30 +63,11 @@ void ImGuiLayer::OnDetach() {
 }
 
 void ImGuiLayer::OnUpdate(TimeStep time_step) {
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
-
-  static bool show = true;
-  ImGui::ShowDemoWindow(&show);
-
-  ImGuiIO& io = ImGui::GetIO();
-  auto app = Application::GetApplication();
-  io.DisplaySize = ImVec2((float)app->GetWindow().GetWidth(),
-                          (float)app->GetWindow().GetHeight());
-
-  // Rendering
-  ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-    GLFWwindow* backup_current_context = glfwGetCurrentContext();
-    ImGui::UpdatePlatformWindows();
-    ImGui::RenderPlatformWindowsDefault();
-    glfwMakeContextCurrent(backup_current_context);
-  }
 }
+
 void ImGuiLayer::OnEvent(Event& event) {
   EventDispatcher event_dispathcer(event);
 }
+void ImGuiLayer::OnRender() { OnImguiRender(); }
+void ImGuiLayer::OnImguiRender() {}
 }  // namespace genesis

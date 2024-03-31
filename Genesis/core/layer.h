@@ -14,6 +14,7 @@ class DLL_API Layer {
   virtual void OnDetach() = 0;
   virtual void OnUpdate(TimeStep time_step) = 0;
   virtual void OnEvent(Event& event) = 0;
+  virtual void OnRender() = 0;
 
   const std::string& GetName() const { return layer_name_; }
 

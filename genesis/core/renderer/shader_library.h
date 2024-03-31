@@ -16,7 +16,7 @@ class ShaderLibrary {
   void AddShader(const std::string& shader_name,
                  const std::string& vertex_shader_file_path,
                  const std::string& fragment_shader_file_path);
-  std::shared_ptr<Shader> GetShader(std::string shader_name);
+  Shader& GetShader(std::string shader_name);
 
  private:
   ShaderLibrary() = default;

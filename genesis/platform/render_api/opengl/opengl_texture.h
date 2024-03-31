@@ -1,9 +1,13 @@
 #pragma once
+#include <filesystem>
+
 #include "core/renderer/texture.h"
 namespace genesis {
 class OpenGLTexture2D : public Texture2D {
  public:
-  OpenGLTexture2D(const std::string &path);
+  OpenGLTexture2D(const std::filesystem::path &path);
+  OpenGLTexture2D(unsigned char *data, unsigned int channels,
+                  unsigned int width, unsigned int height);
   ~OpenGLTexture2D();
   int GetWidth() const override;
   int GetHeight() const override;

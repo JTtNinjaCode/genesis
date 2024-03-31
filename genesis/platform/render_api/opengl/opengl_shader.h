@@ -10,10 +10,11 @@ class OpenGLShader : public Shader {
   virtual ~OpenGLShader();
   void Bind() const override;
   void Unbind() const override;
-  void SetUniform(const std::string& name, const glm::mat4& value);
-  void SetUniform(const std::string& name, const glm::vec3 value);
-  void SetUniform(const std::string& name, const glm::vec2 value);
-  void SetUniform(const std::string& name, const int value);
+  void SetUniform(const std::string& name, const glm::mat4& value) override;
+  void SetUniform(const std::string& name, const glm::vec4& value) override;
+  void SetUniform(const std::string& name, const glm::vec3& value) override;
+  void SetUniform(const std::string& name, const glm::vec2& value) override;
+  void SetUniform(const std::string& name, const int value) override;
 
  private:
   unsigned int id_ = 0;
