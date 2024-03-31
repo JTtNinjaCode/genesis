@@ -24,7 +24,7 @@ class DLL_API Application {
  public:
   Application();
   virtual ~Application();
-  static std::shared_ptr<Application> GetApplication() { return instance_; }
+  static Application& GetApplication() { return *instance_; }
 
   Window& GetWindow() { return *window_; }
   virtual void Run();

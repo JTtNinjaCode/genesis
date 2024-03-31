@@ -13,13 +13,13 @@ class VertexBuffer {
 class IndexBuffer {
  public:
   static std::shared_ptr<IndexBuffer> Create(void *vertices, size_t size);
-  unsigned int GetCount() const { return count; }
+  unsigned int GetCount() const { return count_; }
   virtual ~IndexBuffer() {}
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
 
  protected:
-  unsigned int count = 0;
+  unsigned int count_ = 0;
 };
 
 }  // namespace genesis

@@ -10,7 +10,7 @@ OrthographicCamera2D::OrthographicCamera2D(float height, float ratio,
       near_plane_(near_plane),
       far_plane_(far_plane),
       position_(glm::vec3(0, 0, 1)),
-      rotation_radians_(1.0f),
+      rotation_radians_(0.0f),
       zoom_level_(1.0f) {
   RecalculateProjectionMatrix();
   RecalculateViewMatrix();

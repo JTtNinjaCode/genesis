@@ -17,7 +17,7 @@ bool GLFWInput::IsKeyPressed(Keycode keycode) const {
   return (GLFW_PRESS ==
           glfwGetKey(
               static_cast<GLFWwindow*>(
-                  Application::GetApplication()->GetWindow().GetNativeWindow()),
+                  Application::GetApplication().GetWindow().GetNativeWindow()),
               glfw_keycode));
 }
 
@@ -26,7 +26,7 @@ int GLFWInput::GetMouseButton(MouseButton button) const {
   return (GLFW_PRESS ==
           glfwGetMouseButton(
               static_cast<GLFWwindow*>(
-                  Application::GetApplication()->GetWindow().GetNativeWindow()),
+                  Application::GetApplication().GetWindow().GetNativeWindow()),
               glfw_button));
 }
 
@@ -34,7 +34,7 @@ std::pair<double, double> GLFWInput::GetMousePosition() const {
   double xpos, ypos;
   glfwGetCursorPos(
       static_cast<GLFWwindow*>(
-          Application::GetApplication()->GetWindow().GetNativeWindow()),
+          Application::GetApplication().GetWindow().GetNativeWindow()),
       &xpos, &ypos);
   return {xpos, ypos};
 }
@@ -43,7 +43,7 @@ double GLFWInput::GetMousePositionX() const {
   double xpos;
   glfwGetCursorPos(
       static_cast<GLFWwindow*>(
-          Application::GetApplication()->GetWindow().GetNativeWindow()),
+          Application::GetApplication().GetWindow().GetNativeWindow()),
       &xpos, nullptr);
   return xpos;
 }
@@ -52,7 +52,7 @@ double GLFWInput::GetMousePositionY() const {
   double ypos;
   glfwGetCursorPos(
       static_cast<GLFWwindow*>(
-          Application::GetApplication()->GetWindow().GetNativeWindow()),
+          Application::GetApplication().GetWindow().GetNativeWindow()),
       nullptr, &ypos);
   return ypos;
 }
