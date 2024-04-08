@@ -13,7 +13,6 @@
 #pragma warning(pop)
 
 #include "imgui_layer/sandbox_2d.h"
-#include "platform/render_api/opengl/opengl_shader.h"
 
 class Sandbox : public genesis::Application {
  public:

@@ -78,10 +78,14 @@ class Sandbox2D : public genesis::ImGuiLayer {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    // if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+    //   GLFWwindow* backup_current_context = glfwGetCurrentContext();
+    //   ImGui::UpdatePlatformWindows();
+    //   ImGui::RenderPlatformWindowsDefault();
+    //   glfwMakeContextCurrent(backup_current_context);
+    // }
+     if (io.ConfigFlags) {
       GLFWwindow* backup_current_context = glfwGetCurrentContext();
-      ImGui::UpdatePlatformWindows();
-      ImGui::RenderPlatformWindowsDefault();
       glfwMakeContextCurrent(backup_current_context);
     }
   }
