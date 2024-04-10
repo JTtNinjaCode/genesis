@@ -63,7 +63,6 @@ class DLL_API Event {
   virtual EventType GetEventType() const = 0;
   virtual int GetEventCategoryFlags() const = 0;
   virtual std::string ToString() const = 0;
-  // TODO: GetEventName method should only use in debug
   virtual const char* GetEventTypeString() const = 0;
 
   inline bool IsInCategory(EventCategory event_category) {

@@ -6,7 +6,11 @@
 
 namespace genesis {
 
-class DLL_API MouseMovedEvent : public Event {
+class MouseEvent : public Event {
+  EVENT_CLASS_CATEGORY(kMouseEventCategory | kInputEventCategory)
+};
+
+class DLL_API MouseMovedEvent : public MouseEvent {
  public:
   MouseMovedEvent(double x, double y) : mouse_x_(x), mouse_y_(y) {}
 
@@ -20,12 +24,11 @@ class DLL_API MouseMovedEvent : public Event {
   }
 
   EVENT_CLASS_TYPE(kMouseMoved)
-  EVENT_CLASS_CATEGORY(kMouseEventCategory | kInputEventCategory)
  private:
   double mouse_x_, mouse_y_;
 };
 
-class DLL_API MouseScrolledEvent : public Event {
+class DLL_API MouseScrolledEvent : public MouseEvent {
  public:
   MouseScrolledEvent(double offset_x, double offset_y)
       : offset_x_(offset_x), offset_y_(offset_y) {}
@@ -40,17 +43,15 @@ class DLL_API MouseScrolledEvent : public Event {
   }
 
   EVENT_CLASS_TYPE(kMouseScrolled)
-  EVENT_CLASS_CATEGORY(kMouseEventCategory | kInputEventCategory)
  private:
   double offset_x_;
   double offset_y_;
 };
 
-class DLL_API MouseButtonEvent : public Event {
+class DLL_API MouseButtonEvent : public MouseEvent {
  public:
   inline int GetMouseButton() const { return button_; }
 
-  EVENT_CLASS_CATEGORY(kMouseEventCategory | kInputEventCategory)
  protected:
   MouseButtonEvent(int button) : button_(button) {}
 

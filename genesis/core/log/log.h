@@ -19,11 +19,7 @@ class DLL_API Log {
   static spdlog::logger& GetCoreLogger() { return *core_logger; }
   static spdlog::logger& GetClientLogger() { return *client_logger; }
 
-  const std::string& GetErrorMessage(const std::string& error_message_key);
-
  private:
-  static void LoadErrorMessage();
-  static std::unordered_map<std::string, std::string, int> error_message_map;
   static std::shared_ptr<spdlog::logger> core_logger;
   static std::shared_ptr<spdlog::logger> client_logger;
 };
