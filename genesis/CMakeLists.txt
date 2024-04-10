@@ -32,6 +32,8 @@ set(SOURCES
     core/renderer/shader_library.cpp
     core/renderer/texture.cpp
     core/renderer/vertex_array.cpp
+    core/renderer/mesh.cpp
+    core/renderer/model.cpp
     core/timer.cpp
     core/time_step.cpp
     core/window.cpp
@@ -79,6 +81,8 @@ set(HEADERS
     core/renderer/camera/orthographic_camera.h
     core/renderer/camera/orthographic_camera_controller.h
     core/renderer/camera/perspective_camera.h
+    core/renderer/mesh.h
+    core/renderer/model.h
     platform/input/glfw_input.h
     platform/render_api/opengl/opengl_buffer.h
     platform/render_api/opengl/opengl_context.h
@@ -106,9 +110,10 @@ add_compile_definitions(GLFW_INCLUDE_NONE)
 add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
 add_compile_definitions(ASSERT)
 add_compile_definitions(GLM_FORCE_SILENT_WARNINGS)
+add_compile_definitions(GENESIS_DEBUG)
 
 #link library
-target_link_libraries(genesis PRIVATE glfw spdlog glad imgui)
+target_link_libraries(genesis PRIVATE glfw spdlog glad imgui assimp)
 
 #include genesis
 set(ENGINE_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/genesis)

@@ -13,6 +13,9 @@ target_compile_options(spdlog PUBLIC /wd4819)
 add_subdirectory(third_party/glad)
 target_compile_options(glad PUBLIC /wd4819)
 
+add_subdirectory(third_party/assimp)
+target_compile_options(assimp PUBLIC /wd4819)
+
 #build genesis
 add_subdirectory(genesis)
 target_compile_options(genesis PUBLIC /wd4819)
