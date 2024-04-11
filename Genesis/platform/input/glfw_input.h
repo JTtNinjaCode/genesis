@@ -18,6 +18,7 @@ class GLFWInput : public Input {
   std::pair<double, double> GetMousePosition() const override;
   double GetMousePositionX() const override;
   double GetMousePositionY() const override;
+  std::string GetKeyCodeName(Keycode key) const override;
 
  private:
   GLFWInput();

@@ -1,7 +1,7 @@
 #include "buffer.h"
 
 #include "core/log/log.h"
-#include "core/renderer/renderer.h"
+#include "core/renderer/renderer_api.h"
 #include "platform/render_api/opengl/opengl_buffer.h"
 namespace genesis {
 

@@ -13,10 +13,11 @@
 #pragma warning(pop)
 
 #include "imgui_layer/sandbox_2d.h"
+#include "imgui_layer/sandbox_3d.h"
 
 class Sandbox : public genesis::Application {
  public:
-  Sandbox() { PushOverLayer(std::make_shared<Sandbox2D>()); }
+  Sandbox() { PushOverLayer(std::make_shared<Sandbox3D>()); }
   ~Sandbox() {}
 };
 

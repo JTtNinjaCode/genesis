@@ -1,8 +1,10 @@
 #pragma once
+#include <filesystem>
 #include <memory>
 #include <string>
-#include <filesystem>
 namespace genesis {
+enum class TextureType { Specular, Diffuse };
+
 class Texture {
  public:
   virtual ~Texture() = default;
@@ -15,10 +17,15 @@ class Texture {
 
 class Texture2D : public Texture {
  public:
-  static std::shared_ptr<Texture2D> Create(const std::filesystem::path& path);
-  static std::shared_ptr<Texture2D> Create(unsigned char* data,
-                                           unsigned int channels,
-                                           unsigned int width,
-                                           unsigned int height);
+  static std::shared_ptr<Texture2D> Create(
+      const std::filesystem::path& path,
+      TextureType texture_type = TextureType::Diffuse);
+  static std::shared_ptr<Texture2D> Create(
+      unsigned char* data, unsigned int channels, unsigned int width,
+      unsigned int height, TextureType texture_type = TextureType::Diffuse);
+  TextureType GetTextureType() const { return texture_type_; }
+
+ private:
+  TextureType texture_type_ = TextureType::Diffuse;
 };
 }  // namespace genesis

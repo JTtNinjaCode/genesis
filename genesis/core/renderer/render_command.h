@@ -14,6 +14,8 @@ class RenderCommand {
   virtual void SetBlend(bool enable) = 0;
   virtual void SetDepthTest(bool enable) = 0;
   virtual void SetViewport(int x, int y, int width, int height) = 0;
+  virtual void SetPolygonMode(bool enable) = 0;
+  virtual void SetBackCulling(bool enable) = 0;
 
  private:
   static std::shared_ptr<RenderCommand> render_command_;

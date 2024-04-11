@@ -14,6 +14,7 @@ RenderCommand& RenderCommand::GetInstanced() {
       default:
         CORE_ASSERT(false, "Not Valid API.");
     }
+    render_command_->SetDepthTest(true);
   }
   return *render_command_;
 }

@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "core/log/log.h"
-#include "core/renderer/renderer.h"
+#include "core/renderer/renderer_api.h"
 #include "platform/render_api/opengl/opengl_vertex_array.h"
 namespace genesis {
 std::shared_ptr<VertexArray> VertexArray::Create(

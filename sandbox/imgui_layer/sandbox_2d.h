@@ -1,5 +1,5 @@
 #pragma once
-#include <Genesis.h>
+#include <genesis.h>
 
 #include <iostream>
 
@@ -10,8 +10,11 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <glm/geometric.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 #pragma warning(pop)
 
 class Sandbox2D : public genesis::ImGuiLayer {
@@ -29,6 +32,10 @@ class Sandbox2D : public genesis::ImGuiLayer {
 
   virtual void OnUpdate(genesis::TimeStep time_step) override {
     {
+      std::cout << glm::to_string(glm::faceforward(glm::vec3{10, 20, 10},
+                                                   glm::vec3{0, 3, 0},
+                                                   glm::vec3{0, -1, 0}))
+                << std::endl;
       PROFILE("Hello",
               [&](const genesis::profile::ProfileResult& profile_result) {
                 profile_results_.push_back(profile_result);
@@ -84,7 +91,7 @@ class Sandbox2D : public genesis::ImGuiLayer {
     //   ImGui::RenderPlatformWindowsDefault();
     //   glfwMakeContextCurrent(backup_current_context);
     // }
-     if (io.ConfigFlags) {
+    if (io.ConfigFlags) {
       GLFWwindow* backup_current_context = glfwGetCurrentContext();
       glfwMakeContextCurrent(backup_current_context);
     }

@@ -1,4 +1,4 @@
-#include "platform/input/glfw_input.h"
+#include "glfw_input.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4005)
@@ -89,6 +89,12 @@ int GLFWInput::GetGLFWMouseButtonFromGenesisMouseButton(
     return -1;  // GLFW_BUTTON_UNKNOWN not exist.
   }
   return iter->second;
+}
+
+//TODO: GetKeyCodeName
+std::string GLFWInput::GetKeyCodeName(Keycode key) const {
+  auto key_name = "W";
+  return std::string(key_name);
 }
 
 void GLFWInput::initializeKeycodeTable() {
@@ -325,4 +331,5 @@ void GLFWInput::initializeMouseButtonTable() {
   lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_3] =
       MouseButton::kButton3;
 }
+
 }  // namespace genesis

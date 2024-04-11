@@ -34,4 +34,20 @@ void OpenGLRenderCommand::SetDepthTest(bool enable) {
     glDisable(GL_DEPTH_TEST);
   }
 }
+void OpenGLRenderCommand::SetPolygonMode(bool enable) {
+  if (enable) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  } else {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  }
+}
+void OpenGLRenderCommand::SetBackCulling(bool enable) {
+  if (enable) {
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+  } else {
+    glDisable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+  }
+}
 }  // namespace genesis

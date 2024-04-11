@@ -10,52 +10,54 @@ OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& path) {
   if (!filesystem::exists(path)) {
     CORE_ASSERT(false, "{0} not exists.", path.string());
   }
+  CORE_LOG_TRACE("load texture {0}", path.string());
+  // auto compressed_path_name = path;
+  // compressed_path_name += ".cpt";
 
-  auto compressed_path_name = path;
-  compressed_path_name += ".cpt";
-
-  CORE_LOG_TRACE(compressed_path_name.string());
+  // CORE_LOG_TRACE(compressed_path_name.string());
 
   // origin file exists, but compress version not exists
-  //if (!filesystem::exists(compressed_path_name)) {
+  // if (!filesystem::exists(compressed_path_name)) {
   //  OpenGLCompressor::compress();
   //}
 
-  //CompressTextureFormat compress_texture = LoadCompressTexture();
+  // CompressTextureFormat compress_texture = LoadCompressTexture();
 
-  //glCreateTextures(GL_TEXTURE_2D, 1, &id_);
-  //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  //GLenum internal_format = 0;
-  //if (compress_texture.channels == 3) {
-  //  internal_format = GL_COMPRESSED_RGB;
-  //} else if (compress_texture.channels == 4) {
-  //  internal_format = GL_COMPRESSED_RGBA;
-  //}
+  // glCreateTextures(GL_TEXTURE_2D, 1, &id_);
+  // glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  // GLenum internal_format = 0;
+  // if (compress_texture.channels == 3) {
+  //   internal_format = GL_COMPRESSED_RGB;
+  // } else if (compress_texture.channels == 4) {
+  //   internal_format = GL_COMPRESSED_RGBA;
+  // }
 
-  //CORE_ASSERT(compress_texture.channels == 3 || compress_texture.channels || 4,
-  //            "texture format not support.");
+  // CORE_ASSERT(compress_texture.channels == 3 || compress_texture.channels ||
+  // 4,
+  //             "texture format not support.");
 
-  //glTextureStorage2D(id_, 1, internal_format, width_,
-  //                   height_);  // allocate memory
+  // glTextureStorage2D(id_, 1, internal_format, width_,
+  //                    height_);  // allocate memory
 
-  //glTextureParameteri(id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  //glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  // glTextureParameteri(id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  // glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  //GLenum data_format;
-  //if (compress_texture.channels == 3) {
-  //  data_format = GL_COMPRESSED_RGB;
-  //} else if (compress_texture.channels == 4) {
-  //  data_format = GL_COMPRESSED_RGBA;
-  //}
-  //glTextureSubImage2D(
-  //    id_, 0, 0, 0, width_, height_, data_format, GL_UNSIGNED_BYTE,
-  //    compress_texture.data);  // transfer data to allocated memory
+  // GLenum data_format;
+  // if (compress_texture.channels == 3) {
+  //   data_format = GL_COMPRESSED_RGB;
+  // } else if (compress_texture.channels == 4) {
+  //   data_format = GL_COMPRESSED_RGBA;
+  // }
+  // glTextureSubImage2D(
+  //     id_, 0, 0, 0, width_, height_, data_format, GL_UNSIGNED_BYTE,
+  //     compress_texture.data);  // transfer data to allocated memory
 
   //
   int channels = 0;
+  stbi_set_flip_vertically_on_load(false);
   stbi_uc* image_data =
       stbi_load(path.string().c_str(), &width_, &height_, &channels, 0);
-  CORE_ASSERT(image_data, "stb fail to load image");
+  CORE_ASSERT(image_data, "stb fail to load image.");
 
   glCreateTextures(GL_TEXTURE_2D, 1, &id_);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -73,6 +75,8 @@ OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& path) {
 
   glTextureParameteri(id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTextureParameteri(id_, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTextureParameteri(id_, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   GLenum data_format;
   if (channels == 3) {
