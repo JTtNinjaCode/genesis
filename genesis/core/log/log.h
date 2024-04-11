@@ -34,7 +34,7 @@ class DLL_API Log {
   genesis::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // assert
-#ifdef ASSERT
+#ifdef GENESIS_ASSERT
 #define CORE_ASSERT(x, ...)      \
   if (!(x)) {                    \
     CORE_LOG_ERROR(__VA_ARGS__); \
