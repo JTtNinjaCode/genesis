@@ -22,6 +22,11 @@ set(HEADERS
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
+# add macro
+add_compile_definitions(
+    GLM_ENABLE_EXPERIMENTAL
+)
+
 target_sources(sandbox
     PRIVATE
     ${HEADERS}

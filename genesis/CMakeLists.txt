@@ -23,8 +23,9 @@ set(SOURCES
     core/renderer/camera/orthographic_camera.cpp
     core/renderer/camera/orthographic_camera_controller.cpp
     core/renderer/camera/perspective_camera.cpp
+    core/renderer/camera/perspective_camera_controller.cpp
     core/renderer/graphic_context.cpp
-    core/renderer/renderer.cpp
+    core/renderer/renderer_3d.cpp
     core/renderer/renderer_2d.cpp
     core/renderer/renderer_api.cpp
     core/renderer/render_command.cpp
@@ -70,7 +71,7 @@ set(HEADERS
     core/renderer/buffer.h
     core/renderer/buffer_layout.h
     core/renderer/graphic_context.h
-    core/renderer/renderer.h
+    core/renderer/renderer_3d.h
     core/renderer/renderer_2d.h
     core/renderer/renderer_api.h
     core/renderer/render_command.h
@@ -81,6 +82,7 @@ set(HEADERS
     core/renderer/camera/orthographic_camera.h
     core/renderer/camera/orthographic_camera_controller.h
     core/renderer/camera/perspective_camera.h
+    core/renderer/camera/perspective_camera_controller.h
     core/renderer/mesh.h
     core/renderer/model.h
     platform/input/glfw_input.h
@@ -106,22 +108,21 @@ target_sources(genesis
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 #define macro
-add_compile_definitions(GLFW_INCLUDE_NONE)
-add_compile_definitions(GLM_ENABLE_EXPERIMENTAL)
-add_compile_definitions(ASSERT)
-add_compile_definitions(GLM_FORCE_SILENT_WARNINGS)
-add_compile_definitions(GENESIS_DEBUG)
+add_compile_definitions(
+	GLFW_INCLUDE_NONE
+	GLM_ENABLE_EXPERIMENTAL
+	GENESIS_ASSERT
+	GLM_FORCE_SILENT_WARNINGS
+	GENESIS_DEBUG
+)
 
 #link library
-target_link_libraries(genesis PRIVATE glfw spdlog glad imgui assimp)
+target_link_libraries(genesis PRIVATE glfw glad assimp)
+target_link_libraries(genesis PUBLIC spdlog imgui glm)
 
 #include genesis
 set(ENGINE_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/genesis)
 target_include_directories(genesis PUBLIC ${ENGINE_INCLUDE_DIRS})
-
-#include glm
-set(GLM_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/glm)
-target_include_directories(genesis PUBLIC ${GLM_INCLUDE_DIRS})
 
 #include stb
 set(STB_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/stb)

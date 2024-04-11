@@ -16,15 +16,15 @@ target_compile_options(glad PUBLIC /wd4819)
 add_subdirectory(third_party/assimp)
 target_compile_options(assimp PUBLIC /wd4819)
 
-#build genesis
+add_subdirectory(third_party/glm)
+target_compile_options(assimp PUBLIC /wd4819)
+
 add_subdirectory(genesis)
 target_compile_options(genesis PUBLIC /wd4819)
 
-#build sandbox
 add_subdirectory(sandbox)
 target_compile_options(sandbox PUBLIC /wd4819)
 
-#build imgui
 add_subdirectory(cmake)
 target_compile_options(imgui PUBLIC /wd4819)
 
