@@ -9,5 +9,7 @@
 /build/
 # ini file contain imgui layout information
 *.ini
+
+.vs
 # make sure all file in genesis(source file) wont be excluded
 !/genesis/
