@@ -12,9 +12,15 @@ namespace genesis {
 Renderer2D::Renderer2D() {
   RenderCommand::GetInstanced().SetBlend(true);
   RenderCommand::GetInstanced().SetDepthTest(true);
-  std::array<float, 20> data{-0.5, -0.5, 0.0, 0.0,  0.0, 0.5, -0.5,
-                             0.0,  1.0,  0.0, -0.5, 0.5, 0.0, 0.0,
-                             1.0,  0.5,  0.5, 0.0,  1.0, 1.0};
+  // clang-format off
+  std::array<float, 20> data{
+      // position-3, uv-2
+      -0.5, -0.5, 0.0, 0.0, 0.0,
+      0.5, -0.5, 0.0,  1.0, 0.0,
+      -0.5, 0.5, 0.0, 0.0, 1.0,
+      0.5,  0.5, 0.0,  1.0, 1.0
+  };
+  // clang-format on
   quad_vbo_ = genesis::VertexBuffer::Create(data.data(), sizeof(data));
   quad_vbo_->Bind();
 
