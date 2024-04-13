@@ -9,7 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(genesis STATIC)
 
 #source files
-set(SOURCES 
+set(SOURCES
+    genesis.h
     core/application.cpp
     core/imgui/imgui_layer.cpp
     core/input.cpp

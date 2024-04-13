@@ -12,39 +12,39 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #pragma warning(pop)
 
 class Sandbox3D : public genesis::ImGuiLayer {
  public:
   Sandbox3D() {
-    float ratio =
-        genesis::Application::GetApplication().GetWindow().GetWidth() /
-        float(genesis::Application::GetApplication().GetWindow().GetHeight());
-    camera_3d_ = std::make_shared<genesis::PerspectiveCamera>(
-        glm::radians(45.0f), ratio, 0.01f, 100.0f, glm::vec3(0, 16, 10),
-        glm::vec3(0, 10, 0));
-    shader_ = genesis::Shader::Create("./assets/shaders/model.vert",
-                                      "./assets/shaders/model.frag");
+    float ratio = genesis::Application::GetApplication().GetWindow().GetWidth() /
+                  float(genesis::Application::GetApplication().GetWindow().GetHeight());
+    camera_3d_ = std::make_shared<genesis::PerspectiveCamera>(glm::radians(45.0f), ratio, 0.01f, 100.0f,
+                                                              glm::vec3(0, 16, 100), glm::vec3(0, 10, 0));
+    shader_ = genesis::Shader::Create("./assets/shaders/model.vert", "./assets/shaders/model.frag");
 
-    model_ = std::make_shared<genesis::Model>(
-        "./assets/models/Nanosuit/nanosuit.obj");
+    model_ = std::make_shared<genesis::Model>("./assets/models/Nanosuit/nanosuit.obj");
   }
 
   virtual void OnUpdate(genesis::TimeStep time_step) override {
     {
-      PROFILE("Hello",
-              [&](const genesis::profile::ProfileResult& profile_result) {
-                profile_results_.push_back(profile_result);
-              });
+      PROFILE("Hello", [&](const genesis::profile::ProfileResult& profile_result) {
+        profile_results_.push_back(profile_result);
+      });
       profile_results_.clear();
-      genesis::RenderCommand& render_command =
-          genesis::RenderCommand::GetInstanced();
+      genesis::RenderCommand& render_command = genesis::RenderCommand::GetInstanced();
       render_command.SetClearColor({0.8, 0.2, 0.5, 1.0f});
       render_command.Clear();
 
       auto& renderer_3d = genesis::Renderer3D();
       renderer_3d.BeginScene(*camera_3d_);
-      renderer_3d.Submit(*shader_, *model_, glm::mat4(1.0f));
+
+      static float rotate_eulerAngle = 0.0;
+      rotate_eulerAngle += time_step.GetSeconds() * 60;
+      glm::mat4 model = glm::eulerAngleYXZ(glm::radians(rotate_eulerAngle), glm::radians(rotate_eulerAngle),
+                                           glm::radians(rotate_eulerAngle));
+      renderer_3d.Submit(*shader_, *model_, model);
       renderer_3d.EndScene();
 
       // camera_3d_->OnUpdate(time_step);
@@ -62,12 +62,10 @@ class Sandbox3D : public genesis::ImGuiLayer {
   void OnImguiRender() override {
     ImGuiIO& io = ImGui::GetIO();
     auto& app = genesis::Application::GetApplication();
-    io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(),
-                            (float)app.GetWindow().GetHeight());
+    io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
     for (auto& result : profile_results_) {
-      ImGui::Text("profiler:%s, time: %f ms", result.name,
-                  result.duration.count() * 0.001f);
+      ImGui::Text("profiler:%s, time: %f ms", result.name, result.duration.count() * 0.001f);
     }
 
     // Rendering

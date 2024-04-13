@@ -17,7 +17,6 @@ add_subdirectory(third_party/assimp)
 target_compile_options(assimp PUBLIC /wd4819)
 
 add_subdirectory(third_party/glm)
-target_compile_options(assimp PUBLIC /wd4819)
 
 add_subdirectory(genesis)
 target_compile_options(genesis PUBLIC /wd4819)
