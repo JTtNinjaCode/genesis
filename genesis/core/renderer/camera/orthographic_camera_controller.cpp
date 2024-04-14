@@ -37,8 +37,8 @@ bool OrthographicCameraController::OnUpdate(TimeStep time_step) {
 
 bool OrthographicCameraController::OnWindowResizeEvent(
     WindowResizeEvent& event) {
-  camera_.SetRatio(Application::GetApplication().GetWindow().GetWidth() /
-                   Application::GetApplication().GetWindow().GetHeight());
+  camera_.SetRatio(Application::GetInstance().GetWindow().GetWidth() /
+                   Application::GetInstance().GetWindow().GetHeight());
   return false;
 }
 

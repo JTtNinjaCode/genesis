@@ -19,8 +19,8 @@
 class Sandbox2D : public genesis::ImGuiLayer {
  public:
   Sandbox2D() {
-    float ratio = genesis::Application::GetApplication().GetWindow().GetWidth() /
-                  float(genesis::Application::GetApplication().GetWindow().GetHeight());
+    float ratio = genesis::Application::GetInstance().GetWindow().GetWidth() /
+                  float(genesis::Application::GetInstance().GetWindow().GetHeight());
     camera_2d_controller_ = std::make_shared<genesis::OrthographicCameraController>(3.0f, ratio, 0.01f, 100.0f);
     texture_ = genesis::Texture2D::Create("./assets/textures/small smoke checkerboard.jpg");
   }
@@ -59,7 +59,7 @@ class Sandbox2D : public genesis::ImGuiLayer {
 
   void OnImguiRender() override {
     ImGuiIO& io = ImGui::GetIO();
-    auto& app = genesis::Application::GetApplication();
+    auto& app = genesis::Application::GetInstance();
     io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
     ImGui::ColorEdit3("color editor", glm::value_ptr(square_color_));

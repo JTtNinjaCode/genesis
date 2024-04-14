@@ -46,7 +46,7 @@ void ImGuiLayer::OnAttach() {
     style.Colors[ImGuiCol_WindowBg].w = 1.0f;
   }
 
-  auto app = Application::GetApplication();
+  auto app = Application::GetInstance();
   GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
   // Setup Platform/Renderer bindings

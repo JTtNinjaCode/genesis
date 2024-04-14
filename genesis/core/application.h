@@ -18,7 +18,7 @@ class DLL_API Application {
  public:
   Application();
   virtual ~Application();
-  static Application& GetApplication() { return *instance_; }
+  static Application& GetInstance() { return *instance_; }
 
   Window& GetWindow() { return *window_; }
   virtual void Run();

@@ -18,9 +18,9 @@
 class Sandbox3D : public genesis::ImGuiLayer {
  public:
   Sandbox3D() {
-    float ratio = genesis::Application::GetApplication().GetWindow().GetWidth() /
-                  float(genesis::Application::GetApplication().GetWindow().GetHeight());
-    genesis::Application::GetApplication().GetWindow().EnableCursor(false);
+    float ratio = genesis::Application::GetInstance().GetWindow().GetWidth() /
+                  float(genesis::Application::GetInstance().GetWindow().GetHeight());
+    genesis::Application::GetInstance().GetWindow().EnableCursor(false);
     camera_3d_ = std::make_shared<genesis::PerspectiveCameraController>(glm::radians(45.0f), ratio, 0.01f, 100.0f,
                                                                         glm::vec3(0, 16, 100), glm::vec3(0, 10, 0));
     shader_ = genesis::Shader::Create("./assets/shaders/model.vert", "./assets/shaders/model.frag");
@@ -57,14 +57,14 @@ class Sandbox3D : public genesis::ImGuiLayer {
   }
   bool OnKeyPressedEvent(genesis::KeyPressedEvent& event) {
     if (event.GetKeyCode() == genesis::Keycode::kKeyEscape) {
-      genesis::Application::GetApplication().GetWindow().EnableCursor(true);
+      genesis::Application::GetInstance().GetWindow().EnableCursor(true);
     }
     return false;
   }
 
   bool OnMouseButtonPressedEvent(genesis::MouseButtonPressedEvent& event) {
      if (event.GetMouseButton() == genesis::MouseButton::kButtonLeft) {
-           genesis::Application::GetApplication().GetWindow().EnableCursor(false);
+           genesis::Application::GetInstance().GetWindow().EnableCursor(false);
          }
     return false;
   }
@@ -79,7 +79,7 @@ class Sandbox3D : public genesis::ImGuiLayer {
 
   void OnImguiRender() override {
     ImGuiIO& io = ImGui::GetIO();
-    auto& app = genesis::Application::GetApplication();
+    auto& app = genesis::Application::GetInstance();
     io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
     for (auto& result : profile_results_) {
