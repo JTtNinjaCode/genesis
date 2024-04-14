@@ -20,13 +20,10 @@ void Model::DrawInstanced(Shader& shader, unsigned int count) {
 
 void Model::LoadModel(const std::filesystem::path& path) {
   Assimp::Importer importer;
-  const aiScene* scene = importer.ReadFile(
-      path.string(),
-      aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-  if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
-      !scene->mRootNode) {
-    CORE_LOG_ERROR("Failed to load object by assimp: {0}",
-                   importer.GetErrorString());
+  const aiScene* scene =
+      importer.ReadFile(path.string(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+  if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+    CORE_LOG_ERROR("Failed to load object by assimp: {0}", importer.GetErrorString());
     return;
   }
   directory_ = path.parent_path();
@@ -69,10 +66,8 @@ Mesh Model::ProcessMesh(const aiMesh* mesh, const aiScene* scene) {
     vertices.push_back(vertex);
   }
 
-  auto vbo = VertexBuffer::Create(vertices.data(),
-                                  sizeof(VertexPNT) * vertices.size());
-  auto vao = VertexArray::Create(
-      {MathDataType::kFloat3, MathDataType::kFloat3, MathDataType::kFloat2});
+  auto vbo = VertexBuffer::Create(vertices.data(), sizeof(VertexPNT) * vertices.size());
+  auto vao = VertexArray::Create({MathDataType::kFloat3, MathDataType::kFloat3, MathDataType::kFloat2});
   vao->AddVertexBuffer(*vbo);
 
   std::vector<unsigned int> indicies;
@@ -82,30 +77,24 @@ Mesh Model::ProcessMesh(const aiMesh* mesh, const aiScene* scene) {
       indicies.push_back(face.mIndices[j]);
     }
   }
-  auto ebo = IndexBuffer::Create(indicies.data(),
-                                 sizeof(unsigned int) * indicies.size());
+  auto ebo = IndexBuffer::Create(indicies.data(), sizeof(unsigned int) * indicies.size());
   vao->SetIndexBuffer(*ebo);
 
   std::vector<std::shared_ptr<Texture2D>> textures;
   if (mesh->mMaterialIndex >= 0) {
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    LoadMaterialTextures(textures, material, aiTextureType_DIFFUSE,
-                         TextureType::Diffuse);
-    LoadMaterialTextures(textures, material, aiTextureType_SPECULAR,
-                         TextureType::Specular);
+    LoadMaterialTextures(textures, material, aiTextureType_DIFFUSE, TextureType::Diffuse);
+    LoadMaterialTextures(textures, material, aiTextureType_SPECULAR, TextureType::Specular);
   }
-  return Mesh(std::move(vbo), std::move(vao), std::move(ebo),
-              std::move(textures));
+  return Mesh(std::move(vbo), std::move(vao), std::move(ebo), std::move(textures));
 }
 
-void Model::LoadMaterialTextures(
-    std::vector<std::shared_ptr<Texture2D>>& textures, aiMaterial* mat,
-    aiTextureType type, TextureType texture_type) {
+void Model::LoadMaterialTextures(std::vector<std::shared_ptr<Texture2D>>& textures, aiMaterial* mat, aiTextureType type,
+                                 TextureType texture_type) {
   for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
     aiString str;
     mat->GetTexture(type, i, &str);
-    textures.push_back(
-        Texture2D::Create(directory_ / std::string(str.C_Str()), texture_type));
+    textures.push_back(Texture2D::Create(directory_ / std::string(str.C_Str()), texture_type));
   }
 }
 }  // namespace genesis

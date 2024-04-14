@@ -63,9 +63,9 @@ class Sandbox3D : public genesis::ImGuiLayer {
   }
 
   bool OnMouseButtonPressedEvent(genesis::MouseButtonPressedEvent& event) {
-     if (event.GetMouseButton() == genesis::MouseButton::kButtonLeft) {
-           genesis::Application::GetInstance().GetWindow().EnableCursor(false);
-         }
+    if (event.GetMouseButton() == genesis::MouseButton::kButtonLeft) {
+      genesis::Application::GetInstance().GetWindow().EnableCursor(false);
+    }
     return false;
   }
 
