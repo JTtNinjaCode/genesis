@@ -15,6 +15,7 @@ class DLL_API Window {
 
   virtual unsigned int GetWidth() const = 0;
   virtual unsigned int GetHeight() const = 0;
+  virtual void EnableCursor(bool open) = 0;
   virtual void SetVSync(bool open) = 0;
   virtual bool IsVSync() const = 0;
   virtual void SetEventListener(const EventCallbackFunc& event_listener) = 0;

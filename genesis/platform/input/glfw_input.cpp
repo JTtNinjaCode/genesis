@@ -14,52 +14,39 @@ GLFWInput::GLFWInput() {
 
 bool GLFWInput::IsKeyPressed(Keycode keycode) const {
   int glfw_keycode = GetGLFWKeycdodeFromGenesisKeycode(keycode);
-  return (GLFW_PRESS ==
-          glfwGetKey(
-              static_cast<GLFWwindow*>(
-                  Application::GetApplication().GetWindow().GetNativeWindow()),
-              glfw_keycode));
+  return (GLFW_PRESS == glfwGetKey(static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow()),
+                                   glfw_keycode));
 }
 
 int GLFWInput::GetMouseButton(MouseButton button) const {
   int glfw_button = GetGLFWMouseButtonFromGenesisMouseButton(button);
   return (GLFW_PRESS ==
-          glfwGetMouseButton(
-              static_cast<GLFWwindow*>(
-                  Application::GetApplication().GetWindow().GetNativeWindow()),
-              glfw_button));
+          glfwGetMouseButton(static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow()),
+                             glfw_button));
 }
 
 std::pair<double, double> GLFWInput::GetMousePosition() const {
   double xpos, ypos;
-  glfwGetCursorPos(
-      static_cast<GLFWwindow*>(
-          Application::GetApplication().GetWindow().GetNativeWindow()),
-      &xpos, &ypos);
+  glfwGetCursorPos(static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow()), &xpos, &ypos);
   return {xpos, ypos};
 }
 
 double GLFWInput::GetMousePositionX() const {
   double xpos;
-  glfwGetCursorPos(
-      static_cast<GLFWwindow*>(
-          Application::GetApplication().GetWindow().GetNativeWindow()),
-      &xpos, nullptr);
+  glfwGetCursorPos(static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow()), &xpos, nullptr);
   return xpos;
 }
 
 double GLFWInput::GetMousePositionY() const {
   double ypos;
-  glfwGetCursorPos(
-      static_cast<GLFWwindow*>(
-          Application::GetApplication().GetWindow().GetNativeWindow()),
-      nullptr, &ypos);
+  glfwGetCursorPos(static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow()), nullptr, &ypos);
   return ypos;
 }
 
 Keycode GLFWInput::GetGenesisKeycodeFromGLFWKeycode(int keycode) const {
   const auto iter = lookup_genesis_keycode_table.find(keycode);
   if (iter == lookup_genesis_keycode_table.cend()) {
+    CORE_LOG_ERROR("Unknown key.");
     return Keycode::kKeyUnknown;
   }
   return iter->second;
@@ -68,34 +55,32 @@ Keycode GLFWInput::GetGenesisKeycodeFromGLFWKeycode(int keycode) const {
 int GLFWInput::GetGLFWKeycdodeFromGenesisKeycode(Keycode keycode) const {
   const auto iter = lookup_glfw_keycode_table.find(keycode);
   if (iter == lookup_glfw_keycode_table.cend()) {
+    CORE_LOG_ERROR("Unknown key.");
     return GLFW_KEY_UNKNOWN;
   }
   return iter->second;
 }
 
-MouseButton GLFWInput::GetGenesisMouseButtonFromGLFWMouseButton(
-    int button) const {
+MouseButton GLFWInput::GetGenesisMouseButtonFromGLFWMouseButton(int button) const {
   const auto iter = lookup_genesis_mouse_button_table.find(button);
   if (iter == lookup_genesis_mouse_button_table.cend()) {
-    return MouseButton::kButton1;
+    CORE_LOG_ERROR("Unknown mouse button.");
+    return MouseButton::kButtonUnknown;
   }
   return iter->second;
 }
 
-int GLFWInput::GetGLFWMouseButtonFromGenesisMouseButton(
-    MouseButton button) const {
+int GLFWInput::GetGLFWMouseButtonFromGenesisMouseButton(MouseButton button) const {
   const auto iter = lookup_glfw_mouse_button_table.find(button);
   if (iter == lookup_glfw_mouse_button_table.cend()) {
+    CORE_LOG_ERROR("Unknown mouse button.");
     return -1;  // GLFW_BUTTON_UNKNOWN not exist.
   }
   return iter->second;
 }
 
-//TODO: GetKeyCodeName
-std::string GLFWInput::GetKeyCodeName(Keycode key) const {
-  auto key_name = "W";
-  return std::string(key_name);
-}
+// TODO: GetKeyCodeName
+std::string GLFWInput::GetKeyCodeName(Keycode key) const { return ""; }
 
 void GLFWInput::initializeKeycodeTable() {
   // initialize genesis keycode table
@@ -134,10 +119,8 @@ void GLFWInput::initializeKeycodeTable() {
   lookup_genesis_keycode_table[GLFW_KEY_X] = Keycode::kKeyX;
   lookup_genesis_keycode_table[GLFW_KEY_Y] = Keycode::kKeyY;
   lookup_genesis_keycode_table[GLFW_KEY_Z] = Keycode::kKeyZ;
-  lookup_genesis_keycode_table[GLFW_KEY_LEFT_BRACKET] =
-      Keycode::kKeyLeftBracket;
-  lookup_genesis_keycode_table[GLFW_KEY_RIGHT_BRACKET] =
-      Keycode::kKeyRirghtBracket;
+  lookup_genesis_keycode_table[GLFW_KEY_LEFT_BRACKET] = Keycode::kKeyLeftBracket;
+  lookup_genesis_keycode_table[GLFW_KEY_RIGHT_BRACKET] = Keycode::kKeyRirghtBracket;
   lookup_genesis_keycode_table[GLFW_KEY_BACKSLASH] = Keycode::kKeyBackSlash;
   lookup_genesis_keycode_table[GLFW_KEY_SEMICOLON] = Keycode::kKeySemicolon;
   lookup_genesis_keycode_table[GLFW_KEY_EQUAL] = Keycode::kKeyEqual;
@@ -147,8 +130,7 @@ void GLFWInput::initializeKeycodeTable() {
   lookup_genesis_keycode_table[GLFW_KEY_MINUS] = Keycode::kKeyMinus;
   lookup_genesis_keycode_table[GLFW_KEY_PERIOD] = Keycode::kKeyPeriod;
   lookup_genesis_keycode_table[GLFW_KEY_SLASH] = Keycode::kKeySlash;
-  lookup_genesis_keycode_table[GLFW_KEY_GRAVE_ACCENT] =
-      Keycode::kKeyGraveAccent;
+  lookup_genesis_keycode_table[GLFW_KEY_GRAVE_ACCENT] = Keycode::kKeyGraveAccent;
   lookup_genesis_keycode_table[GLFW_KEY_KP_0] = Keycode::kKeyPad0;
   lookup_genesis_keycode_table[GLFW_KEY_KP_1] = Keycode::kKeyPad1;
   lookup_genesis_keycode_table[GLFW_KEY_KP_2] = Keycode::kKeyPad2;
@@ -177,13 +159,11 @@ void GLFWInput::initializeKeycodeTable() {
   lookup_genesis_keycode_table[GLFW_KEY_TAB] = Keycode::kKeyTab;
   lookup_genesis_keycode_table[GLFW_KEY_ENTER] = Keycode::kKeyEnter;
   lookup_genesis_keycode_table[GLFW_KEY_LEFT_SHIFT] = Keycode::kKeyLeftShift;
-  lookup_genesis_keycode_table[GLFW_KEY_LEFT_CONTROL] =
-      Keycode::kKeyLeftControl;
+  lookup_genesis_keycode_table[GLFW_KEY_LEFT_CONTROL] = Keycode::kKeyLeftControl;
   lookup_genesis_keycode_table[GLFW_KEY_LEFT_ALT] = Keycode::kKeyLeftAlt;
   lookup_genesis_keycode_table[GLFW_KEY_LEFT_SUPER] = Keycode::kKeyLeftSuper;
   lookup_genesis_keycode_table[GLFW_KEY_RIGHT_SHIFT] = Keycode::kKeyRightShift;
-  lookup_genesis_keycode_table[GLFW_KEY_RIGHT_CONTROL] =
-      Keycode::kKeyRightControl;
+  lookup_genesis_keycode_table[GLFW_KEY_RIGHT_CONTROL] = Keycode::kKeyRightControl;
   lookup_genesis_keycode_table[GLFW_KEY_RIGHT_ALT] = Keycode::kKeyRightAlt;
   lookup_genesis_keycode_table[GLFW_KEY_RIGHT_SUPER] = Keycode::kKeyRightSuper;
   lookup_genesis_keycode_table[GLFW_KEY_MENU] = Keycode::kKeyMenu;
@@ -198,8 +178,7 @@ void GLFWInput::initializeKeycodeTable() {
   lookup_genesis_keycode_table[GLFW_KEY_DOWN] = Keycode::kKeyDwon;
   lookup_genesis_keycode_table[GLFW_KEY_UP] = Keycode::kKeyUp;
   lookup_genesis_keycode_table[GLFW_KEY_SCROLL_LOCK] = Keycode::kKeyScrollLock;
-  lookup_genesis_keycode_table[GLFW_KEY_PRINT_SCREEN] =
-      Keycode::kKeyPrintScreen;
+  lookup_genesis_keycode_table[GLFW_KEY_PRINT_SCREEN] = Keycode::kKeyPrintScreen;
   lookup_genesis_keycode_table[GLFW_KEY_PAUSE] = Keycode::kKeyPause;
   lookup_genesis_keycode_table[GLFW_KEY_KP_DECIMAL] = Keycode::kKeyPadDecimal;
   lookup_genesis_keycode_table[GLFW_KEY_KP_DIVIDE] = Keycode::kKeyPadDivide;
@@ -247,8 +226,7 @@ void GLFWInput::initializeKeycodeTable() {
   lookup_glfw_keycode_table[Keycode::kKeyY] = GLFW_KEY_Y;
   lookup_glfw_keycode_table[Keycode::kKeyZ] = GLFW_KEY_Z;
   lookup_glfw_keycode_table[Keycode::kKeyLeftBracket] = GLFW_KEY_LEFT_BRACKET;
-  lookup_glfw_keycode_table[Keycode::kKeyRirghtBracket] =
-      GLFW_KEY_RIGHT_BRACKET;
+  lookup_glfw_keycode_table[Keycode::kKeyRirghtBracket] = GLFW_KEY_RIGHT_BRACKET;
   lookup_glfw_keycode_table[Keycode::kKeyBackSlash] = GLFW_KEY_BACKSLASH;
   lookup_glfw_keycode_table[Keycode::kKeySemicolon] = GLFW_KEY_SEMICOLON;
   lookup_glfw_keycode_table[Keycode::kKeyEqual] = GLFW_KEY_EQUAL;
@@ -324,12 +302,9 @@ void GLFWInput::initializeMouseButtonTable() {
   lookup_glfw_mouse_button_table[MouseButton::kButton3] = GLFW_MOUSE_BUTTON_3;
 
   // initialized genesis mouse button table
-  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_1] =
-      MouseButton::kButton1;
-  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_2] =
-      MouseButton::kButton2;
-  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_3] =
-      MouseButton::kButton3;
+  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_1] = MouseButton::kButton1;
+  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_2] = MouseButton::kButton2;
+  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_3] = MouseButton::kButton3;
 }
 
 }  // namespace genesis

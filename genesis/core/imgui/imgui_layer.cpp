@@ -25,13 +25,12 @@ void ImGuiLayer::OnAttach() {
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO();
   (void)io;
-  io.ConfigFlags |=
-      ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad
   // Controls
-  //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;    // Enable Docking
-  //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport
-                                                       // / Platform Windows
+  // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;    // Enable Docking
+  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport
+  // / Platform Windows
   // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
   // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
@@ -48,8 +47,7 @@ void ImGuiLayer::OnAttach() {
   }
 
   auto app = Application::GetApplication();
-  GLFWwindow* window =
-      static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+  GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
   // Setup Platform/Renderer bindings
   ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -62,11 +60,11 @@ void ImGuiLayer::OnDetach() {
   ImGui::DestroyContext();
 }
 
-void ImGuiLayer::OnUpdate(TimeStep time_step) {
-}
+void ImGuiLayer::OnUpdate(TimeStep time_step) {}
 
-void ImGuiLayer::OnEvent(Event& event) {
+bool ImGuiLayer::OnEvent(Event& event) {
   EventDispatcher event_dispathcer(event);
+  return false;
 }
 void ImGuiLayer::OnRender() { OnImguiRender(); }
 void ImGuiLayer::OnImguiRender() {}

@@ -20,8 +20,9 @@ class Sandbox3D : public genesis::ImGuiLayer {
   Sandbox3D() {
     float ratio = genesis::Application::GetApplication().GetWindow().GetWidth() /
                   float(genesis::Application::GetApplication().GetWindow().GetHeight());
-    camera_3d_ = std::make_shared<genesis::PerspectiveCamera>(glm::radians(45.0f), ratio, 0.01f, 100.0f,
-                                                              glm::vec3(0, 16, 100), glm::vec3(0, 10, 0));
+    genesis::Application::GetApplication().GetWindow().EnableCursor(false);
+    camera_3d_ = std::make_shared<genesis::PerspectiveCameraController>(glm::radians(45.0f), ratio, 0.01f, 100.0f,
+                                                                        glm::vec3(0, 16, 100), glm::vec3(0, 10, 0));
     shader_ = genesis::Shader::Create("./assets/shaders/model.vert", "./assets/shaders/model.frag");
 
     model_ = std::make_shared<genesis::Model>("./assets/models/Nanosuit/nanosuit.obj");
@@ -38,7 +39,7 @@ class Sandbox3D : public genesis::ImGuiLayer {
       render_command.Clear();
 
       auto& renderer_3d = genesis::Renderer3D();
-      renderer_3d.BeginScene(*camera_3d_);
+      renderer_3d.BeginScene(camera_3d_->GetCamera());
 
       static float rotate_eulerAngle = 0.0;
       rotate_eulerAngle += time_step.GetSeconds() * 60;
@@ -47,16 +48,33 @@ class Sandbox3D : public genesis::ImGuiLayer {
       renderer_3d.Submit(*shader_, *model_, model);
       renderer_3d.EndScene();
 
-      // camera_3d_->OnUpdate(time_step);
+      camera_3d_->OnUpdate(time_step);
 
       ImGui_ImplOpenGL3_NewFrame();
       ImGui_ImplGlfw_NewFrame();
       ImGui::NewFrame();
     }
   }
+  bool OnKeyPressedEvent(genesis::KeyPressedEvent& event) {
+    if (event.GetKeyCode() == genesis::Keycode::kKeyEscape) {
+      genesis::Application::GetApplication().GetWindow().EnableCursor(true);
+    }
+    return false;
+  }
 
-  void OnEvent(genesis::Event& event) override {
-    // camera_3d_->OnEvent(event);
+  bool OnMouseButtonPressedEvent(genesis::MouseButtonPressedEvent& event) {
+     if (event.GetMouseButton() == genesis::MouseButton::kButtonLeft) {
+           genesis::Application::GetApplication().GetWindow().EnableCursor(false);
+         }
+    return false;
+  }
+
+  bool OnEvent(genesis::Event& event) override {
+    camera_3d_->OnEvent(event);
+    genesis::EventDispatcher event_dispatcher(event);
+    event_dispatcher.Dispatch<genesis::KeyPressedEvent>(BIND_METHOD(Sandbox3D::OnKeyPressedEvent));
+    event_dispatcher.Dispatch<genesis::MouseButtonPressedEvent>(BIND_METHOD(Sandbox3D::OnMouseButtonPressedEvent));
+    return false;
   }
 
   void OnImguiRender() override {
@@ -86,7 +104,7 @@ class Sandbox3D : public genesis::ImGuiLayer {
   }
 
  private:
-  std::shared_ptr<genesis::PerspectiveCamera> camera_3d_;
+  std::shared_ptr<genesis::PerspectiveCameraController> camera_3d_;
   std::vector<genesis::profile::ProfileResult> profile_results_;
   std::shared_ptr<genesis::Model> model_;
   std::shared_ptr<genesis::Shader> shader_;

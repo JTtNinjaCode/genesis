@@ -4,8 +4,8 @@
 namespace genesis {
 class PerspectiveCamera {
  public:
-  PerspectiveCamera(float field_of_view, float ratio, float near_plane,
-                    float far_plane, glm::vec3 position, glm::vec3 target);
+  PerspectiveCamera(float field_of_view, float ratio, float near_plane, float far_plane, glm::vec3 position,
+                    glm::vec3 target);
 
   float GetFieldOfView() const { return field_of_view_; }
 
@@ -25,7 +25,7 @@ class PerspectiveCamera {
 
   glm::mat4 GetProjectionView() const { return projection_view_; }
 
-  void SetDirection(glm::vec3 direction) { direction_ = direction; }
+  void SetDirection(glm::vec3 direction) { direction_ = glm::normalize(direction); }
 
   void SetFieldOfView(float field_of_view) {
     field_of_view_ = field_of_view;

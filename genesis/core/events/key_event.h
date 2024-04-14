@@ -13,14 +13,11 @@ class DLL_API KeyEvent : public Event {
 
 class DLL_API KeyPressedEvent : public KeyEvent {
  public:
-  KeyPressedEvent(Keycode key_code) : key_code_(key_code) {
-    CORE_LOG_TRACE(ToString());
-  }
+  KeyPressedEvent(Keycode key_code) : key_code_(key_code) {}
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << GetEventTypeString()
-       << Input::GetInstance().GetKeyCodeName(key_code_);
+    ss << GetEventTypeString() << Input::GetInstance().GetKeyCodeName(key_code_);
     return ss.str();
   }
 

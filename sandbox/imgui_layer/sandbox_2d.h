@@ -52,7 +52,10 @@ class Sandbox2D : public genesis::ImGuiLayer {
     }
   }
 
-  void OnEvent(genesis::Event& event) override { camera_2d_controller_->OnEvent(event); }
+  bool OnEvent(genesis::Event& event) override {
+    camera_2d_controller_->OnEvent(event);
+    return false;
+  }
 
   void OnImguiRender() override {
     ImGuiIO& io = ImGui::GetIO();

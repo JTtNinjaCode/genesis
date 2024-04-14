@@ -12,10 +12,13 @@ class MouseEvent : public Event {
 
 class DLL_API MouseMovedEvent : public MouseEvent {
  public:
-  MouseMovedEvent(double x, double y) : mouse_x_(x), mouse_y_(y) {}
+  MouseMovedEvent(double x, double y, double delta_x, double delta_y)
+      : mouse_x_(x), mouse_y_(y), mouse_delta_x_(delta_x), mouse_delta_y_(delta_y) {}
 
   inline double GetX() const { return mouse_x_; }
   inline double GetY() const { return mouse_y_; }
+  inline double GetDeltaX() const { return mouse_delta_x_; }
+  inline double GetDeltaY() const { return mouse_delta_y_; }
 
   std::string ToString() const override {
     std::stringstream ss;
@@ -26,12 +29,12 @@ class DLL_API MouseMovedEvent : public MouseEvent {
   EVENT_CLASS_TYPE(kMouseMoved)
  private:
   double mouse_x_, mouse_y_;
+  double mouse_delta_x_, mouse_delta_y_;
 };
 
 class DLL_API MouseScrolledEvent : public MouseEvent {
  public:
-  MouseScrolledEvent(double offset_x, double offset_y)
-      : offset_x_(offset_x), offset_y_(offset_y) {}
+  MouseScrolledEvent(double offset_x, double offset_y) : offset_x_(offset_x), offset_y_(offset_y) {}
 
   inline double GetXOffset() const { return offset_x_; }
   inline double GetYOffset() const { return offset_y_; }
@@ -50,21 +53,21 @@ class DLL_API MouseScrolledEvent : public MouseEvent {
 
 class DLL_API MouseButtonEvent : public MouseEvent {
  public:
-  inline int GetMouseButton() const { return button_; }
+  inline MouseButton GetMouseButton() const { return button_; }
 
  protected:
-  MouseButtonEvent(int button) : button_(button) {}
+  MouseButtonEvent(MouseButton button) : button_(button) {}
 
-  int button_;
+  MouseButton button_;
 };
 
 class DLL_API MouseButtonPressedEvent : public MouseButtonEvent {
  public:
-  MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
+  MouseButtonPressedEvent(MouseButton button) : MouseButtonEvent(button) {}
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << GetEventTypeString() << button_;
+    ss << GetEventTypeString();
     return ss.str();
   }
 
@@ -73,11 +76,11 @@ class DLL_API MouseButtonPressedEvent : public MouseButtonEvent {
 
 class DLL_API MouseButtonReleasedEvent : public MouseButtonEvent {
  public:
-  MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
+  MouseButtonReleasedEvent(MouseButton button) : MouseButtonEvent(button) {}
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << GetEventTypeString() << button_;
+    ss << GetEventTypeString();
     return ss.str();
   }
 

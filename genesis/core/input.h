@@ -1,6 +1,7 @@
 #pragma once
-#include <utility>
 #include <string>
+#include <utility>
+
 #include "core/core.h"
 namespace genesis {
 enum class Keycode;

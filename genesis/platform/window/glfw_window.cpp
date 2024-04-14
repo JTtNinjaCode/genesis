@@ -20,8 +20,7 @@ static void GLFWErrorCallback(int error_code, const char* description) {
   CORE_LOG_WARN("glfw Error:[{0}], {1}", error_code, description);
 }
 
-GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
-                       unsigned height) {
+GLFWWindow::GLFWWindow(const std::string& title, unsigned int width, unsigned height) {
   if (!is_glfw_initialized_) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -39,13 +38,12 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
 
   SetVSync(false);
   glfwSetWindowUserPointer(window_,
-                           &data_);  // set user poing so that we can get data_
+                           &data_);  // set user pointer so that we can get data_
                                      // in event handle function
 
   glfwSetWindowCloseCallback(window_, [](GLFWwindow* window) {
     WindowCloseEvent event;
-    WindowData data =
-        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
     if (!data.event_listener_) {
       CORE_LOG_WARN("event callback function has not been set yet.");
     }
@@ -54,8 +52,7 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
 
   glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int x, int y) {
     WindowResizeEvent event(x, y);
-    WindowData data =
-        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
     if (!data.event_listener_) {
       CORE_LOG_WARN("event callback function has not been set yet.");
     }
@@ -63,51 +60,53 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
   });
 
   glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double x, double y) {
-    MouseMovedEvent event(x, y);
-    WindowData data =
-        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    static double last_x = 0.0, last_y = 0.0;
+    static bool first_call = true;
+    if (first_call) {
+      first_call = false;
+      last_x = x;
+      last_y = y;
+    }
+    MouseMovedEvent event(x, y, x - last_x, y - last_y);
+    last_x = x;
+    last_y = y;
+    WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    if (!data.event_listener_) {
+      CORE_LOG_WARN("Event callback function has not been set yet.");
+    }
+    data.event_listener_(event);  // pass event to Application's method
+  });
+
+  glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int mods) {
+    WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    if (!data.event_listener_) {
+      CORE_LOG_WARN("Event callback function has not been set yet.");
+    }
+    const GLFWInput& glfw_input = dynamic_cast<GLFWInput&>(Input::GetInstance());
+    if (action == GLFW_PRESS) {
+      MouseButtonPressedEvent event(glfw_input.GetGenesisMouseButtonFromGLFWMouseButton(button));
+      data.event_listener_(event);  // pass event to Application's method
+    } else if (action == GLFW_RELEASE) {
+      MouseButtonReleasedEvent event(glfw_input.GetGenesisMouseButtonFromGLFWMouseButton(button));
+      data.event_listener_(event);  // pass event to Application's method
+    }
+  });
+
+  glfwSetScrollCallback(window_, [](GLFWwindow* window, double offset_x, double offset_y) {
+    MouseScrolledEvent event(offset_x, offset_y);
+    WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
     if (!data.event_listener_) {
       CORE_LOG_WARN("event callback function has not been set yet.");
     }
     data.event_listener_(event);  // pass event to Application's method
   });
 
-  glfwSetMouseButtonCallback(
-      window_, [](GLFWwindow* window, int button, int action, int mods) {
-        WindowData data =
-            *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-        if (!data.event_listener_) {
-          CORE_LOG_WARN("event callback function has not been set yet.");
-        }
-        if (action == GLFW_PRESS) {
-          MouseButtonPressedEvent event(button);
-          data.event_listener_(event);  // pass event to Application's method
-        } else if (action == GLFW_RELEASE) {
-          MouseButtonReleasedEvent event(button);
-          data.event_listener_(event);  // pass event to Application's method
-        }
-      });
-
-  glfwSetScrollCallback(
-      window_, [](GLFWwindow* window, double offset_x, double offset_y) {
-        MouseScrolledEvent event(offset_x, offset_y);
-        WindowData data =
-            *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-        if (!data.event_listener_) {
-          CORE_LOG_WARN("event callback function has not been set yet.");
-        }
-        data.event_listener_(event);  // pass event to Application's method
-      });
-
-  glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int scancode,
-                                 int action, int mods) {
-    WindowData data =
-        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+  glfwSetKeyCallback(window_, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+    WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
     if (!data.event_listener_) {
       CORE_LOG_WARN("event callback function has not been set yet.");
     }
-    const GLFWInput& glfw_input =
-        dynamic_cast<GLFWInput&>(Input::GetInstance());
+    const GLFWInput& glfw_input = dynamic_cast<GLFWInput&>(Input::GetInstance());
     if (action == GLFW_PRESS) {
       KeyPressedEvent event(glfw_input.GetGenesisKeycodeFromGLFWKeycode(key));
       data.event_listener_(event);  // pass event to Application's method
@@ -119,8 +118,7 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width,
 
   glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int character) {
     KeyTypedEvent event(character);
-    WindowData data =
-        *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
+    WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
     if (!data.event_listener_) {
       CORE_LOG_WARN("event callback function has not been set yet.");
     }
@@ -147,6 +145,14 @@ unsigned int GLFWWindow::GetHeight() const {
   int y;
   glfwGetWindowSize(window_, nullptr, &y);
   return y;
+}
+
+void GLFWWindow::EnableCursor(bool open) {
+  if (open) {
+    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  } else {
+    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  }
 }
 
 void GLFWWindow::SetVSync(bool open) {

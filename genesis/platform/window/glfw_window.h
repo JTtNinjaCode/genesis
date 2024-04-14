@@ -17,19 +17,18 @@ class DLL_API GLFWWindow : public Window {
   void OnUpdate() override;
   unsigned int GetWidth() const override;
   unsigned int GetHeight() const override;
+  void EnableCursor(bool open) override;
   void SetVSync(bool open) override;
   bool IsVSync() const override;
   void* GetNativeWindow() override;
 
-  void SetEventListener(const EventCallbackFunc& event_listener) override {
-    data_.event_listener_ = event_listener;
-  }
+  void SetEventListener(const EventCallbackFunc& event_listener) override { data_.event_listener_ = event_listener; }
 
  private:
   static bool is_glfw_initialized_;
 
   GLFWwindow* window_;
-  GraphicContext *context_;
+  GraphicContext* context_;
 
   struct WindowData {
     bool is_vsync_ = false;
