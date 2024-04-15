@@ -22,6 +22,7 @@ add_compile_definitions(
 
 target_sources(sandbox
     PRIVATE
+    source.cpp
     ${HEADERS}
     ${SOURCES}
 )
