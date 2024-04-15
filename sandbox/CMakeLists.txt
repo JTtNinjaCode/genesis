@@ -8,17 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(sandbox ${SRC})
 
 #source files
-set(SOURCES
-    imgui_layer/sandbox_2d.cpp
-    imgui_layer/sandbox_3d.cpp
-    source.cpp
-)
+file(GLOB_RECURSE SOURCES "./**/*.cpp")
 
 #header files
-set(HEADERS
-    imgui_layer/sandbox_2d.h
-    imgui_layer/sandbox_3d.h
-)
+file(GLOB_RECURSE HEADERS "./**/*.h")
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
