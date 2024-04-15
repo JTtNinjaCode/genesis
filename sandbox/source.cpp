@@ -1,6 +1,5 @@
 #include <Genesis.h>
 #include <core/entry_point.h>
-
 #pragma warning(push)
 #pragma warning(disable : 4005)
 #include <GLFW/glfw3.h>

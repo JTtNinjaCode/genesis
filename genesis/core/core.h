@@ -14,5 +14,4 @@
 #endif
 
 #include <functional>
-#define BIND_METHOD(method_name) \
-  std::bind(&method_name, this, std::placeholders::_1)
+#define BIND_METHOD(method_name) std::bind(&method_name, this, std::placeholders::_1)

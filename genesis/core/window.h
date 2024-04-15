@@ -9,8 +9,7 @@ class DLL_API Window {
  public:
   using EventCallbackFunc = std::function<void(Event&)>;
 
-  static std::shared_ptr<Window> Create(std::string title, unsigned int widht,
-                                        unsigned int height);
+  static std::shared_ptr<Window> Create(std::string title, unsigned int widht, unsigned int height);
   virtual ~Window() = default;
 
   virtual unsigned int GetWidth() const = 0;

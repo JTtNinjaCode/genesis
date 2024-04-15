@@ -3,7 +3,6 @@
 #pragma warning(disable : 4005)
 #include <GLFW/glfw3.h>
 #pragma warning(pop)
-
 #include <string>
 
 #include "core/renderer/graphic_context.h"

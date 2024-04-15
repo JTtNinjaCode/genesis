@@ -1,5 +1,5 @@
 #pragma once
-namespace genesis{
+namespace genesis {
 struct TextureFormat {
   unsigned int channels;
   unsigned int width;
@@ -7,7 +7,6 @@ struct TextureFormat {
   unsigned char* data;
 };
 
-
 class OpenglTextureCompressor {};
 
-}
+}  // namespace genesis

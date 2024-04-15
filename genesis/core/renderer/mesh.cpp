@@ -11,22 +11,16 @@ void Mesh::Draw(Shader& shader) {
     texture->Bind(i);
     switch (texture->GetTextureType()) {
       case TextureType::Diffuse:
-        shader.SetUniform(std::string("material.diffuse") +
-                              std::to_string(diffuse_texture_counter++),
-                          i);
+        shader.SetUniform(std::string("material.diffuse") + std::to_string(diffuse_texture_counter++), i);
         break;
       case TextureType::Specular:
-        shader.SetUniform(std::string("material.specular") +
-                              std::to_string(specular_texture_counter++),
-                          i);
+        shader.SetUniform(std::string("material.specular") + std::to_string(specular_texture_counter++), i);
         break;
       default:
         CORE_ASSERT(false, "invalid texture type.");
     }
   }
-  vbo_->Bind();
   vao_->Bind();
-  ebo_->Bind();
   RenderCommand::GetInstanced().DrawIndexed(*vao_);
 }
 

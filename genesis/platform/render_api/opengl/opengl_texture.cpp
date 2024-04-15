@@ -10,7 +10,7 @@
 namespace genesis {
 OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& path) {
   auto compressed_path_name = path.string() + ".cpt";
-  if (std::filesystem::exists(compressed_path_name) && false) {
+  if (std::filesystem::exists(compressed_path_name)) {
     UseCompressFile(compressed_path_name);
   } else {
     unsigned char* image_data = LoadOriginFile(path);
@@ -85,6 +85,7 @@ void OpenGLTexture2D::CompressAndUseOriginFile(unsigned char* image_data) {
     gpu_format = GL_COMPRESSED_RGBA;
     origin_format = GL_RGBA;
   }
+
   CORE_ASSERT(channels_ == 3 || channels_ == 4, "texture format not support.");
 
   glBindTexture(GL_TEXTURE_2D, id_);
@@ -102,8 +103,6 @@ void OpenGLTexture2D::UseCompressFile(const std::filesystem::path& path) {
     CORE_LOG_ERROR("Failed to read file:{0}", path.string());
     return;
   }
-  // TODO:Delete this
-  CORE_LOG_TRACE("Open File:{0}", path.string());
 
   char read_buffer[sizeof(OpenGLCompressedFileHeaderFormat)];
   input_file_stream.read(read_buffer, sizeof(OpenGLCompressedFileHeaderFormat));

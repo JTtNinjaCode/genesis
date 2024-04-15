@@ -11,8 +11,7 @@
 namespace genesis {
 std::shared_ptr<Application> Application::instance_;
 
-Application::Application()
-    : window_(std::shared_ptr<Window>(Window::Create("Genesis", 900, 600))) {
+Application::Application() : window_(std::shared_ptr<Window>(Window::Create("Genesis", 900, 600))) {
   CORE_ASSERT(!instance_, "Application had exist.");
   instance_.reset(this);
 
@@ -42,8 +41,7 @@ void Application::Run() {
 
 void Application::OnEvent(Event& event) {
   EventDispatcher event_dispatcher(event);
-  event_dispatcher.Dispatch<WindowCloseEvent>(
-      BIND_METHOD(Application::OnWindowClose));
+  event_dispatcher.Dispatch<WindowCloseEvent>(BIND_METHOD(Application::OnWindowClose));
 
   for (auto iter = layer_stack_.rbegin(); iter != layer_stack_.rend(); iter++) {
     (*iter)->OnEvent(event);
