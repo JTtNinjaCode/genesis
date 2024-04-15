@@ -4,6 +4,9 @@ project(genesis)
 message(${PROJECT_SOURCE_DIR})
 message(${PROJECT_BINARY_DIR})
 
+
+add_subdirectory(third_party/rttr)
+
 add_subdirectory(third_party/glfw)
 target_compile_options(glfw PUBLIC /wd4819)
 

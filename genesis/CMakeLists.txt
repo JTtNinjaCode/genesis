@@ -119,7 +119,7 @@ add_compile_definitions(
 
 #link library
 target_link_libraries(genesis PRIVATE glfw glad assimp)
-target_link_libraries(genesis PUBLIC spdlog imgui glm)
+target_link_libraries(genesis PUBLIC spdlog imgui glm RTTR::Core_Lib)
 
 #include genesis
 set(ENGINE_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/genesis)
