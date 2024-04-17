@@ -1,6 +1,4 @@
 #pragma once
-
-#pragma once
 #include <genesis.h>
 
 #pragma warning(push)
@@ -10,6 +8,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -25,27 +24,38 @@ class Sandbox3D : public genesis::ImGuiLayer {
                                                                         glm::vec3(0, 16, 100), glm::vec3(0, 10, 0));
     shader_ = genesis::Shader::Create("./assets/shaders/model.vert", "./assets/shaders/model.frag");
 
-    model_ = std::make_shared<genesis::Model>("./assets/models/Nanosuit/nanosuit.obj");
+    game_object_.AddComponent("Transform");
+    genesis::Model* mesh = dynamic_cast<genesis::Model*>(game_object_.AddComponent("Model"));
+    mesh->LoadModel("./assets/models/Nanosuit/nanosuit.obj");
   }
 
   virtual void OnUpdate(genesis::TimeStep time_step) override {
     {
-      PROFILE("Hello", [&](const genesis::profile::ProfileResult& profile_result) {
-        profile_results_.push_back(profile_result);
-      });
-      profile_results_.clear();
       genesis::RenderCommand& render_command = genesis::RenderCommand::GetInstanced();
       render_command.SetClearColor({0.8, 0.2, 0.5, 1.0f});
       render_command.Clear();
 
       auto& renderer_3d = genesis::Renderer3D();
       renderer_3d.BeginScene(camera_3d_->GetCamera());
+      auto result = game_object_.GetComponent("Transform");
+      genesis::Transform* transform = dynamic_cast<genesis::Transform*>(result); 
+      if (!transform) {
+        return;
+      }
 
-      static float rotate_eulerAngle = 0.0;
-      rotate_eulerAngle += time_step.GetSeconds() * 60;
-      glm::mat4 model = glm::eulerAngleYXZ(glm::radians(rotate_eulerAngle), glm::radians(rotate_eulerAngle),
-                                           glm::radians(rotate_eulerAngle));
-      renderer_3d.Submit(*shader_, *model_, model);
+      glm::mat4 trans_mat = glm::translate(glm::mat4(1.0f), transform->position());
+      auto rotation = transform->rotation();
+      glm::mat4 rotate_mat =
+          glm::eulerAngleYXZ(glm::radians(rotation.y), glm::radians(rotation.x), glm::radians(rotation.z));
+      glm::mat4 scale_mat = glm::scale(glm::mat4(1.0f), transform->scale());
+      glm::mat4 model = trans_mat * rotate_mat * scale_mat;
+
+      genesis::Model* component_model = dynamic_cast<genesis::Model*>(game_object_.GetComponent("Model"));
+      if (!component_model) {
+        return;
+      }
+
+      renderer_3d.Submit(*shader_, *component_model, {1.0f});
       renderer_3d.EndScene();
 
       camera_3d_->OnUpdate(time_step);
@@ -82,9 +92,8 @@ class Sandbox3D : public genesis::ImGuiLayer {
     auto& app = genesis::Application::GetInstance();
     io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
-    for (auto& result : profile_results_) {
-      ImGui::Text("profiler:%s, time: %f ms", result.name, result.duration.count() * 0.001f);
-    }
+    ImGui::ShowDemoWindow();
+    ImGui::Text("Test");
 
     // Rendering
     ImGui::Render();
@@ -106,6 +115,6 @@ class Sandbox3D : public genesis::ImGuiLayer {
  private:
   std::shared_ptr<genesis::PerspectiveCameraController> camera_3d_;
   std::vector<genesis::profile::ProfileResult> profile_results_;
-  std::shared_ptr<genesis::Model> model_;
   std::shared_ptr<genesis::Shader> shader_;
+  genesis::GameObject game_object_;
 };

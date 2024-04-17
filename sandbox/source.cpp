@@ -22,6 +22,5 @@ class Sandbox : public genesis::Application {
 
 genesis::Application* genesis::CreateApplication() {
   genesis::Log::Init();
-  CORE_LOG_WARN("Initialized Log!");
   return new Sandbox;
 }

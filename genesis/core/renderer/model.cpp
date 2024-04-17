@@ -1,5 +1,7 @@
 #include "model.h"
 
+#include <rttr/registration.h>
+
 #include <vector>
 
 #include "core/log/log.h"
@@ -97,4 +99,10 @@ void Model::LoadMaterialTextures(std::vector<std::shared_ptr<Texture2D>>& textur
     textures.push_back(Texture2D::Create(directory_ / std::string(str.C_Str()), texture_type));
   }
 }
+
+using namespace rttr;
+RTTR_REGISTRATION {
+  registration::class_<Model>("Model").constructor<>()(rttr::policy::ctor::as_raw_ptr);
+}
+
 }  // namespace genesis

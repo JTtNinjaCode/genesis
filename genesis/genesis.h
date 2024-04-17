@@ -1,6 +1,8 @@
 // this file is for user of Genesis
 #pragma once
 #include "core/application.h"
+#include "core/component/game_object.h"
+#include "core/component/transform.h"
 #include "core/events/event.h"
 #include "core/imgui/imgui_layer.h"
 #include "core/input.h"
