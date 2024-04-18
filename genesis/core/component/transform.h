@@ -9,7 +9,6 @@ namespace genesis {
 class Transform : public Component {
  public:
   Transform();
-  ~Transform() = default;
 
   glm::vec3 position() const { return position_; }
   glm::vec3 rotation() const { return rotation_; }
@@ -19,11 +18,9 @@ class Transform : public Component {
   void set_rotation(glm::vec3 rotation) { rotation_ = rotation; }
   void set_scale(glm::vec3 scale) { scale_ = scale; }
 
-  RTTR_ENABLE(Component);
  private:
   glm::vec3 position_;
   glm::vec3 rotation_;
   glm::vec3 scale_;
 };
-
 }  // namespace genesis

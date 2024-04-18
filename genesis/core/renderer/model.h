@@ -16,8 +16,8 @@ class Model : public Component {
   Model(const std::filesystem::path& path) { LoadModel(path.string()); }
   void LoadModel(const std::filesystem::path& path);
 
-  void Draw(Shader& shader);
-  void DrawInstanced(Shader& shader, unsigned int count);
+  void Draw(Shader& shader) const;
+  void DrawInstanced(Shader& shader, unsigned int count) const;
 
  private:
   void ProcessNode(const aiNode* node, const aiScene* scene);

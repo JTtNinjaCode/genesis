@@ -3,6 +3,8 @@
 #include "core/application.h"
 #include "core/component/game_object.h"
 #include "core/component/transform.h"
+#include "core/component/camera.h"
+#include "core/component/mesh_filter.h"
 #include "core/events/event.h"
 #include "core/imgui/imgui_layer.h"
 #include "core/input.h"
