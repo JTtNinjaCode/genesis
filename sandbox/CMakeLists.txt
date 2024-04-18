@@ -27,4 +27,4 @@ target_sources(sandbox
     ${SOURCES}
 )
 
-target_link_libraries(sandbox genesis)
+target_link_libraries(sandbox PRIVATE genesis -WHOLEARCHIVE:$<TARGET_FILE:genesis>)
