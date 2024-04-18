@@ -12,6 +12,5 @@ class Component {
 
  private:
   GameObject* game_object_ = nullptr;
-  RTTR_ENABLE();
 };
 }  // namespace genesis

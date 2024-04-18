@@ -15,10 +15,8 @@ file(GLOB_RECURSE SOURCES "./**/*.cpp")
 file(GLOB_RECURSE HEADERS "./**/*.h")
 
 target_sources(genesis
-    INTERFACE
-    genesis.h
-
     PRIVATE
+    genesis.h
     ${HEADERS}
     ${SOURCES}
 )

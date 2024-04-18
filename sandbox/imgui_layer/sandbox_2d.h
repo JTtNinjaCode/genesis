@@ -15,30 +15,28 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 #pragma warning(pop)
-
 using namespace genesis;
-class Sandbox2D : public genesis::ImGuiLayer {
+class Sandbox2D : public ImGuiLayer {
  public:
   Sandbox2D() {
-    float ratio = genesis::Application::GetInstance().GetWindow().GetWidth() /
-                  float(genesis::Application::GetInstance().GetWindow().GetHeight());
-    camera_2d_controller_ = std::make_shared<genesis::OrthographicCameraController>(3.0f, ratio, 0.01f, 100.0f);
-    texture_ = genesis::Texture2D::Create("./assets/textures/small smoke checkerboard.jpg");
+    float ratio =
+        Application::GetInstance().GetWindow().GetWidth() / float(Application::GetInstance().GetWindow().GetHeight());
+    camera_2d_controller_ = std::make_shared<OrthographicCameraController>(3.0f, ratio, 0.01f, 100.0f);
+    texture_ = Texture2D::Create("./assets/textures/small smoke checkerboard.jpg");
   }
 
-  virtual void OnUpdate(genesis::TimeStep time_step) override {
+  virtual void OnUpdate(TimeStep time_step) override {
     {
       std::cout << glm::to_string(glm::faceforward(glm::vec3{10, 20, 10}, glm::vec3{0, 3, 0}, glm::vec3{0, -1, 0}))
                 << std::endl;
-      PROFILE("Hello", [&](const genesis::profile::ProfileResult& profile_result) {
-        profile_results_.push_back(profile_result);
-      });
+      PROFILE("Hello",
+              [&](const profile::ProfileResult& profile_result) { profile_results_.push_back(profile_result); });
       profile_results_.clear();
-      genesis::RenderCommand& render_command = genesis::RenderCommand::GetInstanced();
+      RenderCommand& render_command = RenderCommand::GetInstanced();
       render_command.SetClearColor({0.8, 0.2, 0.5, 1.0f});
       render_command.Clear();
 
-      auto& renderer_2d = genesis::Renderer2D::GetInstanced();
+      auto& renderer_2d = Renderer2D::GetInstanced();
       renderer_2d.BeginScene(camera_2d_controller_->GetCamera());
       renderer_2d.DrawQuad({0.2, 0.2, -20.0f}, {1, 1}, rotate_radians_, *texture_);
       renderer_2d.DrawQuad({0.0, 0.0, -10.0f}, {1, 1}, rotate_radians_, {1.0, 1.0, 0.0, 1.0});
@@ -53,14 +51,14 @@ class Sandbox2D : public genesis::ImGuiLayer {
     }
   }
 
-EventState OnEvent(genesis::Event& event) override {
+  EventState OnEvent(Event& event) override {
     camera_2d_controller_->OnEvent(event);
-  return EventState::kHandled;
+    return EventState::kHandled;
   }
 
   void OnImguiRender() override {
     ImGuiIO& io = ImGui::GetIO();
-    auto& app = genesis::Application::GetInstance();
+    auto& app = Application::GetInstance();
     io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
     ImGui::ColorEdit3("color editor", glm::value_ptr(square_color_));
@@ -86,9 +84,9 @@ EventState OnEvent(genesis::Event& event) override {
   }
 
  private:
-  std::shared_ptr<genesis::OrthographicCameraController> camera_2d_controller_;
+  std::shared_ptr<OrthographicCameraController> camera_2d_controller_;
   float rotate_radians_ = 0.0f;
-  std::shared_ptr<genesis::Texture2D> texture_;
+  std::shared_ptr<Texture2D> texture_;
   glm::vec3 square_color_ = glm::vec3(1.0f);
-  std::vector<genesis::profile::ProfileResult> profile_results_;
+  std::vector<profile::ProfileResult> profile_results_;
 };

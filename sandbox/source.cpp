@@ -14,10 +14,11 @@
 #include "imgui_layer/sandbox_2d.h"
 #include "imgui_layer/sandbox_3d.h"
 
-class Sandbox : public genesis::Application {
+using namespace genesis;
+class Sandbox : public Application {
  public:
   Sandbox() { PushOverLayer(std::make_shared<Sandbox3D>()); }
   ~Sandbox() {}
 };
 
-genesis::Application* genesis::CreateApplication() { return new Sandbox; }
+Application* genesis::CreateApplication() { return new Sandbox; }

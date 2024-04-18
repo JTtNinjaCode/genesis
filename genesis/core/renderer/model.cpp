@@ -1,7 +1,5 @@
 #include "model.h"
 
-#include <rttr/registration.h>
-
 #include <vector>
 
 #include "core/log/log.h"
@@ -10,13 +8,13 @@
 #include "core/renderer/vertex_format/vertex_pnt.h"
 
 namespace genesis {
-void Model::Draw(Shader& shader) {
+void Model::Draw(Shader& shader) const {
   for (auto& mesh : meshes_) {
     mesh.Draw(shader);
   }
 }
 
-void Model::DrawInstanced(Shader& shader, unsigned int count) {
+void Model::DrawInstanced(Shader& shader, unsigned int count) const {
   for (auto& mesh : meshes_) mesh.DrawInstanced(shader, count);
 }
 
@@ -98,11 +96,6 @@ void Model::LoadMaterialTextures(std::vector<std::shared_ptr<Texture2D>>& textur
     mat->GetTexture(type, i, &str);
     textures.push_back(Texture2D::Create(directory_ / std::string(str.C_Str()), texture_type));
   }
-}
-
-using namespace rttr;
-RTTR_REGISTRATION {
-  registration::class_<Model>("Model").constructor<>()(rttr::policy::ctor::as_raw_ptr);
 }
 
 }  // namespace genesis

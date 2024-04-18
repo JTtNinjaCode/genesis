@@ -20,7 +20,7 @@ void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const g
 
   RenderCommand::GetInstanced().DrawIndexed(vertex_array);
 }
-void Renderer3D::Submit(Shader& shader, Model& model, const glm::mat4& model_matrix) {
+void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix) {
   shader.Bind();
   shader.SetUniform("u_view_projection", camera_->GetProjection() * camera_->GetView());
   shader.SetUniform("u_model", model_matrix);

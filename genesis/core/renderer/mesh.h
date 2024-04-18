@@ -15,8 +15,8 @@ class Mesh {
        std::vector<std::shared_ptr<Texture2D>>&& textures)
       : vbo_(std::move(vbo)), vao_(std::move(vao)), ebo_(std::move(ebo)), textures_(std::move(textures)) {}
 
-  void Draw(Shader& shader);
-  void DrawInstanced(Shader& shader, unsigned int count);
+  void Draw(Shader& shader) const;
+  void DrawInstanced(Shader& shader, unsigned int count) const;
 
  private:
   std::shared_ptr<VertexBuffer> vbo_;

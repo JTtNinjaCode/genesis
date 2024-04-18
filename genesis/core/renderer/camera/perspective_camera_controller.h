@@ -24,5 +24,4 @@ class PerspectiveCameraController {
   glm::vec2 rotation_speed_ = glm::vec2(1.0f);
   float zoom_speed_ = 0.05f;
 };
-
 }  // namespace genesis

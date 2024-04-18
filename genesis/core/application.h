@@ -22,7 +22,6 @@ class DLL_API Application {
 
   Window& GetWindow() { return *window_; }
   void OnEventEntryPoint(Event& event);
-  EventState OnWindowResize(WindowResizeEvent& event);
   EventState OnWindowClose(WindowCloseEvent& event);
   virtual void Run();
 

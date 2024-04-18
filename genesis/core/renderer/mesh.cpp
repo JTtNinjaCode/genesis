@@ -3,7 +3,7 @@
 #include "core/log/log.h"
 #include "core/renderer/render_command.h"
 namespace genesis {
-void Mesh::Draw(Shader& shader) {
+void Mesh::Draw(Shader& shader) const {
   unsigned int diffuse_texture_counter = 1;
   unsigned int specular_texture_counter = 1;
   for (unsigned int i = 0; i < textures_.size(); i++) {
@@ -24,7 +24,7 @@ void Mesh::Draw(Shader& shader) {
   RenderCommand::GetInstanced().DrawIndexed(*vao_);
 }
 
-void Mesh::DrawInstanced(Shader& shader, unsigned int count) {
+void Mesh::DrawInstanced(Shader& shader, unsigned int count) const {
   // TODO: drawInstaced
 
   // unsigned int diffuseTextureCounter = 1;
