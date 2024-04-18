@@ -42,14 +42,12 @@ enum EventCategory {
   kInputEventCategory = 1 << 5
 };
 
-#define EVENT_CLASS_TYPE(type)                                        \
-  static EventType GetStaticEventType() { return EventType::##type; } \
-  virtual EventType GetEventType() const override {                   \
-    return GetStaticEventType();                                      \
-  }                                                                   \
-  virtual const char* GetEventTypeString() const override {           \
-    return static_cast<const char*>(#type + 1);                       \
-  }
+enum class EventState { kHandled, kNotHandled };
+
+#define EVENT_CLASS_TYPE(type)                                                     \
+  static EventType GetStaticEventType() { return EventType::##type; }              \
+  virtual EventType GetEventType() const override { return GetStaticEventType(); } \
+  virtual const char* GetEventTypeString() const override { return static_cast<const char*>(#type + 1); }
 
 // return int, because the enum EventCategory after do some or operating (ex. or
 // operation)that cant convert to EventCategory
@@ -66,8 +64,7 @@ class DLL_API Event {
   virtual const char* GetEventTypeString() const = 0;
 
   inline bool IsInCategory(EventCategory event_category) {
-    return (EventCategory::kNoneEventCategory ==
-            (event_category & GetEventCategoryFlags()));
+    return (EventCategory::kNoneEventCategory == (event_category & GetEventCategoryFlags()));
   }
   bool isEventHandled() const { return handled_; }
 
@@ -78,14 +75,14 @@ class DLL_API Event {
 class DLL_API EventDispatcher {
  public:
   template <typename T>
-  using EventFunction = std::function<bool(T&)>;
+  using EventFunction = std::function<EventState(T&)>;
 
   EventDispatcher(Event& event) : event_(event) {}
 
   template <typename T>
   bool Dispatch(EventFunction<T> event_handler) {
     if (event_.GetEventType() == T::GetStaticEventType()) {
-      event_.handled_ = event_handler(static_cast<T&>(event_));
+      event_handler(static_cast<T&>(event_));
       return true;  // success to dispatch
     }
     return false;  // failed to dispatch
@@ -95,8 +92,6 @@ class DLL_API EventDispatcher {
   Event& event_;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const Event& e) {
-  return os << e.ToString();
-}
+inline std::ostream& operator<<(std::ostream& os, const Event& e) { return os << e.ToString(); }
 
 }  // namespace genesis

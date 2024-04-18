@@ -21,10 +21,10 @@ class DLL_API Application {
   static Application& GetInstance() { return *instance_; }
 
   Window& GetWindow() { return *window_; }
+  void OnEventEntryPoint(Event& event);
+  EventState OnWindowResize(WindowResizeEvent& event);
+  EventState OnWindowClose(WindowCloseEvent& event);
   virtual void Run();
-  void OnEvent(Event& event);
-  bool OnWindowClose(WindowCloseEvent& event);
-  bool OnWindowResize(WindowResizeEvent& event);
 
   void PushLayer(std::shared_ptr<Layer> layer);
   void PushOverLayer(std::shared_ptr<Layer> layer);

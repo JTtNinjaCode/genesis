@@ -19,24 +19,33 @@ ImGuiLayer::ImGuiLayer() : Layer("imgui layer") {}
 
 ImGuiLayer::~ImGuiLayer() {}
 
-void ImGuiLayer::OnAttach() {
+void ImGuiLayer::OnAttach() {}
+
+void ImGuiLayer::OnDetach() {}
+
+void ImGuiLayer::OnUpdate(TimeStep time_step) {}
+
+EventState ImGuiLayer::OnEvent(Event& event) {
+  EventDispatcher event_dispathcer(event);
+  return EventState::kHandled;
+}
+void ImGuiLayer::OnRender() { OnImguiRender(); }
+void ImGuiLayer::OnImguiRender() {}
+
+void ImGuiLayer::Init(Window& window) {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO();
-  (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport
+  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport
   // / Platform Windows
   // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
   // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
-
-  // When viewports are enabled we tweak WindowRounding/WindowBg so platform
-  // windows can look identical to regular ones.
   ImGuiStyle& style = ImGui::GetStyle();
   if (io.ConfigFlags) {
     style.WindowRounding = 20.0f;
@@ -44,24 +53,13 @@ void ImGuiLayer::OnAttach() {
   }
 
   // Setup Platform/Renderer bindings
-  auto app = Application::GetInstance();
-  GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  GLFWwindow* native_window = static_cast<GLFWwindow*>(window.GetNativeWindow());
+  ImGui_ImplGlfw_InitForOpenGL(native_window, true);
   ImGui_ImplOpenGL3_Init("#version 460");
 }
-
-void ImGuiLayer::OnDetach() {
+void ImGuiLayer::Uninit() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
-
-void ImGuiLayer::OnUpdate(TimeStep time_step) {}
-
-bool ImGuiLayer::OnEvent(Event& event) {
-  EventDispatcher event_dispathcer(event);
-  return false;
-}
-void ImGuiLayer::OnRender() { OnImguiRender(); }
-void ImGuiLayer::OnImguiRender() {}
 }  // namespace genesis

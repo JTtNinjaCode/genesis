@@ -13,13 +13,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #pragma warning(pop)
-
+using namespace genesis;
 class Sandbox3D : public genesis::ImGuiLayer {
  public:
   Sandbox3D() {
     float ratio = genesis::Application::GetInstance().GetWindow().GetWidth() /
                   float(genesis::Application::GetInstance().GetWindow().GetHeight());
-    genesis::Application::GetInstance().GetWindow().EnableCursor(false);
+    genesis::Application::GetInstance().GetWindow().EnableCursor(true);
     camera_3d_ = std::make_shared<genesis::PerspectiveCameraController>(glm::radians(45.0f), ratio, 0.01f, 100.0f,
                                                                         glm::vec3(0, 16, 100), glm::vec3(0, 10, 0));
     shader_ = genesis::Shader::Create("./assets/shaders/model.vert", "./assets/shaders/model.frag");
@@ -34,11 +34,10 @@ class Sandbox3D : public genesis::ImGuiLayer {
       genesis::RenderCommand& render_command = genesis::RenderCommand::GetInstanced();
       render_command.SetClearColor({0.8, 0.2, 0.5, 1.0f});
       render_command.Clear();
-
       auto& renderer_3d = genesis::Renderer3D();
       renderer_3d.BeginScene(camera_3d_->GetCamera());
       auto result = game_object_.GetComponent("Transform");
-      genesis::Transform* transform = dynamic_cast<genesis::Transform*>(result); 
+      genesis::Transform* transform = dynamic_cast<genesis::Transform*>(result);
       if (!transform) {
         return;
       }
@@ -51,43 +50,45 @@ class Sandbox3D : public genesis::ImGuiLayer {
       glm::mat4 model = trans_mat * rotate_mat * scale_mat;
 
       genesis::Model* component_model = dynamic_cast<genesis::Model*>(game_object_.GetComponent("Model"));
-      if (!component_model) {
-        return;
-      }
 
       renderer_3d.Submit(*shader_, *component_model, {1.0f});
       renderer_3d.EndScene();
 
       camera_3d_->OnUpdate(time_step);
-
-      ImGui_ImplOpenGL3_NewFrame();
-      ImGui_ImplGlfw_NewFrame();
-      ImGui::NewFrame();
     }
   }
-  bool OnKeyPressedEvent(genesis::KeyPressedEvent& event) {
-    if (event.GetKeyCode() == genesis::Keycode::kKeyEscape) {
-      genesis::Application::GetInstance().GetWindow().EnableCursor(true);
-    }
-    return false;
+  EventState OnKeyPressedEvent(genesis::KeyPressedEvent& event) {
+    // if (event.GetKeyCode() == genesis::Keycode::kKeyEscape) {
+    //   genesis::Application::GetInstance().GetWindow().EnableCursor(true);
+    // }
+    return EventState::kHandled;
   }
 
-  bool OnMouseButtonPressedEvent(genesis::MouseButtonPressedEvent& event) {
-    if (event.GetMouseButton() == genesis::MouseButton::kButtonLeft) {
-      genesis::Application::GetInstance().GetWindow().EnableCursor(false);
-    }
-    return false;
+  EventState OnMouseButtonPressedEvent(genesis::MouseButtonPressedEvent& event) {
+    // if (event.GetMouseButton() == genesis::MouseButton::kButtonLeft) {
+    //   genesis::Application::GetInstance().GetWindow().EnableCursor(false);
+    // }
+    return EventState::kHandled;
   }
 
-  bool OnEvent(genesis::Event& event) override {
+  EventState OnWindowResizeEvent(genesis::WindowResizeEvent& event) {
+    genesis::RenderCommand::GetInstanced().SetViewport(0, 0, event.GetWidth(), event.GetHeight());
+    return EventState::kHandled;
+  }
+
+  EventState OnEvent(genesis::Event& event) override {
     camera_3d_->OnEvent(event);
     genesis::EventDispatcher event_dispatcher(event);
     event_dispatcher.Dispatch<genesis::KeyPressedEvent>(BIND_METHOD(Sandbox3D::OnKeyPressedEvent));
     event_dispatcher.Dispatch<genesis::MouseButtonPressedEvent>(BIND_METHOD(Sandbox3D::OnMouseButtonPressedEvent));
-    return false;
+    event_dispatcher.Dispatch<genesis::WindowResizeEvent>(BIND_METHOD(Sandbox3D::OnWindowResizeEvent));
+    return EventState::kHandled;
   }
 
   void OnImguiRender() override {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
     ImGuiIO& io = ImGui::GetIO();
     auto& app = genesis::Application::GetInstance();
     io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
@@ -99,12 +100,13 @@ class Sandbox3D : public genesis::ImGuiLayer {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    // if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-    //   GLFWwindow* backup_current_context = glfwGetCurrentContext();
-    //   ImGui::UpdatePlatformWindows();
-    //   ImGui::RenderPlatformWindowsDefault();
-    //   glfwMakeContextCurrent(backup_current_context);
-    // }
+    // Update and Render additional Platform Windows
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+      GLFWwindow* backup_current_context = glfwGetCurrentContext();
+      ImGui::UpdatePlatformWindows();
+      ImGui::RenderPlatformWindowsDefault();
+      glfwMakeContextCurrent(backup_current_context);
+    }
 
     if (io.ConfigFlags) {
       GLFWwindow* backup_current_context = glfwGetCurrentContext();

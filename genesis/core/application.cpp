@@ -5,21 +5,26 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
+#include "core/imgui/imgui_layer.h"
 #include "core/renderer/buffer_layout.h"
 #include "core/renderer/render_command.h"
 #
 namespace genesis {
 std::shared_ptr<Application> Application::instance_;
 
-Application::Application() : window_(std::shared_ptr<Window>(Window::Create("Genesis", 900, 600))) {
+Application::Application() {
+  Log::Init();
+  window_ = std::shared_ptr<Window>(Window::Create("Genesis", 900, 600));
+  ImGuiLayer::Init(*window_);
+
   CORE_ASSERT(!instance_, "Application had exist.");
   instance_.reset(this);
 
-  window_->SetEventListener(BIND_METHOD(Application::OnEvent));
+  window_->SetEventListener(BIND_METHOD(Application::OnEventEntryPoint));
   window_->SetVSync(true);
 }
 
-Application::~Application() {}
+Application::~Application() { ImGuiLayer::Uninit(); }
 
 void Application::Run() {
   timer.Start();
@@ -39,7 +44,7 @@ void Application::Run() {
   }
 }
 
-void Application::OnEvent(Event& event) {
+void Application::OnEventEntryPoint(Event& event) {
   EventDispatcher event_dispatcher(event);
   event_dispatcher.Dispatch<WindowCloseEvent>(BIND_METHOD(Application::OnWindowClose));
 
@@ -49,9 +54,9 @@ void Application::OnEvent(Event& event) {
   }
 }
 
-bool Application::OnWindowClose(WindowCloseEvent& event) {
+EventState Application::OnWindowClose(WindowCloseEvent& event) {
   running_ = false;
-  return true;
+  return EventState::kHandled;
 }
 
 void Application::PushLayer(std::shared_ptr<Layer> layer) {

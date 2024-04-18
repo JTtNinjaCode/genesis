@@ -7,21 +7,18 @@
 namespace genesis {
 class OrthographicCameraController {
  public:
-  OrthographicCameraController(float height, float ratio, float near_plane,
-                               float far_plane);
-  bool OnEvent(Event& event) {
+  OrthographicCameraController(float height, float ratio, float near_plane, float far_plane);
+  EventState OnEvent(Event& event) {
     EventDispatcher event_dispatcher(event);
-    event_dispatcher.Dispatch<WindowResizeEvent>(
-        BIND_METHOD(OrthographicCameraController::OnWindowResizeEvent));
-    event_dispatcher.Dispatch<MouseScrolledEvent>(
-        BIND_METHOD(OrthographicCameraController::OnMouseScrolledEvent));
-    return false;
+    event_dispatcher.Dispatch<WindowResizeEvent>(BIND_METHOD(OrthographicCameraController::OnWindowResizeEvent));
+    event_dispatcher.Dispatch<MouseScrolledEvent>(BIND_METHOD(OrthographicCameraController::OnMouseScrolledEvent));
+    return EventState::kHandled;
   }
 
   const OrthographicCamera2D& GetCamera() const { return camera_; }
   bool OnUpdate(TimeStep time_step);
-  bool OnWindowResizeEvent(WindowResizeEvent& event);
-  bool OnMouseScrolledEvent(MouseScrolledEvent& event);
+  EventState OnWindowResizeEvent(WindowResizeEvent& event);
+  EventState OnMouseScrolledEvent(MouseScrolledEvent& event);
 
  private:
   OrthographicCamera2D camera_;

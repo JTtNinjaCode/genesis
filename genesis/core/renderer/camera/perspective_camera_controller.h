@@ -12,11 +12,11 @@ class PerspectiveCameraController {
                               glm::vec3 target);
   const PerspectiveCamera& GetCamera() const { return camera_; }
 
-  bool OnUpdate(TimeStep time_step);
-  bool OnEvent(Event& event);
-  bool OnWindowResizeEvent(WindowResizeEvent& event);
-  bool OnMouseScrolledEvent(MouseScrolledEvent& event);
-  bool OnMouseMovedEvent(MouseMovedEvent& event);
+  void OnUpdate(TimeStep time_step);
+  EventState OnEvent(Event& event);
+  EventState OnWindowResizeEvent(WindowResizeEvent& event);
+  EventState OnMouseScrolledEvent(MouseScrolledEvent& event);
+  EventState OnMouseMovedEvent(MouseMovedEvent& event);
 
  private:
   PerspectiveCamera camera_;

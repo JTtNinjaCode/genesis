@@ -10,15 +10,15 @@ PerspectiveCameraController::PerspectiveCameraController(float height, float rat
                                                          glm::vec3 position, glm::vec3 target)
     : camera_(height, ratio, near_plane, far_plane, position, target) {}
 
-bool PerspectiveCameraController::OnEvent(Event& event) {
+EventState PerspectiveCameraController::OnEvent(Event& event) {
   EventDispatcher event_dispatcher(event);
   event_dispatcher.Dispatch<WindowResizeEvent>(BIND_METHOD(PerspectiveCameraController::OnWindowResizeEvent));
-  event_dispatcher.Dispatch<MouseScrolledEvent>(BIND_METHOD(PerspectiveCameraController::OnMouseScrolledEvent));
-  event_dispatcher.Dispatch<MouseMovedEvent>(BIND_METHOD(PerspectiveCameraController::OnMouseMovedEvent));
-  return false;
+  // event_dispatcher.Dispatch<MouseScrolledEvent>(BIND_METHOD(PerspectiveCameraController::OnMouseScrolledEvent));
+  // event_dispatcher.Dispatch<MouseMovedEvent>(BIND_METHOD(PerspectiveCameraController::OnMouseMovedEvent));
+  return EventState::kHandled;
 }
 
-bool PerspectiveCameraController::OnUpdate(TimeStep time_step) {
+void PerspectiveCameraController::OnUpdate(TimeStep time_step) {
   auto& input = genesis::Input::GetInstance();
   glm::vec3 forward_dir = camera_.GetDirection();
   glm::vec3 right_dir = glm::normalize(glm::cross(camera_.GetDirection(), {0, 1, 0}));
@@ -34,21 +34,19 @@ bool PerspectiveCameraController::OnUpdate(TimeStep time_step) {
     new_position += right_dir * move_speed_.x * time_step.GetSeconds();
   }
   camera_.SetPosition(new_position);
-  return false;
 }
 
-bool PerspectiveCameraController::OnWindowResizeEvent(WindowResizeEvent& event) {
-  camera_.SetRatio(Application::GetInstance().GetWindow().GetWidth() /
-                   Application::GetInstance().GetWindow().GetHeight());
-  return false;
+EventState PerspectiveCameraController::OnWindowResizeEvent(WindowResizeEvent& event) {
+  camera_.SetRatio((float)event.GetHeight() / event.GetWidth());
+  return EventState::kHandled;
 }
 
-bool PerspectiveCameraController::OnMouseScrolledEvent(MouseScrolledEvent& event) {
+EventState PerspectiveCameraController::OnMouseScrolledEvent(MouseScrolledEvent& event) {
   // camera_.SetZoomLevel(camera_.GetZoomLevel() + event.GetYOffset() * zoom_speed_);
-  return false;
+  return EventState::kHandled;
 }
 
-bool PerspectiveCameraController::OnMouseMovedEvent(MouseMovedEvent& event) {
+EventState PerspectiveCameraController::OnMouseMovedEvent(MouseMovedEvent& event) {
   glm::vec3 world_up_dir = glm::vec3(0, 1, 0);
   glm::vec3 forward_dir = camera_.GetDirection();
   glm::vec3 right_dir = glm::cross(forward_dir, world_up_dir);
@@ -59,7 +57,7 @@ bool PerspectiveCameraController::OnMouseMovedEvent(MouseMovedEvent& event) {
 
   camera_.SetDirection(quaternion_yaw * quaternion_pitch * forward_dir);
 
-  return false;
+  return EventState::kHandled;
 }
 
 }  // namespace genesis

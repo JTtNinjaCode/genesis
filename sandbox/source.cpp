@@ -20,7 +20,4 @@ class Sandbox : public genesis::Application {
   ~Sandbox() {}
 };
 
-genesis::Application* genesis::CreateApplication() {
-  genesis::Log::Init();
-  return new Sandbox;
-}
+genesis::Application* genesis::CreateApplication() { return new Sandbox; }

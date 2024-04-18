@@ -16,6 +16,7 @@
 #include <glm/gtx/string_cast.hpp>
 #pragma warning(pop)
 
+using namespace genesis;
 class Sandbox2D : public genesis::ImGuiLayer {
  public:
   Sandbox2D() {
@@ -52,9 +53,9 @@ class Sandbox2D : public genesis::ImGuiLayer {
     }
   }
 
-  bool OnEvent(genesis::Event& event) override {
+EventState OnEvent(genesis::Event& event) override {
     camera_2d_controller_->OnEvent(event);
-    return false;
+  return EventState::kHandled;
   }
 
   void OnImguiRender() override {
