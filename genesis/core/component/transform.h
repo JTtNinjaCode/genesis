@@ -1,6 +1,4 @@
 #pragma once
-#include <rttr/registration.h>
-
 #include <glm/glm.hpp>
 
 #include "core/component/component.h"

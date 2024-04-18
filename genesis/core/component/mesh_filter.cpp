@@ -1,4 +1,6 @@
 #include "mesh_filter.h"
+
+#include <rttr/registration.h>
 namespace genesis {
 using namespace rttr;
 RTTR_REGISTRATION {
