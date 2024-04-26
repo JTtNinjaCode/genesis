@@ -25,7 +25,10 @@ class PerspectiveCamera {
 
   glm::mat4 GetProjectionView() const { return projection_view_; }
 
-  void SetDirection(glm::vec3 direction) { direction_ = glm::normalize(direction); }
+  void SetDirection(glm::vec3 direction) {
+    direction_ = glm::normalize(direction);
+    RecalculateView();
+  }
 
   void SetFieldOfView(float field_of_view) {
     field_of_view_ = field_of_view;
