@@ -303,14 +303,14 @@ void GLFWInput::initializeKeycodeTable() {
 }
 void GLFWInput::initializeMouseButtonTable() {
   // initialize glfw mouse button table
-  lookup_glfw_mouse_button_table[MouseButton::kButton1] = GLFW_MOUSE_BUTTON_1;
-  lookup_glfw_mouse_button_table[MouseButton::kButton2] = GLFW_MOUSE_BUTTON_2;
-  lookup_glfw_mouse_button_table[MouseButton::kButton3] = GLFW_MOUSE_BUTTON_3;
+  lookup_glfw_mouse_button_table[MouseButton::kButton1] = GLFW_MOUSE_BUTTON_LEFT;
+  lookup_glfw_mouse_button_table[MouseButton::kButton2] = GLFW_MOUSE_BUTTON_MIDDLE;
+  lookup_glfw_mouse_button_table[MouseButton::kButton3] = GLFW_MOUSE_BUTTON_RIGHT;
 
   // initialized genesis mouse button table
-  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_1] = MouseButton::kButton1;
-  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_2] = MouseButton::kButton2;
-  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_3] = MouseButton::kButton3;
+  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_LEFT] = MouseButton::kButton1;
+  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_MIDDLE] = MouseButton::kButton2;
+  lookup_genesis_mouse_button_table[GLFW_MOUSE_BUTTON_RIGHT] = MouseButton::kButton3;
 }
 
 }  // namespace genesis
