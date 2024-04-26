@@ -9,7 +9,7 @@ class GameObject {
  public:
   GameObject();
   Component* AddComponent(const std::string& component_name);
-  Component* GetComponent(const std::string& component_name);
+  const Component* GetComponent(const std::string& component_name) const;
   void DeleteComponent(const std::string& component_name);
 
  private:

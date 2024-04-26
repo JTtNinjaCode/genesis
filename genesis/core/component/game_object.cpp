@@ -8,13 +8,18 @@ Component* GameObject::AddComponent(const std::string& component_name) {
   type t = type::get_by_name(component_name);
   variant var = t.create();
   auto component = var.get_value<std::shared_ptr<Component>>();
-  component->set_game_object(this);
+  component->SetGameObject(this);
   components_[component_name] = component;
   return component.get();
 }
-Component* GameObject::GetComponent(const std::string& component_name) {
-  auto result = components_[component_name];
-  return result.get();
+
+const Component* GameObject::GetComponent(const std::string& component_name) const {
+  auto result = components_.find(component_name);
+  if (result != components_.end()) {
+    return result->second.get();
+  }
+  return nullptr;
 }
+
 void GameObject::DeleteComponent(const std::string& component_name) { components_.erase(component_name); }
 }  // namespace genesis
