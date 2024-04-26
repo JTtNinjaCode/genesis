@@ -13,7 +13,15 @@ Component* GameObject::AddComponent(const std::string& component_name) {
   return component.get();
 }
 
-const Component* GameObject::GetComponent(const std::string& component_name) const {
+const Component* GameObject::GetConstComponent(const std::string& component_name) const {
+  auto result = components_.find(component_name);
+  if (result != components_.end()) {
+    return result->second.get();
+  }
+  return nullptr;
+}
+
+Component* GameObject::GetComponent(const std::string& component_name) {
   auto result = components_.find(component_name);
   if (result != components_.end()) {
     return result->second.get();

@@ -39,8 +39,8 @@ void genesis::Camera::RecalculateOrthographicMatrix() {
   orthographics_ = glm::orthoRH(-size_, size_, -size_, size_, clipping_plane_near_, clipping_plane_far_);
 }
 void genesis::Camera::RecalculateViewMatrix() {
-  auto transform = dynamic_cast<const Transform*>(GetGameObject()->GetComponent("Transform"));
-  auto position = transform->position();
+  auto transform = dynamic_cast<const Transform*>(GetGameObject()->GetConstComponent("Transform"));
+  auto position = transform->GetPostiion();
   view_ = glm::lookAtRH(position, position + direction_, glm::vec3(0, 1, 0));
 }
 }  // namespace genesis
