@@ -14,8 +14,14 @@ GLFWInput::GLFWInput() {
 
 bool GLFWInput::IsKeyPressed(Keycode keycode) const {
   int glfw_keycode = GetGLFWKeycdodeFromGenesisKeycode(keycode);
-  return (GLFW_PRESS == glfwGetKey(static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow()),
-                                   glfw_keycode));
+  return (GLFW_PRESS ==
+          glfwGetKey(static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow()), glfw_keycode));
+}
+
+bool GLFWInput::IsMousePressed(MouseButton mouse_button) const {
+  int glfw_mouse_button = GetGLFWMouseButtonFromGenesisMouseButton(mouse_button);
+  return (GLFW_PRESS ==
+          glfwGetMouseButton(static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow()), glfw_mouse_button));
 }
 
 int GLFWInput::GetMouseButton(MouseButton button) const {

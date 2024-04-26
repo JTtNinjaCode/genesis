@@ -11,6 +11,7 @@ enum class MouseButton;
 class DLL_API Input {
  public:
   virtual bool IsKeyPressed(Keycode key) const = 0;
+  virtual bool IsMousePressed(MouseButton mouse_button) const = 0;
   virtual std::string GetKeyCodeName(Keycode key) const = 0;
   virtual int GetMouseButton(MouseButton button) const = 0;
   virtual std::pair<double, double> GetMousePosition() const = 0;

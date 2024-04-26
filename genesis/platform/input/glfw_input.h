@@ -14,6 +14,7 @@ class GLFWInput : public Input {
   int GetGLFWMouseButtonFromGenesisMouseButton(MouseButton button) const;
 
   bool IsKeyPressed(Keycode keycode) const override;
+  bool IsMousePressed(MouseButton mouse_button) const override;
   int GetMouseButton(MouseButton button) const override;
   std::pair<double, double> GetMousePosition() const override;
   double GetMousePositionX() const override;
