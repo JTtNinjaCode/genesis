@@ -6,7 +6,7 @@ namespace genesis {
 void Mesh::Draw(Shader& shader) const {
   unsigned int diffuse_texture_counter = 1;
   unsigned int specular_texture_counter = 1;
-  for (unsigned int i = 0; i < textures_.size(); i++) {
+  for (int i = 0; i < textures_.size(); i++) {
     const auto& texture = textures_[i];
     texture->Bind(i);
     switch (texture->GetTextureType()) {
