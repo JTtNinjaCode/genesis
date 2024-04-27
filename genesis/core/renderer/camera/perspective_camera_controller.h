@@ -12,6 +12,9 @@ class PerspectiveCameraController {
                               glm::vec3 target);
   const PerspectiveCamera& GetCamera() const { return camera_; }
 
+  glm::vec4 GetClearColor() const { return camera_.GetClearColor(); }
+  void SetClearColor(glm::vec4 clear_color) { camera_.SetClearColor(clear_color); }
+
   void OnUpdate(TimeStep time_step);
   EventState OnEvent(Event& event);
   EventState OnWindowResizeEvent(WindowResizeEvent& event);

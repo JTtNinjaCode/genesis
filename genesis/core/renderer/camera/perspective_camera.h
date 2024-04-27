@@ -17,6 +17,8 @@ class PerspectiveCamera {
 
   glm::vec3 GetPosition() const { return position_; }
 
+  glm::vec4 GetClearColor() const { return clear_color_; }
+
   glm::vec3 GetDirection() const { return direction_; }
 
   glm::mat4 GetProjection() const { return projection_; }
@@ -29,6 +31,8 @@ class PerspectiveCamera {
     direction_ = glm::normalize(direction);
     RecalculateView();
   }
+
+  void SetClearColor(glm::vec4 clear_color) { clear_color_ = clear_color; }
 
   void SetFieldOfView(float field_of_view) {
     field_of_view_ = field_of_view;
@@ -75,6 +79,7 @@ class PerspectiveCamera {
 
   glm::vec3 position_;
   glm::vec3 direction_;
+  glm::vec4 clear_color_;
 };
 
 }  // namespace genesis
