@@ -7,8 +7,7 @@
 
 #include "core/log/log.h"
 namespace genesis {
-OpenGLShader::OpenGLShader(const std::string &vertex_source,
-                           const std::string &fragment_source) {
+OpenGLShader::OpenGLShader(const std::string &vertex_source, const std::string &fragment_source) {
   GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
   const GLchar *source = (const GLchar *)vertex_source.c_str();
@@ -104,6 +103,11 @@ void OpenGLShader::SetUniform(const std::string &name, const glm::vec2 &value) {
 }
 
 void OpenGLShader::SetUniform(const std::string &name, const int value) {
+  GLint location = glGetUniformLocation(id_, name.c_str());
+  glUniform1i(location, value);
+}
+
+void OpenGLShader::SetUniform(const std::string &name, const float value) {
   GLint location = glGetUniformLocation(id_, name.c_str());
   glUniform1i(location, value);
 }
