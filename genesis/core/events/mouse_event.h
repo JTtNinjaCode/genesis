@@ -36,12 +36,12 @@ class DLL_API MouseScrolledEvent : public MouseEvent {
  public:
   MouseScrolledEvent(double offset_x, double offset_y) : offset_x_(offset_x), offset_y_(offset_y) {}
 
-  inline double GetXOffset() const { return offset_x_; }
-  inline double GetYOffset() const { return offset_y_; }
+  inline double GetOffsetX() const { return offset_x_; }
+  inline double GetOffsetY() const { return offset_y_; }
 
   std::string ToString() const override {
     std::stringstream ss;
-    ss << GetEventTypeString() << GetXOffset() << ", " << GetYOffset();
+    ss << GetEventTypeString() << GetOffsetX() << ", " << GetOffsetY();
     return ss.str();
   }
 

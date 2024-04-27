@@ -35,7 +35,7 @@ EventState OrthographicCameraController::OnWindowResizeEvent(WindowResizeEvent& 
 }
 
 EventState OrthographicCameraController::OnMouseScrolledEvent(MouseScrolledEvent& event) {
-  camera_.SetZoomLevel(camera_.GetZoomLevel() + event.GetYOffset() * zoom_speed_);
+  camera_.SetZoomLevel(camera_.GetZoomLevel() + event.GetOffsetY() * zoom_speed_);
   return EventState::kHandled;
 }
 
