@@ -8,7 +8,7 @@ class Transform : public Component {
  public:
   Transform() : position_({0.0f}), rotation_({0.0f}), scale_({1.0f}) {}
 
-  glm::vec3 GetPostiion() const { return position_; }
+  glm::vec3 GetPosition() const { return position_; }
   glm::vec3 GetRotation() const { return rotation_; }
   glm::vec3 GetScale() const { return scale_; }
 

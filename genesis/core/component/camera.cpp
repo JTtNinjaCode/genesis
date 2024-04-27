@@ -49,7 +49,7 @@ void genesis::Camera::RecalculateOrthographicMatrix() {
 
 void genesis::Camera::RecalculateViewMatrix() {
   auto transform = dynamic_cast<const Transform*>(GetGameObject()->GetConstComponent("Transform"));
-  auto position = transform->GetPostiion();
+  auto position = transform->GetPosition();
   view_ = glm::lookAtRH(position, position + direction_, glm::vec3(0, 1, 0));
 }
 }  // namespace genesis
