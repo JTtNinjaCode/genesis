@@ -18,15 +18,22 @@ glm::mat4 Camera::GetProjection() const {
       break;
   }
 }
+
 glm::mat4 Camera::GetView() const { return view_; }
+
 ProjectionMode genesis::Camera::GetProjectionMode() const { return projection_mode_; }
+
 void genesis::Camera::SetProjectionMode(ProjectionMode projection_mode) { projection_mode_ = projection_mode; }
+
 float genesis::Camera::GetFov() const { return fov_; }
+
 void Camera::SetFov(float fov) {
   fov_ = fov;
   RecalculatePerspectiveMatrix();
 }
+
 float genesis::Camera::GetSize() const { return size_; }
+
 void genesis::Camera::SetSize(float size) {
   size_ = size;
   RecalculateOrthographicMatrix();
@@ -35,9 +42,11 @@ void genesis::Camera::SetSize(float size) {
 void genesis::Camera::RecalculatePerspectiveMatrix() {
   perspective_ = glm::perspective(fov_, 1.0f, clipping_plane_near_, clipping_plane_far_);
 }
+
 void genesis::Camera::RecalculateOrthographicMatrix() {
   orthographics_ = glm::orthoRH(-size_, size_, -size_, size_, clipping_plane_near_, clipping_plane_far_);
 }
+
 void genesis::Camera::RecalculateViewMatrix() {
   auto transform = dynamic_cast<const Transform*>(GetGameObject()->GetConstComponent("Transform"));
   auto position = transform->GetPostiion();

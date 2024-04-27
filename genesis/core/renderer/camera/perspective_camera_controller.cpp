@@ -43,16 +43,9 @@ EventState PerspectiveCameraController::OnWindowResizeEvent(WindowResizeEvent& e
 
 EventState PerspectiveCameraController::OnMouseScrolledEvent(MouseScrolledEvent& event) {
   glm::vec3 new_position = camera_.GetPosition();
+  glm::vec3 direction = camera_.GetDirection();
   auto& input = genesis::Input::GetInstance();
-  if (input.IsMousePressed(genesis::MouseButton::kButtonMiddle)) {
-    new_position -= (float)event.GetOffsetY() * right_dir * 0.05f;
-  } else if (input.IsMousePressed(genesis::MouseButton::kButtonRight)) {
-    glm::quat quaternion_pitch{
-        glm::angleAxis<float>(glm::radians(0.1f) * -rotation_speed_.y * event.GetDeltaY(), right_dir)};
-    glm::quat quaternion_yaw{
-        glm::angleAxis<float>(glm::radians(0.1f) * -rotation_speed_.x * event.GetDeltaX(), world_up_dir)};
-    camera_.SetDirection(quaternion_yaw * quaternion_pitch * forward_dir);
-  }
+  new_position += (float)event.GetOffsetY() * direction * 1.5f;
   camera_.SetPosition(new_position);
   return EventState::kHandled;
 }

@@ -77,13 +77,20 @@ void Sandbox3D::OnImguiRender() {
 
   auto transform = dynamic_cast<Transform*>(game_object_.GetComponent("Transform"));
   auto position = transform->GetPostiion();
+  auto rotation = transform->GetRotation();
+  auto scale = transform->GetScale();
   ImGui::Begin("Components");
-  ImGui::DragFloat3("Transform", glm::value_ptr(position), 1.0f, std::numeric_limits<float>::max(),
+  ImGui::Text("Transform");
+  ImGui::DragFloat3("Position", glm::value_ptr(position), 1.0f, std::numeric_limits<float>::max(),
                     -std::numeric_limits<float>::max());
-  ImGui::Text("Test");
+  ImGui::DragFloat3("Rotation", glm::value_ptr(rotation), 1.0f, std::numeric_limits<float>::max(),
+                    -std::numeric_limits<float>::max());
+  ImGui::DragFloat3("Scale", glm::value_ptr(scale), 1.0f, 0.0f, std::numeric_limits<float>::max());
   ImGui::End();
 
   transform->SetPosition(position);
+  transform->SetRotation(rotation);
+  transform->SetScale(scale);
 
   // Rendering
   ImGui::Render();

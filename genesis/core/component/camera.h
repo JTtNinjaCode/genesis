@@ -19,7 +19,6 @@ class Camera : public Component {
   void SetFov(float fov);
   float GetSize() const;
   void SetSize(float size);
-
   //bool OnEvent();
 
  private:
