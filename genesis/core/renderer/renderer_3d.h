@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 
+#include "core/component/light.h"
 #include "core/renderer/camera/perspective_camera.h"
 #include "core/renderer/model.h"
 #include "core/renderer/renderer_api.h"
@@ -13,10 +14,13 @@ class Renderer3D {
   Renderer3D();
   void BeginScene(const PerspectiveCamera& camera);
   void EndScene();
-  void Submit(Shader& shader, const VertexArray& vertex_array, const glm::mat4& model_matrix);
-  void Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix);
+  void Submit(Shader& shader, const VertexArray& vertex_array, const glm::mat4& model_matrix,
+              const Light* light = nullptr, const PerspectiveCamera* camera = nullptr);
+  void Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix, const Light* light = nullptr,
+              const PerspectiveCamera* camera = nullptr);
 
  private:
+  void SetLightUniform(Shader& shader, const Light& light);
   const PerspectiveCamera* camera_ = nullptr;
 };
 }  // namespace genesis

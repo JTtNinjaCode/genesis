@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 
 #include "core/component/component.h"
+#include "core/component/game_object.h"
+#include "core/component/transform.h"
 namespace genesis {
 enum class LightType { Directional, Point, Spot };
 class Light : public Component {
@@ -18,7 +20,7 @@ class Light : public Component {
     return transform->GetPosition();
   }
   void SetPosition(glm::vec3 position) {
-    auto transform = dynamic_cast<const Transform *>(GetGameObject()->GetComponent("Transform"));
+    auto transform = dynamic_cast<Transform *>(GetGameObject()->GetComponent("Transform"));
     transform->SetPosition(position);
   }
   float GetConstant() const { return constant_; }
@@ -29,13 +31,13 @@ class Light : public Component {
   void SetQuadratic(float quadratic) { quadratic_ = quadratic; }
 
  private:
-  LightType type_;
-  glm::vec3 direction_;
+  LightType type_ = LightType::Point;
+  glm::vec3 direction_ = glm::vec3(1.0f, 1.0f, 1.0f);
   glm::vec3 color_;
 
-  float constant_;
-  float linear_;
-  float quadratic_;
+  float constant_ = 1.0f;
+  float linear_ = 0.0f;
+  float quadratic_ = 0.0f;
 
   float cutOff;
 };
