@@ -7,6 +7,7 @@ class OpenGLVertexBuffer : public VertexBuffer {
   ~OpenGLVertexBuffer();
   void Bind() const override;
   void Unbind() const override;
+  int GetId() const override;
 
  private:
   unsigned int id_ = 0;
@@ -18,6 +19,7 @@ class OpenGLIndexBuffer : public IndexBuffer {
   ~OpenGLIndexBuffer();
   void Bind() const override;
   void Unbind() const override;
+  int GetId() const override;
 
  private:
   unsigned int id_ = 0;

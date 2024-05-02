@@ -22,18 +22,16 @@ GLenum MathDataTypeToOpenGLBaseType(MathDataType type) {
   return 0;
 }
 
-OpenGLVertexArray::OpenGLVertexArray(const BufferLayout& buffer_layout) {
+OpenGLVertexArray::OpenGLVertexArray(const BufferLayout& buffer_layout)
+    : total_stride_(buffer_layout.GetTotalStride()) {
+  CORE_ASSERT(!buffer_layout.GetLayout().empty(), "Buffer layout is empty.");
   glCreateVertexArrays(1, &id_);
-
-  glBindVertexArray(id_);
-  CORE_ASSERT(!buffer_layout.GetLayout().empty(), "buffer_layout is empty");
   int index = 0;
   size_t offset = 0;
   for (const auto& element : buffer_layout) {
-    glEnableVertexAttribArray(index);
-    glVertexAttribPointer(index, element.count,
-                          MathDataTypeToOpenGLBaseType(element.type), GL_FALSE,
-                          buffer_layout.GetTotalStride(), (const void*)offset);
+    glEnableVertexArrayAttrib(id_, index);
+    glVertexArrayAttribBinding(id_, index, 0);
+    glVertexArrayAttribFormat(id_, index, element.count, MathDataTypeToOpenGLBaseType(element.type), GL_FALSE, offset);
     offset += element.size;
     index++;
   }
@@ -45,15 +43,16 @@ void OpenGLVertexArray::Bind() const { glBindVertexArray(id_); }
 
 void OpenGLVertexArray::Unbind() const { glBindVertexArray(0); }
 
-void OpenGLVertexArray::AddVertexBuffer(const VertexBuffer& vertex_buffer) {
-  glBindVertexArray(id_);
-  vertex_buffer.Bind();
+unsigned int OpenGLVertexArray::GetCount() const { return ibo_->GetCount(); }
+
+void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) {
+  glVertexArrayVertexBuffer(id_, 0, vertex_buffer->GetId(), 0, total_stride_);
+  vbo_ = vertex_buffer;
 }
 
-void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer& index_buffer) {
-  glBindVertexArray(id_);
-  index_buffer.Bind();
-  count_ = index_buffer.GetCount();
+void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer> index_buffer) {
+  glVertexArrayElementBuffer(id_, index_buffer->GetId());
   has_index_ = true;
+  ibo_ = index_buffer;
 }
 }  // namespace genesis

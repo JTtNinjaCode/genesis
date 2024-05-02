@@ -4,8 +4,7 @@
 namespace genesis {
 OpenGLVertexBuffer::OpenGLVertexBuffer(void* vertices, size_t size) {
   glCreateBuffers(1, &id_);
-  glBindBuffer(GL_ARRAY_BUFFER, id_);
-  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+  glNamedBufferData(id_, size, vertices, GL_STATIC_DRAW);
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer() { glDeleteBuffers(1, &id_); }
@@ -14,21 +13,20 @@ void OpenGLVertexBuffer::Bind() const { glBindBuffer(GL_ARRAY_BUFFER, id_); }
 
 void OpenGLVertexBuffer::Unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
+int OpenGLVertexBuffer::GetId() const { return id_; }
+
 OpenGLIndexBuffer::OpenGLIndexBuffer(void* vertices, size_t size) {
   glCreateBuffers(1, &id_);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+  glNamedBufferData(id_, size, vertices, GL_STATIC_DRAW);
   count_ = size / sizeof(unsigned int);
 }
 
 OpenGLIndexBuffer::~OpenGLIndexBuffer() { glDeleteBuffers(1, &id_); }
 
-void OpenGLIndexBuffer::Bind() const {
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_);
-}
+void OpenGLIndexBuffer::Bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_); }
 
-void OpenGLIndexBuffer::Unbind() const {
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
+void OpenGLIndexBuffer::Unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
+
+int OpenGLIndexBuffer::GetId() const { return id_; }
 
 }  // namespace genesis

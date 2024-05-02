@@ -8,6 +8,7 @@ class VertexBuffer {
   virtual ~VertexBuffer() {}
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
+  virtual int GetId() const = 0;
 };
 
 class IndexBuffer {
@@ -17,6 +18,7 @@ class IndexBuffer {
   virtual ~IndexBuffer() {}
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
+  virtual int GetId() const = 0;
 
  protected:
   unsigned int count_ = 0;

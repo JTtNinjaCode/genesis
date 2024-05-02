@@ -11,16 +11,15 @@ class VertexArray {
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
 
-  virtual void AddVertexBuffer(const VertexBuffer& vertex_buffer) = 0;
-  virtual void SetIndexBuffer(const IndexBuffer& index_buffer) = 0;
+  virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) = 0;
+  virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer> index_buffer) = 0;
   bool HasIndex() const { return has_index_; }
-  unsigned int GetCount() const { return count_; }
+  virtual unsigned int GetCount() const = 0;
   bool GetIndexBuffer() const { return has_index_; }
-  static std::shared_ptr<VertexArray>Create(const BufferLayout& buffer_layout);
+  static std::shared_ptr<VertexArray> Create(const BufferLayout& buffer_layout);
 
  protected:
   bool has_index_ = false;
-  unsigned int count_ = 0;
 };
 
 }  // namespace genesis

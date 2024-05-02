@@ -16,7 +16,6 @@ void Renderer3D::BeginScene(const PerspectiveCamera& camera) {
   render_command.SetClearColor(camera_->GetClearColor());
   render_command.Clear();
 }
-
 void Renderer3D::EndScene() {}
 void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const glm::mat4& model_matrix,
                         const Light* light, const PerspectiveCamera* camera) {

@@ -68,7 +68,7 @@ Mesh Model::ProcessMesh(const aiMesh* mesh, const aiScene* scene) {
 
   auto vbo = VertexBuffer::Create(vertices.data(), sizeof(VertexPNT) * vertices.size());
   auto vao = VertexArray::Create({MathDataType::kFloat3, MathDataType::kFloat3, MathDataType::kFloat2});
-  vao->AddVertexBuffer(*vbo);
+  vao->AddVertexBuffer(vbo);
 
   std::vector<unsigned int> indicies;
   for (size_t i = 0; i < mesh->mNumFaces; i++) {
@@ -78,7 +78,7 @@ Mesh Model::ProcessMesh(const aiMesh* mesh, const aiScene* scene) {
     }
   }
   auto ebo = IndexBuffer::Create(indicies.data(), sizeof(unsigned int) * indicies.size());
-  vao->SetIndexBuffer(*ebo);
+  vao->SetIndexBuffer(ebo);
 
   std::vector<std::shared_ptr<Texture2D>> textures;
   if (mesh->mMaterialIndex >= 0) {
@@ -86,7 +86,7 @@ Mesh Model::ProcessMesh(const aiMesh* mesh, const aiScene* scene) {
     LoadMaterialTextures(textures, material, aiTextureType_DIFFUSE, TextureType::Diffuse);
     LoadMaterialTextures(textures, material, aiTextureType_SPECULAR, TextureType::Specular);
   }
-  return Mesh(std::move(vbo), std::move(vao), std::move(ebo), std::move(textures));
+  return Mesh(std::move(vao), std::move(textures));
 }
 
 void Model::LoadMaterialTextures(std::vector<std::shared_ptr<Texture2D>>& textures, aiMaterial* mat, aiTextureType type,
