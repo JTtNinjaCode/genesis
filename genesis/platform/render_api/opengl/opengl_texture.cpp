@@ -39,7 +39,7 @@ OpenGLTexture2D::OpenGLTexture2D(unsigned char* data, unsigned int channels, uns
   glTextureParameteri(id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  GLenum data_format;
+  GLenum data_format = GL_RGB;
   if (channels == 3) {
     data_format = GL_RGB;
   } else if (channels == 4) {
