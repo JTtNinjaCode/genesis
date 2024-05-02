@@ -111,4 +111,9 @@ void OpenGLShader::SetUniform(const std::string &name, const float value) {
   GLint location = glGetUniformLocation(id_, name.c_str());
   glUniform1f(location, value);
 }
+
+void OpenGLShader::SetUniform(const std::string &name, const bool value) {
+  GLint location = glGetUniformLocation(id_, name.c_str());
+  glUniform1i(location, value);
+}
 }  // namespace genesis

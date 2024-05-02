@@ -16,6 +16,7 @@ class OpenGLShader : public Shader {
   void SetUniform(const std::string& name, const glm::vec2& value) override;
   void SetUniform(const std::string& name, const int value) override;
   void SetUniform(const std::string& name, const float value) override;
+  void SetUniform(const std::string& name, const bool value) override;
 
  private:
   unsigned int id_ = 0;
