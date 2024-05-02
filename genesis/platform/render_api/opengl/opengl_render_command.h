@@ -9,7 +9,7 @@ class OpenGLRenderCommand : public RenderCommand {
   void SetBlend(bool enable) override;
   void SetViewport(int x, int y, int width, int height) override;
   void SetDepthTest(bool enable) override;
-  void SetPolygonMode(bool enable) override;
+  void SetDrawMode(DrawMode mode) override;
   void SetBackCulling(bool enable) override;
 };
 }  // namespace genesis

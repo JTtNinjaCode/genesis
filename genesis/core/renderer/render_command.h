@@ -4,6 +4,9 @@
 
 #include "core/renderer/vertex_array.h"
 namespace genesis {
+enum class DrawMode {
+	kFill, kLine, kPoint
+};
 class RenderCommand {
  public:
   static RenderCommand& GetInstanced();
@@ -14,7 +17,7 @@ class RenderCommand {
   virtual void SetBlend(bool enable) = 0;
   virtual void SetDepthTest(bool enable) = 0;
   virtual void SetViewport(int x, int y, int width, int height) = 0;
-  virtual void SetPolygonMode(bool enable) = 0;
+  virtual void SetDrawMode(DrawMode enable) = 0;
   virtual void SetBackCulling(bool enable) = 0;
 
  private:
