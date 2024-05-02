@@ -6,7 +6,7 @@
 namespace genesis {
 class Renderer2D {
  public:
-  static Renderer2D& GetInstanced();
+  static Renderer2D& GetInstance();
   void BeginScene(const OrthographicCamera2D& camera);
   void EndScene();
   // void Submit(Shader& shader, const VertexArray& vertex_array,

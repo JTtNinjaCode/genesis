@@ -21,7 +21,7 @@ void Mesh::Draw(Shader& shader) const {
     }
   }
   vao_->Bind();
-  RenderCommand::GetInstanced().DrawIndexed(*vao_);
+  RenderCommand::GetInstance().DrawIndexed(*vao_);
 }
 
 void Mesh::DrawInstanced(Shader& shader, unsigned int count) const {

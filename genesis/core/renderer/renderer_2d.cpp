@@ -10,8 +10,8 @@
 
 namespace genesis {
 Renderer2D::Renderer2D() {
-  RenderCommand::GetInstanced().SetBlend(true);
-  RenderCommand::GetInstanced().SetDepthTest(true);
+  RenderCommand::GetInstance().SetBlend(true);
+  RenderCommand::GetInstance().SetDepthTest(true);
   // clang-format off
   std::array<float, 20> data{
       // position-3, uv-2
@@ -59,7 +59,7 @@ void Renderer2D::BeginScene(const OrthographicCamera2D& camera) {
 
 void Renderer2D::EndScene() {}
 
-Renderer2D& Renderer2D::GetInstanced() {
+Renderer2D& Renderer2D::GetInstance() {
   static Renderer2D renderer_2d;
   return renderer_2d;
 }
@@ -80,7 +80,7 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
 
   white_texture_->Bind(1);
   quad_vao_->Bind();
-  RenderCommand::GetInstanced().DrawIndexed(*quad_vao_);
+  RenderCommand::GetInstance().DrawIndexed(*quad_vao_);
 }
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
@@ -99,7 +99,7 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
 
   texture.Bind(1);
   quad_vao_->Bind();
-  RenderCommand::GetInstanced().DrawIndexed(*quad_vao_);
+  RenderCommand::GetInstance().DrawIndexed(*quad_vao_);
 }
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
@@ -119,6 +119,6 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
 
   texture.Bind(1);
   quad_vao_->Bind();
-  RenderCommand::GetInstanced().DrawIndexed(*quad_vao_);
+  RenderCommand::GetInstance().DrawIndexed(*quad_vao_);
 }
 }  // namespace genesis

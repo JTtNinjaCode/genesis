@@ -7,12 +7,12 @@
 
 namespace genesis {
 Renderer3D::Renderer3D() {
-  RenderCommand::GetInstanced().SetBlend(true);
-  RenderCommand::GetInstanced().SetDepthTest(true);
+  RenderCommand::GetInstance().SetBlend(true);
+  RenderCommand::GetInstance().SetDepthTest(true);
 }
 void Renderer3D::BeginScene(const PerspectiveCamera& camera) {
   camera_ = &camera;
-  RenderCommand& render_command = RenderCommand::GetInstanced();
+  RenderCommand& render_command = RenderCommand::GetInstance();
   render_command.SetClearColor(camera_->GetClearColor());
   render_command.Clear();
 }
@@ -33,7 +33,7 @@ void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const g
   if (camera != nullptr) {
     shader.SetUniform("camera_position", camera->GetPosition());
   }
-  RenderCommand::GetInstanced().DrawIndexed(vertex_array);
+  RenderCommand::GetInstance().DrawIndexed(vertex_array);
 }
 void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix, const Light* light,
                         const PerspectiveCamera* camera) {

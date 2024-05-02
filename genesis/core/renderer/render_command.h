@@ -9,7 +9,7 @@ enum class DrawMode {
 };
 class RenderCommand {
  public:
-  static RenderCommand& GetInstanced();
+  static RenderCommand& GetInstance();
 
   virtual void SetClearColor(glm::vec4 color) = 0;
   virtual void Clear() = 0;
