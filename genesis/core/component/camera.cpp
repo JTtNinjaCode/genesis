@@ -18,38 +18,52 @@ glm::mat4 Camera::GetProjection() const {
       break;
   }
 }
-
 glm::mat4 Camera::GetView() const { return view_; }
 
-ProjectionMode genesis::Camera::GetProjectionMode() const { return projection_mode_; }
+glm::mat4 Camera::GetProjectionView() const { return GetProjection() * GetView(); }
 
-void genesis::Camera::SetProjectionMode(ProjectionMode projection_mode) { projection_mode_ = projection_mode; }
+ProjectionMode Camera::GetProjectionMode() const { return projection_mode_; }
 
-float genesis::Camera::GetFov() const { return fov_; }
+void Camera::SetProjectionMode(ProjectionMode projection_mode) { projection_mode_ = projection_mode; }
+
+float Camera::GetFov() const { return fov_; }
 
 void Camera::SetFov(float fov) {
   fov_ = fov;
   RecalculatePerspectiveMatrix();
 }
 
-float genesis::Camera::GetSize() const { return size_; }
+float Camera::GetSize() const { return size_; }
 
-void genesis::Camera::SetSize(float size) {
+void Camera::SetSize(float size) {
   size_ = size;
   RecalculateOrthographicMatrix();
 }
 
-void genesis::Camera::RecalculatePerspectiveMatrix() {
-  perspective_ = glm::perspective(fov_, 1.0f, clipping_plane_near_, clipping_plane_far_);
+float genesis::Camera::GetFar() const { return far_; }
+
+void genesis::Camera::SetFar(float far) { far_ = far; }
+
+float genesis::Camera::GetNear() const { return near_; }
+
+void genesis::Camera::SetNear(float near) { near_ = near; }
+
+void Camera::RecalculatePerspectiveMatrix() { perspective_ = glm::perspective(fov_, 1.0f, near_, far_); }
+
+void Camera::RecalculateOrthographicMatrix() {
+  orthographics_ = glm::orthoRH(-size_, size_, -size_, size_, near_, far_);
 }
 
-void genesis::Camera::RecalculateOrthographicMatrix() {
-  orthographics_ = glm::orthoRH(-size_, size_, -size_, size_, clipping_plane_near_, clipping_plane_far_);
-}
-
-void genesis::Camera::RecalculateViewMatrix() {
-  auto transform = dynamic_cast<const Transform*>(GetGameObject()->GetConstComponent("Transform"));
-  auto position = transform->GetPosition();
+void Camera::RecalculateViewMatrix() {
+  auto position = GetPosition();
   view_ = glm::lookAtRH(position, position + direction_, glm::vec3(0, 1, 0));
 }
+
+glm::vec3 Camera::GetPosition() const {
+  auto transform = dynamic_cast<const Transform*>(GetGameObject()->GetConstComponent("Transform"));
+  auto position = transform->GetPosition();
+  return position;
+}
+
+glm::vec3 Camera::GetDirection() const { return direction_; }
 }  // namespace genesis

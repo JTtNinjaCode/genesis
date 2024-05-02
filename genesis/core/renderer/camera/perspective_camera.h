@@ -1,8 +1,10 @@
 #pragma once
 #include <glm/glm.hpp>
 
+#include "camera_3d_interface.h"
+
 namespace genesis {
-class PerspectiveCamera {
+class PerspectiveCamera : public Camera3DInterface {
  public:
   PerspectiveCamera(float field_of_view, float ratio, float near_plane, float far_plane, glm::vec3 position,
                     glm::vec3 target);
@@ -11,21 +13,21 @@ class PerspectiveCamera {
 
   float GetRatio() const { return ratio_; }
 
-  float GetNear() const { return near_; }
+  float GetNear() const override { return near_; }
 
-  float GetFar() const { return far_; }
+  float GetFar() const override { return far_; }
 
-  glm::vec3 GetPosition() const { return position_; }
+  glm::vec3 GetPosition() const override { return position_; }
+
+  glm::vec3 GetDirection() const override { return direction_; }
+
+  glm::mat4 GetProjection() const override { return projection_; }
+
+  glm::mat4 GetView() const override { return view_; };
+
+  glm::mat4 GetProjectionView() const override { return projection_view_; }
 
   glm::vec4 GetClearColor() const { return clear_color_; }
-
-  glm::vec3 GetDirection() const { return direction_; }
-
-  glm::mat4 GetProjection() const { return projection_; }
-
-  glm::mat4 GetView() const { return view_; };
-
-  glm::mat4 GetProjectionView() const { return projection_view_; }
 
   void SetDirection(glm::vec3 direction) {
     direction_ = glm::normalize(direction);

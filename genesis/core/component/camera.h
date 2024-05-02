@@ -4,22 +4,32 @@
 #include <glm/glm.hpp>
 
 #include "core/component/component.h"
+#include "core/renderer/camera/camera_3d_interface.h"
 namespace genesis {
 enum ProjectionMode { kPerspective, kOrthographic };
 
-class Camera : public Component {
+class Camera : public Component, Camera3DInterface {
  public:
   Camera() = default;
-  ProjectionMode camera_usage;
-  glm::mat4 GetProjection() const;
-  glm::mat4 GetView() const;
+
+  // Inherited via CameraInterface
+  glm::mat4 GetProjection() const override;
+  glm::mat4 GetView() const override;
+  glm::mat4 GetProjectionView() const override;
+  glm::vec3 GetPosition() const override;
+  glm::vec3 GetDirection() const override;
+
   ProjectionMode GetProjectionMode() const;
   void SetProjectionMode(ProjectionMode projection_mode);
   float GetFov() const;
   void SetFov(float fov);
   float GetSize() const;
   void SetSize(float size);
-  //bool OnEvent();
+  float GetFar() const override;
+  void SetFar(float far);
+  float GetNear() const override;
+  void SetNear(float near);
+  // bool OnEvent();
 
  private:
   void RecalculatePerspectiveMatrix();
@@ -29,8 +39,8 @@ class Camera : public Component {
   ProjectionMode projection_mode_ = kPerspective;
   float fov_ = 0.0f;
   float size_ = 0.0f;
-  float clipping_plane_near_ = 0.1f;
-  float clipping_plane_far_ = 100.0f;
+  float near_ = 0.1f;
+  float far_ = 100.0f;
   glm::vec3 direction_ = glm::vec3(0.0f, 0.0f, 1.0f);
   glm::mat4 perspective_;
   glm::mat4 orthographics_;
