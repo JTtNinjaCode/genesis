@@ -11,5 +11,6 @@ class OpenGLRenderCommand : public RenderCommand {
   void SetDepthTest(bool enable) override;
   void SetDrawMode(DrawMode mode) override;
   void SetBackCulling(bool enable) override;
+  void SetPointSize(float size) override;
 };
 }  // namespace genesis

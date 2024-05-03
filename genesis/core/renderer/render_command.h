@@ -19,6 +19,7 @@ class RenderCommand {
   virtual void SetViewport(int x, int y, int width, int height) = 0;
   virtual void SetDrawMode(DrawMode enable) = 0;
   virtual void SetBackCulling(bool enable) = 0;
+  virtual void SetPointSize(float size) = 0;
 
  private:
   static std::shared_ptr<RenderCommand> render_command_;

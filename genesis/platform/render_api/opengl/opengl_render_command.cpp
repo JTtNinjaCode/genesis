@@ -49,4 +49,5 @@ void OpenGLRenderCommand::SetBackCulling(bool enable) {
     glCullFace(GL_FRONT);
   }
 }
+void OpenGLRenderCommand::SetPointSize(float size) { glPointSize(size); }
 }  // namespace genesis
