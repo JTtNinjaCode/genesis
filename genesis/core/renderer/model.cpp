@@ -68,7 +68,7 @@ Mesh Model::ProcessMesh(const aiMesh* mesh, const aiScene* scene) {
 
   auto vbo = VertexBuffer::Create(vertices.data(), sizeof(VertexPNT) * vertices.size());
   auto vao = VertexArray::Create({MathDataType::kFloat3, MathDataType::kFloat3, MathDataType::kFloat2});
-  vao->AddVertexBuffer(vbo);
+  vao->SetVertexBuffer(vbo);
 
   std::vector<unsigned int> indicies;
   for (size_t i = 0; i < mesh->mNumFaces; i++) {

@@ -31,7 +31,7 @@ Renderer2D::Renderer2D() {
   genesis::BufferLayout buffer_layout{
       {genesis::MathDataType::kFloat3, genesis::MathDataType::kFloat2}};
   quad_vao_ = genesis::VertexArray::Create(buffer_layout);
-  quad_vao_->AddVertexBuffer(quad_vbo_);
+  quad_vao_->SetVertexBuffer(quad_vbo_);
   quad_vao_->SetIndexBuffer(quad_ebo_);
 
   auto& shader_library = genesis::ShaderLibrary::GetInstance();
