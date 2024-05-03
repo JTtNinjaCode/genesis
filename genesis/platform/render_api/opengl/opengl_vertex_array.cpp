@@ -45,14 +45,16 @@ void OpenGLVertexArray::Unbind() const { glBindVertexArray(0); }
 
 unsigned int OpenGLVertexArray::GetCount() const { return index_buffer_->GetCount(); }
 
-void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) {
+void OpenGLVertexArray::SetVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) {
   glVertexArrayVertexBuffer(id_, 0, vertex_buffer->GetId(), 0, total_stride_);
-  vbo_ = vertex_buffer;
+  vertex_buffer_ = vertex_buffer;
 }
 
 void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer> index_buffer) {
   glVertexArrayElementBuffer(id_, index_buffer->GetId());
   has_index_ = true;
-  ibo_ = index_buffer;
+  index_buffer_ = index_buffer;
 }
+VertexBuffer& OpenGLVertexArray::GetVertexBuffer() const { return *vertex_buffer_; }
+IndexBuffer& OpenGLVertexArray::GetIndexBuffer() const { return *index_buffer_; }
 }  // namespace genesis

@@ -8,6 +8,7 @@ class OpenGLVertexBuffer : public VertexBuffer {
   void Bind() const override;
   void Unbind() const override;
   int GetId() const override;
+  void SubData(void *vertices, size_t size) override;
 
  private:
   unsigned int id_ = 0;
@@ -20,6 +21,7 @@ class OpenGLIndexBuffer : public IndexBuffer {
   void Bind() const override;
   void Unbind() const override;
   int GetId() const override;
+  void SubData(void *vertices, size_t size) override;
 
  private:
   unsigned int id_ = 0;

@@ -17,12 +17,14 @@ class OpenGLVertexArray : public VertexArray {
   void Unbind() const override;
   unsigned int GetCount() const override;
 
-  void AddVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) override;
+  void SetVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) override;
   void SetIndexBuffer(const std::shared_ptr<IndexBuffer> index_buffer) override;
+  VertexBuffer& GetVertexBuffer() const override;
+  IndexBuffer& GetIndexBuffer() const override;
 
  private:
-  std::shared_ptr<VertexBuffer> vbo_;
-  std::shared_ptr<IndexBuffer> ibo_;
+  std::shared_ptr<VertexBuffer> vertex_buffer_;
+  std::shared_ptr<IndexBuffer> index_buffer_;
   const int total_stride_;
   unsigned int id_ = 0;
 };

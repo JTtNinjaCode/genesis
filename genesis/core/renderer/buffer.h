@@ -9,6 +9,7 @@ class VertexBuffer {
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
   virtual int GetId() const = 0;
+  virtual void SubData(void *vertices, size_t size) = 0;
 };
 
 class IndexBuffer {
@@ -19,6 +20,7 @@ class IndexBuffer {
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
   virtual int GetId() const = 0;
+  virtual void SubData(void *vertices, size_t size) = 0;
 
  protected:
   unsigned int count_ = 0;
