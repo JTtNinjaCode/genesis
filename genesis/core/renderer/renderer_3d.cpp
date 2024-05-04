@@ -24,13 +24,13 @@ void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const g
   shader.SetUniform("u_projection", camera_->GetProjection());
   shader.SetUniform("u_view", camera_->GetView());
   shader.SetUniform("u_model", model_matrix);
+  shader.SetUniform("u_camera_position", camera->GetPosition());
+  shader.SetUniform("u_camera_far", camera->GetFar());
+  shader.SetUniform("u_camera_near", camera->GetNear());
+
   // set light uniform
   if (light != nullptr) {
     SetLightUniform(shader, *light);
-  }
-  // set camera uniform
-  if (camera != nullptr) {
-    shader.SetUniform("u_position", camera->GetPosition());
   }
   RenderCommand::GetInstance().DrawIndexed(vertex_array);
 }
@@ -48,7 +48,7 @@ void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& mod
   }
   // set camera uniform
   if (camera != nullptr) {
-    shader.SetUniform("camera_position", camera->GetPosition());
+    shader.SetUniform("u_camera_position", camera->GetPosition());
   }
   model.Draw(shader);
 }
