@@ -32,11 +32,11 @@ class Sandbox2D : public ImGuiLayer {
       PROFILE("Hello",
               [&](const profile::ProfileResult& profile_result) { profile_results_.push_back(profile_result); });
       profile_results_.clear();
-      RenderCommand& render_command = RenderCommand::GetInstanced();
+      RenderCommand& render_command = RenderCommand::GetInstance();
       render_command.SetClearColor({0.8, 0.2, 0.5, 1.0f});
       render_command.Clear();
 
-      auto& renderer_2d = Renderer2D::GetInstanced();
+      auto& renderer_2d = Renderer2D::GetInstance();
       renderer_2d.BeginScene(camera_2d_controller_->GetCamera());
       renderer_2d.DrawQuad({0.2, 0.2, -20.0f}, {1, 1}, rotate_radians_, *texture_);
       renderer_2d.DrawQuad({0.0, 0.0, -10.0f}, {1, 1}, rotate_radians_, {1.0, 1.0, 0.0, 1.0});

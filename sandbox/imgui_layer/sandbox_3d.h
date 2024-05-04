@@ -4,10 +4,6 @@
 #pragma warning(push)
 #pragma warning(disable : 4005)
 #include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -29,5 +25,8 @@ class Sandbox3D : public ImGuiLayer {
   std::shared_ptr<PerspectiveCameraController> camera_3d_;
   std::vector<profile::ProfileResult> profile_results_;
   std::shared_ptr<Shader> shader_;
-  GameObject game_object_;
+  std::shared_ptr<Shader> shader2_;
+  std::shared_ptr<VertexArray> vertex_array_;
+  GameObject model_;
+  GameObject light_;
 };

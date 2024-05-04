@@ -17,7 +17,10 @@
 using namespace genesis;
 class Sandbox : public Application {
  public:
-  Sandbox() { PushOverLayer(std::make_shared<Sandbox3D>()); }
+  Sandbox() {
+    PushOverLayer(std::make_shared<Sandbox3D>());
+    PushOverLayer(std::make_shared<GridController>());
+  }
   ~Sandbox() {}
 };
 

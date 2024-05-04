@@ -1,6 +1,8 @@
 #include "core/application.h"
 
 #include <GLFW/glfw3.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 #include <glm/glm.hpp>
 #include <iostream>
@@ -8,13 +10,12 @@
 #include "core/imgui/imgui_layer.h"
 #include "core/renderer/buffer_layout.h"
 #include "core/renderer/render_command.h"
-#
 namespace genesis {
 std::shared_ptr<Application> Application::instance_;
 
 Application::Application() {
   Log::Init();
-  window_ = std::shared_ptr<Window>(Window::Create("Genesis", 900, 600));
+  window_ = std::shared_ptr<Window>(Window::Create("Genesis", 1000, 1000));
   ImGuiLayer::Init(*window_);
 
   CORE_ASSERT(!instance_, "Application had exist.");
@@ -36,8 +37,23 @@ void Application::Run() {
       layer->OnUpdate(duration);
     }
 
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
     for (auto& layer : layer_stack_) {
       layer->OnRender();
+    }
+    // Rendering
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    //// Update and Render additional Platform Windows, if use multi viewport, use these code
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+      GLFWwindow* backup_current_context = glfwGetCurrentContext();
+      ImGui::UpdatePlatformWindows();
+      ImGui::RenderPlatformWindowsDefault();
+      glfwMakeContextCurrent(backup_current_context);
     }
 
     window_->OnUpdate();
