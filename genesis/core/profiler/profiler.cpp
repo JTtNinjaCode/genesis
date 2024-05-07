@@ -1,0 +1,1 @@
+namespace genesis {}  // namespace genesis

@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "core/imgui/imgui_layer.h"
+#include "core/profiler/profiler.h"
 #include "core/renderer/buffer_layout.h"
 #include "core/renderer/render_command.h"
 namespace genesis {
@@ -22,7 +23,9 @@ Application::Application() {
   instance_.reset(this);
 
   window_->SetEventListener(BIND_METHOD(Application::OnEventEntryPoint));
-  window_->SetVSync(true);
+  window_->SetVSync(false);
+
+  Profiler::Init();
 }
 
 Application::~Application() { ImGuiLayer::Uninit(); }
@@ -55,7 +58,6 @@ void Application::Run() {
       ImGui::RenderPlatformWindowsDefault();
       glfwMakeContextCurrent(backup_current_context);
     }
-
     window_->OnUpdate();
   }
 }
