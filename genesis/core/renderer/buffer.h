@@ -26,4 +26,19 @@ class IndexBuffer {
   unsigned int count_ = 0;
 };
 
+class UniformBuffer {
+ public:
+  static std::shared_ptr<UniformBuffer> Create(void *vertices, size_t size);
+  unsigned int GetCount() const { return count_; }
+  virtual ~UniformBuffer() {}
+  virtual void BindSlot(const unsigned int slot) const = 0;
+  virtual void Bind() const = 0;
+  virtual void Unbind() const = 0;
+  virtual int GetId() const = 0;
+  virtual void SubData(void *vertices, size_t size, size_t begin = 0) = 0;
+
+ protected:
+  unsigned int count_ = 0;
+};
+
 }  // namespace genesis
