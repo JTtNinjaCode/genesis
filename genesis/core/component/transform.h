@@ -6,7 +6,7 @@ namespace genesis {
 
 class Transform : public Component {
  public:
-  Transform() : position_({0.0f}), rotation_({0.0f}), scale_({1.0f}) {}
+  Transform(GameObject* game_object) : Component(game_object), position_({0.0f}), rotation_({0.0f}), scale_({1.0f}) {}
 
   glm::vec3 GetPosition() const { return position_; }
   glm::vec3 GetRotation() const { return rotation_; }

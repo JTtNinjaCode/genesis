@@ -6,7 +6,9 @@
 #include "core/component/transform.h"
 namespace genesis {
 using namespace rttr;
-RTTR_REGISTRATION { registration::class_<Camera>("Camera").constructor<>()(rttr::policy::ctor::as_std_shared_ptr); }
+RTTR_REGISTRATION {
+  registration::class_<Camera>("Camera").constructor<GameObject *>()(rttr::policy::ctor::as_std_shared_ptr);
+}
 
 glm::mat4 Camera::GetProjection() const {
   switch (projection_mode_) {
@@ -60,7 +62,7 @@ void Camera::RecalculateViewMatrix() {
 }
 
 glm::vec3 Camera::GetPosition() const {
-  auto transform = dynamic_cast<const Transform*>(GetGameObject()->GetConstComponent("Transform"));
+  auto transform = dynamic_cast<const Transform *>(GetGameObject()->GetConstComponent("Transform"));
   auto position = transform->GetPosition();
   return position;
 }

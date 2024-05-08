@@ -6,9 +6,8 @@ using namespace rttr;
 GameObject::GameObject() { AddComponent("Transform"); }
 Component* GameObject::AddComponent(const std::string& component_name) {
   type t = type::get_by_name(component_name);
-  variant var = t.create();
+  variant var = t.create({this});
   auto component = var.get_value<std::shared_ptr<Component>>();
-  component->SetGameObject(this);
   components_[component_name] = component;
   return component.get();
 }

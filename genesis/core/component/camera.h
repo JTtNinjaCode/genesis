@@ -4,13 +4,14 @@
 #include <glm/glm.hpp>
 
 #include "core/component/component.h"
+#include "core/component/game_object.h"
 #include "core/renderer/camera/camera_3d_interface.h"
 namespace genesis {
 enum ProjectionMode { kPerspective, kOrthographic };
 
 class Camera : public Component, Camera3DInterface {
  public:
-  Camera() = default;
+  Camera(GameObject *game_object) : Component(game_object) {}
 
   // Inherited via CameraInterface
   glm::mat4 GetProjection() const override;
