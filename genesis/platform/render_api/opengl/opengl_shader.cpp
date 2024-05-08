@@ -116,4 +116,8 @@ void OpenGLShader::SetUniform(const std::string &name, const bool value) {
   GLint location = glGetUniformLocation(id_, name.c_str());
   glUniform1i(location, value);
 }
+void OpenGLShader::SetUniformBlock(const std::string &name, const unsigned int slot) {
+  GLint location = glGetUniformBlockIndex(id_, name.c_str());
+  glUniformBlockBinding(id_, location, slot);
+}
 }  // namespace genesis

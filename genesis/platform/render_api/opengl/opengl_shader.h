@@ -5,8 +5,7 @@
 namespace genesis {
 class OpenGLShader : public Shader {
  public:
-  OpenGLShader(const std::string& vertex_source,
-               const std::string& fragment_source);
+  OpenGLShader(const std::string& vertex_source, const std::string& fragment_source);
   virtual ~OpenGLShader();
   void Bind() const override;
   void Unbind() const override;
@@ -17,6 +16,8 @@ class OpenGLShader : public Shader {
   void SetUniform(const std::string& name, const int value) override;
   void SetUniform(const std::string& name, const float value) override;
   void SetUniform(const std::string& name, const bool value) override;
+
+  void SetUniformBlock(const std::string& name, const unsigned int slot) override;
 
  private:
   unsigned int id_ = 0;
