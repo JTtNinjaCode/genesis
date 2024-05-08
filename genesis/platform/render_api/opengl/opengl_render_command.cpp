@@ -25,6 +25,7 @@ void OpenGLRenderCommand::SetViewport(int x, int y, int width, int height) { glV
 void OpenGLRenderCommand::SetDepthTest(bool enable) {
   if (enable) {
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
   } else {
     glDisable(GL_DEPTH_TEST);
   }

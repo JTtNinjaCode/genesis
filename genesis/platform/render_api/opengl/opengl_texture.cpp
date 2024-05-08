@@ -25,13 +25,15 @@ OpenGLTexture2D::OpenGLTexture2D(unsigned char* data, unsigned int channels, uns
   glCreateTextures(GL_TEXTURE_2D, 1, &id_);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   GLenum internal_format = 0;
-  if (channels == 3) {
+  if (channels == 1) {
+    internal_format = GL_R8;
+  } else if (channels == 3) {
     internal_format = GL_RGB8;
   } else if (channels == 4) {
     internal_format = GL_RGBA8;
   }
 
-  CORE_ASSERT(channels == 3 || channels || 4, "texture format not support.");
+  CORE_ASSERT(channels == 1 || channels == 3 || channels || 4, "texture format not support.");
 
   glTextureStorage2D(id_, 1, internal_format, width_,
                      height_);  // allocate memory
@@ -40,7 +42,9 @@ OpenGLTexture2D::OpenGLTexture2D(unsigned char* data, unsigned int channels, uns
   glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
   GLenum data_format = GL_RGB;
-  if (channels == 3) {
+  if (channels == 1) {
+    data_format = GL_RED;
+  } else if (channels == 3) {
     data_format = GL_RGB;
   } else if (channels == 4) {
     data_format = GL_RGBA;
