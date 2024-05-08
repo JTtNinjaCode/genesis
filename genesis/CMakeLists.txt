@@ -33,7 +33,7 @@ add_compile_definitions(
 )
 
 #link library
-target_link_libraries(genesis PRIVATE glfw glad assimp RTTR::Core_Lib)
+target_link_libraries(genesis PRIVATE glfw glad assimp RTTR::Core_Lib freetype)
 target_link_libraries(genesis PUBLIC spdlog imgui glm easy_profiler)
 
 #include genesis

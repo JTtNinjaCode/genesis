@@ -12,6 +12,10 @@ target_compile_options(glad PUBLIC /wd4819)
 add_subdirectory(assimp)
 target_compile_options(assimp PUBLIC /wd4819)
 
+add_subdirectory(freetype2)
+target_compile_definitions(freetype PRIVATE CMAKE_BUILD_TYPE=Release)
+target_compile_options(freetype PUBLIC /wd4819)
+
 set(EASY_PROFILER_NO_GUI ON CACHE BOOL "")
 set(EASY_PROFILER_NO_SAMPLES ON CACHE BOOL "")
 add_subdirectory(easy_profiler)
