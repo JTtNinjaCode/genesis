@@ -27,4 +27,13 @@ target_sources(sandbox
     ${SOURCES}
 )
 
-target_link_libraries(sandbox PRIVATE genesis -WHOLEARCHIVE:$<TARGET_FILE:genesis>)
+target_link_libraries(sandbox PRIVATE genesis imgui -WHOLEARCHIVE:$<TARGET_FILE:genesis>)
+target_include_directories(sandbox PRIVATE .)
+
+#include imgui
+set(IMGUI_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/imgui)
+target_include_directories(genesis PUBLIC  ${IMGUI_INCLUDE_DIRS})
+
+#include imgui backends
+set(IMGUI_BACKENDS_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/imgui/backends)
+target_include_directories(genesis PUBLIC  ${IMGUI_BACKENDS_INCLUDE_DIRS})

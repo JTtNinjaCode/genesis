@@ -1,5 +1,6 @@
 #pragma once
 #include <genesis.h>
+#include "imgui_layer/imgui_layer.h"
 
 #include <iostream>
 #pragma warning(push)
@@ -29,9 +30,6 @@ class Sandbox2D : public ImGuiLayer {
     {
       std::cout << glm::to_string(glm::faceforward(glm::vec3{10, 20, 10}, glm::vec3{0, 3, 0}, glm::vec3{0, -1, 0}))
                 << std::endl;
-      PROFILE("Hello",
-              [&](const profile::ProfileResult& profile_result) { profile_results_.push_back(profile_result); });
-      profile_results_.clear();
       RenderCommand& render_command = RenderCommand::GetInstance();
       render_command.SetClearColor({0.8, 0.2, 0.5, 1.0f});
       render_command.Clear();
@@ -63,9 +61,6 @@ class Sandbox2D : public ImGuiLayer {
 
     ImGui::ColorEdit3("color editor", glm::value_ptr(square_color_));
     ImGui::DragFloat("float", &rotate_radians_, 0.01);
-    for (auto& result : profile_results_) {
-      ImGui::Text("profiler:%s, time: %f ms", result.name, result.duration.count() * 0.001f);
-    }
 
     // Rendering
     ImGui::Render();
@@ -88,5 +83,4 @@ class Sandbox2D : public ImGuiLayer {
   float rotate_radians_ = 0.0f;
   std::shared_ptr<Texture2D> texture_;
   glm::vec3 square_color_ = glm::vec3(1.0f);
-  std::vector<profile::ProfileResult> profile_results_;
 };

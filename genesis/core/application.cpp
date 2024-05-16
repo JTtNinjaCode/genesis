@@ -7,7 +7,6 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
-#include "core/imgui/imgui_layer.h"
 #include "core/profiler/profiler.h"
 #include "core/renderer/buffer_layout.h"
 #include "core/renderer/render_command.h"
@@ -17,7 +16,6 @@ std::shared_ptr<Application> Application::instance_;
 Application::Application() {
   Log::Init();
   window_ = std::shared_ptr<Window>(Window::Create("Genesis", 1000, 1000));
-  ImGuiLayer::Init(*window_);
 
   CORE_ASSERT(!instance_, "Application had exist.");
   instance_.reset(this);
@@ -28,7 +26,7 @@ Application::Application() {
   Profiler::Init();
 }
 
-Application::~Application() { ImGuiLayer::Uninit(); }
+Application::~Application() {}
 
 void Application::Run() {
   timer.Start();

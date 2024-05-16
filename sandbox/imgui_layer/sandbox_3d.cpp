@@ -3,6 +3,12 @@
 #include <imgui.h>
 
 #include <limits>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/euler_angles.hpp>
+
+#include "core/renderer/font.h"
 using namespace genesis;
 Sandbox3D::Sandbox3D() {
   auto& app = Application::GetInstance();
@@ -20,10 +26,13 @@ Sandbox3D::Sandbox3D() {
   mesh_filter->SetModel("./assets/models/Nanosuit/nanosuit.obj");
 
   auto* light = dynamic_cast<Light*>(light_.AddComponent("Light"));
-  light->SetColor({0.5f, 0.5f, 0.5f});
   light->SetPosition({0.0f, 30.0f, 30.0f});
+  light->SetColor({1.0f, 1.0f, 1.0f});
   light->SetDirection({1.0f, 1.0f, 1.0f});
   light->SetLightType(LightType::Point);
+
+  Font::Init();
+  Font::LoadFont("./assets/fonts/SedanSC-Regular.ttf", "SedanSC-Regular", 16);
 }
 
 void Sandbox3D::OnUpdate(TimeStep time_step) {
@@ -52,8 +61,10 @@ void Sandbox3D::OnUpdate(TimeStep time_step) {
     auto& render_command = RenderCommand::GetInstance();
     render_command.SetDrawMode(DrawMode::kFill);
     renderer_3d.Submit(*shader_, component_model->GetModel(), model, component_light, &camera);
-    
-    
+
+    // Font::GetTexture().Bind(0);
+    // renderer_3d.Submit(Font::GetShader(), Font::GetVertexArray(), {1.0f}, nullptr, &camera);
+
     auto& grid = Grid::GetInstance();
     grid.GetShader().Bind();
     grid.GetShader().SetUniform("u_grid_opacity", grid.GetOpacity());
@@ -63,13 +74,6 @@ void Sandbox3D::OnUpdate(TimeStep time_step) {
 
     camera_3d_->OnUpdate(time_step);
   }
-}
-
-EventState Sandbox3D::OnKeyPressedEvent(KeyPressedEvent& event) {
-  // if (event.GetKeyCode() == Keycode::kKeyEscape) {
-  //   Application::GetInstance().GetWindow().EnableCursor(true);
-  // }
-  return EventState::kHandled;
 }
 
 EventState Sandbox3D::OnMouseButtonPressedEvent(MouseButtonPressedEvent& event) { return EventState::kHandled; }
@@ -82,7 +86,6 @@ EventState Sandbox3D::OnWindowResizeEvent(WindowResizeEvent& event) {
 EventState Sandbox3D::OnEvent(Event& event) {
   EventDispatcher event_dispatcher(event);
   camera_3d_->OnEvent(event);
-  event_dispatcher.Dispatch<KeyPressedEvent>(BIND_METHOD(Sandbox3D::OnKeyPressedEvent));
   event_dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_METHOD(Sandbox3D::OnMouseButtonPressedEvent));
   event_dispatcher.Dispatch<WindowResizeEvent>(BIND_METHOD(Sandbox3D::OnWindowResizeEvent));
   return EventState::kHandled;

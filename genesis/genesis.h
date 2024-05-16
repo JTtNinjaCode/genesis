@@ -6,8 +6,6 @@
 #include "core/component/mesh_filter.h"
 #include "core/component/transform.h"
 #include "core/events/event.h"
-#include "core/imgui/grid_controller.h"
-#include "core/imgui/imgui_layer.h"
 #include "core/input.h"
 #include "core/layer/layer.h"
 #include "core/layer/layer_stack.h"

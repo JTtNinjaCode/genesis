@@ -34,7 +34,7 @@ add_compile_definitions(
 
 #link library
 target_link_libraries(genesis PRIVATE glfw glad assimp RTTR::Core_Lib freetype)
-target_link_libraries(genesis PUBLIC spdlog imgui glm easy_profiler)
+target_link_libraries(genesis PUBLIC spdlog glm easy_profiler)
 
 #include genesis
 set(ENGINE_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/genesis)
@@ -43,11 +43,3 @@ target_include_directories(genesis PUBLIC ${ENGINE_INCLUDE_DIRS})
 #include stb
 set(STB_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/stb)
 target_include_directories(genesis PRIVATE ${STB_INCLUDE_DIRS})
-
-#include imgui
-set(IMGUI_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/imgui)
-target_include_directories(genesis PUBLIC  ${IMGUI_INCLUDE_DIRS})
-
-#include imgui backends
-set(IMGUI_BACKENDS_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/imgui/backends)
-target_include_directories(genesis PUBLIC  ${IMGUI_BACKENDS_INCLUDE_DIRS})

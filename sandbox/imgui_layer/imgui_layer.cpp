@@ -1,38 +1,16 @@
 #include "imgui_layer.h"
 
 #pragma warning(push)
-#pragma warning(disable : 4005)
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-// TEMPORARY
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
 #pragma warning(pop)
 
 #include "core/application.h"
 #include "core/events/event.h"
-#include "core/events/mouse_event.h"
 
 namespace genesis {
-ImGuiLayer::ImGuiLayer() : Layer("imgui layer") {}
-
-ImGuiLayer::~ImGuiLayer() {}
-
-void ImGuiLayer::OnAttach() {}
-
-void ImGuiLayer::OnDetach() {}
-
-void ImGuiLayer::OnUpdate(TimeStep time_step) {}
-
-EventState ImGuiLayer::OnEvent(Event& event) {
-  EventDispatcher event_dispathcer(event);
-  return EventState::kHandled;
-}
-void ImGuiLayer::OnRender() { OnImguiRender(); }
-void ImGuiLayer::OnImguiRender() {}
-
-void ImGuiLayer::Init(Window& window) {
+void ImGuiLayer::Init() {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -40,13 +18,16 @@ void ImGuiLayer::Init(Window& window) {
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;      // Enable Docking
   io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    // Enable Multi-Viewport
-  // / Platform Windows
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
   // Setup Dear ImGui style
   ImGui::StyleColorsDark();
   ImGuiStyle& style = ImGui::GetStyle();
+  style.WindowRounding = 4;
+  style.FrameRounding = 4;
+  style.GrabRounding = 3;
+  style.ScrollbarSize = 7;
+  style.ScrollbarRounding = 0;
+
   ImVec4* colors = style.Colors;
   colors[ImGuiCol_FrameBg] = ImVec4(0.16f, 0.16f, 0.17f, 1.00f);
   colors[ImGuiCol_FrameBgHovered] = ImVec4(0.37f, 0.36f, 0.36f, 102.00f);
@@ -75,20 +56,31 @@ void ImGuiLayer::Init(Window& window) {
   colors[ImGuiCol_NavHighlight] = ImVec4(1.00f, 0.40f, 0.13f, 1.00f);
   colors[ImGuiCol_TextSelectedBg] = ImVec4(0.45f, 1.00f, 0.85f, 0.35f);
 
-  style.WindowRounding = 4;
-  style.FrameRounding = 4;
-  style.GrabRounding = 3;
-  style.ScrollbarSize = 7;
-  style.ScrollbarRounding = 0;
-
   // Setup Platform/Renderer bindings
+  auto& app = Application::GetInstance();
+  auto& window = app.GetWindow();
   GLFWwindow* native_window = static_cast<GLFWwindow*>(window.GetNativeWindow());
   ImGui_ImplGlfw_InitForOpenGL(native_window, true);
   ImGui_ImplOpenGL3_Init("#version 460");
 }
+
 void ImGuiLayer::Uninit() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
+
+ImGuiLayer::ImGuiLayer() : Layer("imgui layer") {}
+
+ImGuiLayer::~ImGuiLayer() {}
+
+void ImGuiLayer::OnAttach() {}
+
+void ImGuiLayer::OnDetach() {}
+
+void ImGuiLayer::OnUpdate(TimeStep time_step) {}
+
+EventState ImGuiLayer::OnEvent(Event& event) { return EventState::kNotHandled; }
+
+void ImGuiLayer::OnRender() { OnImguiRender(); }
 }  // namespace genesis
