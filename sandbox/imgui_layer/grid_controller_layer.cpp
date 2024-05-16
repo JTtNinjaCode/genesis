@@ -5,13 +5,12 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include "core/log/log.h"
-#include "core/renderer/grid.h"
+#include "imgui_layer/global_layer_controller_layer.h"
 namespace genesis {
 void GridControllerLayer::OnImguiRender() {
-  static bool show = true;  // TODO: build All Layer Context
-  if (show) {
-    ImGui::Begin("Grid", &show);
+  auto &show_grid_controller = LayerContext::layer_context.grid_controller;
+  if (show_grid_controller) {
+    ImGui::Begin("Grid", &show_grid_controller);
     auto &grid = Grid::GetInstance();
     auto grid_mode = grid.GetGridMode();
     ImGui::Text("Grid Plane");
