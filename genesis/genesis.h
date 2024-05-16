@@ -4,6 +4,7 @@
 #include "core/component/camera.h"
 #include "core/component/game_object.h"
 #include "core/component/mesh_filter.h"
+#include "core/component/scene.h"
 #include "core/component/transform.h"
 #include "core/events/event.h"
 #include "core/input.h"

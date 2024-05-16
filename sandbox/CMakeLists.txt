@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(sandbox ${SRC})
 
 #source files
-file(GLOB_RECURSE SOURCES "./**/*.cpp")
+file(GLOB_RECURSE SOURCES "./**/*.cc")
 
 #header files
 file(GLOB_RECURSE HEADERS "./**/*.h")
@@ -22,7 +22,7 @@ add_compile_definitions(
 
 target_sources(sandbox
     PRIVATE
-    source.cpp
+    source.cc
     ${HEADERS}
     ${SOURCES}
 )

@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(genesis STATIC)
 
 #source files
-file(GLOB_RECURSE SOURCES "./**/*.cpp")
+file(GLOB_RECURSE SOURCES "./**/*.cc")
 
 #header files
 file(GLOB_RECURSE HEADERS "./**/*.h")

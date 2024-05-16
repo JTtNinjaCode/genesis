@@ -2,11 +2,11 @@
 
 #include <imgui.h>
 
-#include <limits>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/euler_angles.hpp>
+#include <limits>
 
 #include "core/renderer/font.h"
 using namespace genesis;
@@ -22,6 +22,11 @@ Sandbox3D::Sandbox3D() {
                                                              glm::vec3(0, 0, 50), glm::vec3(0, 0, 0));
   camera_3d_->SetClearColor({1.0f, 1.0f, 1.0f, 1.0f});
 
+  scene_.AddGameObject("robot");
+  scene_.AddGameObject("light");
+
+  auto& model_ = scene_.GetGameObject("robot");
+  auto& light_ = scene_.GetGameObject("light");
   auto* mesh_filter = dynamic_cast<MeshFilter*>(model_.AddComponent("Mesh Filter"));
   mesh_filter->SetModel("./assets/models/Nanosuit/nanosuit.obj");
 
@@ -40,6 +45,9 @@ void Sandbox3D::OnUpdate(TimeStep time_step) {
     auto& renderer_3d = Renderer3D();
     auto& camera = camera_3d_->GetCamera();
     renderer_3d.BeginScene(camera);
+
+    auto& model_ = scene_.GetGameObject("robot");
+    auto& light_ = scene_.GetGameObject("light");
 
     auto* light = dynamic_cast<Light*>(light_.GetComponent("Light"));
     light->SetPosition({20.0f, 0.0f, 20.0f});
@@ -95,6 +103,8 @@ void Sandbox3D::OnImguiRender() {
   ImGuiIO& io = ImGui::GetIO();
   auto& app = Application::GetInstance();
   io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+
+  auto& model_ = scene_.GetGameObject("robot");
 
   auto transform = dynamic_cast<Transform*>(model_.GetComponent("Transform"));
   auto position = transform->GetPosition();

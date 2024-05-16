@@ -19,6 +19,6 @@ class Sandbox3D : public ImGuiLayer {
   std::shared_ptr<UniformBuffer> ubo_;
   std::shared_ptr<Texture2D> fonts_;
   std::shared_ptr<VertexArray> vertex_array_;
-  GameObject model_;
-  GameObject light_;
+
+  Scene scene_;
 };

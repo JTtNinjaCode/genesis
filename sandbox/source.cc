@@ -1,6 +1,7 @@
 #include <core/entry_point.h>
 #include <genesis.h>
 
+#include "imgui_layer/global_layer_controller_layer.h"
 #include "imgui_layer/grid_controller_layer.h"
 #include "imgui_layer/sandbox_3d.h"
 
@@ -11,6 +12,7 @@ class Sandbox : public Application {
     ImGuiLayer::Init();
     PushOverLayer(std::make_shared<Sandbox3D>());
     PushOverLayer(std::make_shared<GridControllerLayer>());
+    PushOverLayer(std::make_shared<GlobalLayerController>());
   }
   ~Sandbox() { ImGuiLayer::Uninit(); }
 };
