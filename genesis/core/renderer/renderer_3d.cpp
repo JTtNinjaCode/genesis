@@ -30,7 +30,8 @@ void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const g
 
   // set light uniform
   if (light != nullptr) {
-    SetLightUniform(shader, *light);
+    light->GetUniform()->BindSlot(2);
+    shader.SetUniformBlock("u_light", 2);
   }
   RenderCommand::GetInstance().DrawIndexed(vertex_array);
 }
@@ -38,51 +39,18 @@ void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& mod
                         const PerspectiveCamera* camera) {
   shader.Bind();
   glm::mat4 projection_view = camera_->GetProjection() * camera_->GetView();
-  shader.SetUniform("u_view_projection", projection_view);
   shader.SetUniform("u_projection", camera_->GetProjection());
   shader.SetUniform("u_view", camera_->GetView());
   shader.SetUniform("u_model", model_matrix);
   // set light uniform
   if (light != nullptr) {
-    SetLightUniform(shader, *light);
+    light->GetUniform()->BindSlot(2);
+    shader.SetUniformBlock("u_light", 2);
   }
   // set camera uniform
   if (camera != nullptr) {
     shader.SetUniform("u_camera_position", camera->GetPosition());
   }
   model.Draw(shader);
-}
-void Renderer3D::SetLightUniform(Shader& shader, const Light& light) {
-  auto color = light.GetColor();
-  auto position = light.GetPosition();
-  auto direction = light.GetDirection();
-  auto constant = light.GetConstant();
-  auto linear = light.GetLinear();
-  auto quadratic = light.GetQuadratic();
-  auto type = light.GetLightType();
-  switch (type) {
-    case LightType::Directional:
-      shader.SetUniform("directional_light.direction", direction);
-      shader.SetUniform("directional_light.color", color);
-      break;
-    case LightType::Point:
-      shader.SetUniform("point_light.position", position);
-      shader.SetUniform("point_light.constant", constant);
-      shader.SetUniform("point_light.linear", linear);
-      shader.SetUniform("point_light.quadratic", quadratic);
-      shader.SetUniform("point_light.color", color);
-      break;
-    case LightType::Spot:
-      shader.SetUniform("spot_light.position", position);
-      shader.SetUniform("spot_light.direction", direction);
-      shader.SetUniform("spot_light.constant", constant);
-      shader.SetUniform("spot_light.linear", linear);
-      shader.SetUniform("spot_light.quadratic", quadratic);
-      shader.SetUniform("spot_light.color", color);
-      break;
-    default:
-      CORE_ASSERT(false, "Unknown LightType.");
-      break;
-  }
 }
 }  // namespace genesis

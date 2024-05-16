@@ -20,7 +20,6 @@ class Renderer3D {
               const PerspectiveCamera* camera = nullptr);
 
  private:
-  void SetLightUniform(Shader& shader, const Light& light);
   const PerspectiveCamera* camera_ = nullptr;
 };
 }  // namespace genesis

@@ -10,7 +10,7 @@
 #include "core/component/component.h"
 #include "mesh.h"
 namespace genesis {
-class Model : public Component {
+class Model{
  public:
   Model() = default;
   Model(const std::filesystem::path& path) { LoadModel(path.string()); }
