@@ -7,8 +7,10 @@ namespace genesis {
 class Profiler {
  public:
   static void Init() {
+    CORE_LOG_TRACE("Start to init Profiler's Context");
     EASY_PROFILER_ENABLE;
     profiler::startListen();
+    CORE_LOG_TRACE("Finish to init Profiler's Context");
   }
   static void Uninit() {}
 };

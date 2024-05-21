@@ -14,6 +14,7 @@ std::shared_ptr<Texture2D> Font::texture2d_;
 std::unordered_map<std::string, FT_Face> Font::faces_;
 
 void Font::Init() {
+  CORE_LOG_TRACE("Start to init Font's Context");
   auto error = FT_Init_FreeType(&library);
   if (error) {
     CORE_ASSERT(false, "Fail to load FreeType library.");
@@ -33,6 +34,7 @@ void Font::Init() {
   vao_ = VertexArray::Create({MathDataType::kFloat2, MathDataType::kFloat2});
   vao_->SetIndexBuffer(ibo);
   vao_->SetVertexBuffer(vbo);
+  CORE_LOG_TRACE("Finish to init Font's Context");
 }
 
 void Font::Uninit() {

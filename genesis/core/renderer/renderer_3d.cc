@@ -6,6 +6,14 @@
 #include "core/renderer/render_command.h"
 
 namespace genesis {
+std::shared_ptr<Shader> Renderer3D::skybox_shader_;
+
+void Renderer3D::Init() {
+  CORE_LOG_TRACE("Start to init Renderer3D's Context");
+  skybox_shader_ = Shader::Create("./assets/shaders/skybox.vert", "./assets/shaders/skybox.frag");
+  CORE_LOG_TRACE("Finish to init Renderer3D's Context");
+}
+void Renderer3D::Uninit() {}
 Renderer3D::Renderer3D() {
   RenderCommand::GetInstance().SetBlend(true);
   RenderCommand::GetInstance().SetDepthTest(true);

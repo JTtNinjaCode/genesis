@@ -11,6 +11,8 @@
 namespace genesis {
 class Renderer3D {
  public:
+  static void Init();
+  static void Uninit();
   Renderer3D();
   void BeginScene(const PerspectiveCamera& camera);
   void EndScene();
@@ -20,6 +22,7 @@ class Renderer3D {
               const PerspectiveCamera* camera = nullptr);
 
  private:
-  const PerspectiveCamera* camera_ = nullptr;
+  const Camera3DInterface* camera_ = nullptr;
+  static std::shared_ptr<Shader> skybox_shader_;
 };
 }  // namespace genesis
