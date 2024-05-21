@@ -1,7 +1,5 @@
 #include "opengl_texture.h"
 #define STB_IMAGE_IMPLEMENTATION  // dont delete this, see stb_image.h
-#include <glad/glad.h>
-#include <intrin.h>
 #include <stb_image.h>
 
 #include <fstream>
@@ -63,6 +61,8 @@ void OpenGLTexture2D::Bind(unsigned int slot) const { glBindTextureUnit(slot, id
 
 void OpenGLTexture2D::UnBind() const { /*glBindTexture(GL_TEXTURE_2D, 0);*/
 }
+
+const void* OpenGLTexture2D::GetID() const { return (void*)id_; }
 
 unsigned char* OpenGLTexture2D::LoadOriginFile(const std::filesystem::path& path) {
   using namespace std;
@@ -149,5 +149,42 @@ void OpenGLTexture2D::SaveCompressedFile(const std::filesystem::path& save_path)
   output_file_stream.close();
   free(img);
 }
+
+OpenGLTexture3D::OpenGLTexture3D(const std::vector<std::filesystem::path>& faces_path) {
+  glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &id_);
+
+  for (unsigned int i = 0; i < faces_path.size(); i++) {
+    unsigned char* data = stbi_load(faces_path[i].string().c_str(), &width_[i], &height_[i], &channels_[i], 0);
+    if (data) {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, id_);
+      glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width_[i], height_[i], 0, GL_RGB, GL_UNSIGNED_BYTE,
+                   data);
+      stbi_image_free(data);
+    } else {
+      CORE_LOG_TRACE("Cubemap texture failed to load at path:{0}", faces_path[i].string().c_str());
+      stbi_image_free(data);
+    }
+  }
+
+  glTextureParameteri(id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTextureParameteri(id_, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTextureParameteri(id_, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTextureParameteri(id_, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+}
+
+OpenGLTexture3D::~OpenGLTexture3D() { glDeleteTextures(1, &id_); }
+
+int OpenGLTexture3D::GetWidth() const {
+  return 0;  // TODO fix OpenGLTexture3D height width
+}
+
+int OpenGLTexture3D::GetHeight() const { return 0; }
+
+void OpenGLTexture3D::Bind(unsigned int slot) const { glBindTexture(GL_TEXTURE_2D, id_); }
+
+void OpenGLTexture3D::UnBind() const {}
+
+const void* OpenGLTexture3D::GetID() const { return &id_; }
 
 }  // namespace genesis

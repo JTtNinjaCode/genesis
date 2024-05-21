@@ -1,5 +1,8 @@
 #pragma once
+#include <glad/glad.h>
+
 #include <filesystem>
+#include <vector>
 
 #include "core/renderer/texture.h"
 
@@ -22,9 +25,9 @@ __pragma(pack(push, 1))  // Packed Format
   const uint32_t compress_format;
   const uint8_t channels;
 };
-__pragma(pack(pop))
+__pragma(pack(pop));
 
-    class OpenGLTexture2D : public Texture2D {
+class OpenGLTexture2D : public Texture2D {
  public:
   OpenGLTexture2D(const std::filesystem::path& path);
   OpenGLTexture2D(unsigned char* data, unsigned int channels, unsigned int width, unsigned int height);
@@ -34,6 +37,7 @@ __pragma(pack(pop))
   int GetHeight() const override;
   void Bind(unsigned int slot) const override;
   void UnBind() const override;
+  const void* GetID() const override;
 
  private:
   unsigned char* LoadOriginFile(const std::filesystem::path& path);
@@ -41,10 +45,28 @@ __pragma(pack(pop))
   void UseCompressFile(const std::filesystem::path& path);
   void SaveCompressedFile(const std::filesystem::path& save_path);
 
-  unsigned int id_ = 0;
+  GLuint id_ = 0;
   int width_ = 0;
   int height_ = 0;
   int channels_ = 0;
+};
+
+class OpenGLTexture3D : public Texture3D {
+ public:
+  OpenGLTexture3D(const std::vector<std::filesystem::path>& faces_path);
+  ~OpenGLTexture3D();
+
+  int GetWidth() const override;
+  int GetHeight() const override;
+  void Bind(unsigned int slot) const override;
+  void UnBind() const override;
+  const void* GetID() const override;
+
+ private:
+  GLuint id_ = 0;
+  int width_[6] = {};
+  int height_[6] = {};
+  int channels_[6] = {};
 };
 
 }  // namespace genesis
