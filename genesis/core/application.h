@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "core/core.h"
-#include "core/input.h"
+#include "core/input/input.h"
 #include "core/layer/layer_stack.h"
 #include "core/log/log.h"
 #include "core/timer.h"

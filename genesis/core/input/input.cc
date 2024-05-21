@@ -1,4 +1,4 @@
-#include "core/input.h"
+#include "core/input/input.h"
 
 #include "platform/input/glfw_input.h"
 namespace genesis {

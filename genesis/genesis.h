@@ -7,7 +7,7 @@
 #include "core/component/scene.h"
 #include "core/component/transform.h"
 #include "core/events/event.h"
-#include "core/input.h"
+#include "core/input/input.h"
 #include "core/layer/layer.h"
 #include "core/layer/layer_stack.h"
 #include "core/log/log.h"

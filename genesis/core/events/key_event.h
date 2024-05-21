@@ -4,7 +4,7 @@
 
 #include "core/core.h"
 #include "core/events/event.h"
-#include "core/input.h"
+#include "core/input/input.h"
 namespace genesis {
 class DLL_API KeyEvent : public Event {
  public:

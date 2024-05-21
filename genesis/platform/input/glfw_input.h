@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "core/input.h"
+#include "core/input/input.h"
 namespace genesis {
 class GLFWInput : public Input {
   friend class Input;
