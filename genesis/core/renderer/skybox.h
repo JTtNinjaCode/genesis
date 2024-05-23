@@ -13,6 +13,8 @@ class Skybox {
   static void Init();
   Skybox(const std::vector<std::filesystem::path>& faces_path);
   void* GetTextureID() const;
+  const VertexArray& GetVertexArray() const;
+  void Bind() const;
 
  private:
   static std::shared_ptr<VertexBuffer> vbo_;

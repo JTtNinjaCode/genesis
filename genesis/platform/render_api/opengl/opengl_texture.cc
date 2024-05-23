@@ -151,8 +151,8 @@ void OpenGLTexture2D::SaveCompressedFile(const std::filesystem::path& save_path)
 }
 
 OpenGLTexture3D::OpenGLTexture3D(const std::vector<std::filesystem::path>& faces_path) {
+  stbi_set_flip_vertically_on_load(false);
   glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &id_);
-
   for (unsigned int i = 0; i < faces_path.size(); i++) {
     unsigned char* data = stbi_load(faces_path[i].string().c_str(), &width_[i], &height_[i], &channels_[i], 0);
     if (data) {
@@ -176,15 +176,17 @@ OpenGLTexture3D::OpenGLTexture3D(const std::vector<std::filesystem::path>& faces
 OpenGLTexture3D::~OpenGLTexture3D() { glDeleteTextures(1, &id_); }
 
 int OpenGLTexture3D::GetWidth() const {
-  return 0;  // TODO fix OpenGLTexture3D height width
+  return 0;  // TODO fix OpenGLTexture3D width
 }
 
-int OpenGLTexture3D::GetHeight() const { return 0; }
+int OpenGLTexture3D::GetHeight() const {
+  return 0;  // TODO fix OpenGLTexture3D width
+}
 
-void OpenGLTexture3D::Bind(unsigned int slot) const { glBindTexture(GL_TEXTURE_2D, id_); }
+void OpenGLTexture3D::Bind(unsigned int slot) const { glBindTexture(GL_TEXTURE_CUBE_MAP, id_); }
 
 void OpenGLTexture3D::UnBind() const {}
 
-const void* OpenGLTexture3D::GetID() const { return &id_; }
+const void* OpenGLTexture3D::GetID() const { return (void*)id_; }
 
 }  // namespace genesis

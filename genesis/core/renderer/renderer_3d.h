@@ -14,7 +14,7 @@ class Renderer3D {
   static void Init();
   static void Uninit();
   Renderer3D();
-  void BeginScene(const PerspectiveCamera& camera);
+  void BeginScene(const Camera3DInterface& camera);
   void EndScene();
   void Submit(Shader& shader, const VertexArray& vertex_array, const glm::mat4& model_matrix = {1.0f},
               const Light* light = nullptr, const PerspectiveCamera* camera = nullptr);

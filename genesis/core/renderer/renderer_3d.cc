@@ -18,11 +18,23 @@ Renderer3D::Renderer3D() {
   RenderCommand::GetInstance().SetBlend(true);
   RenderCommand::GetInstance().SetDepthTest(true);
 }
-void Renderer3D::BeginScene(const PerspectiveCamera& camera) {
+void Renderer3D::BeginScene(const Camera3DInterface& camera) {
   camera_ = &camera;
   RenderCommand& render_command = RenderCommand::GetInstance();
   render_command.SetClearColor(camera_->GetClearColor());
   render_command.Clear();
+
+  skybox_shader_->Bind();
+  skybox_shader_->SetUniform("u_projection", camera_->GetProjection());
+  skybox_shader_->SetUniform("u_view", camera_->GetView());
+  auto& skybox = camera_->GetSkybox();
+  if (skybox != nullptr) {
+    skybox->Bind();
+    skybox_shader_->SetUniform("u_skybox", 0);
+    auto& vertex_array = skybox->GetVertexArray();
+    vertex_array.Bind();
+    render_command.DrawArray(vertex_array);
+  }
 }
 void Renderer3D::EndScene() {}
 void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const glm::mat4& model_matrix,
@@ -58,6 +70,10 @@ void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& mod
   // set camera uniform
   if (camera != nullptr) {
     shader.SetUniform("u_camera_position", camera->GetPosition());
+    auto& skybox = camera_->GetSkybox();
+    if (skybox != nullptr) {
+      shader.SetUniform("u_skybox", (int)(skybox->GetTextureID()));
+    }
   }
   model.Draw(shader);
 }
