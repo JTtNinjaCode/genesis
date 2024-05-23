@@ -9,7 +9,9 @@
 
 #include "core/profiler/profiler.h"
 #include "core/renderer/buffer_layout.h"
+#include "core/renderer/font.h"
 #include "core/renderer/render_command.h"
+#include "core/renderer/renderer_3d.h"
 namespace genesis {
 std::shared_ptr<Application> Application::instance_;
 
@@ -24,6 +26,9 @@ Application::Application() {
   window_->SetVSync(false);
 
   Profiler::Init();
+  Renderer3D::Init();
+  Font::Init();
+  Skybox::Init();
 }
 
 Application::~Application() {}

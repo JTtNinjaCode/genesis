@@ -10,7 +10,7 @@ class PerspectiveCameraController {
  public:
   PerspectiveCameraController(float height, float ratio, float near_plane, float far_plane, glm::vec3 position,
                               glm::vec3 target);
-  const PerspectiveCamera& GetCamera() const { return camera_; }
+  PerspectiveCamera& GetCamera() { return camera_; }
 
   glm::vec4 GetClearColor() const { return camera_.GetClearColor(); }
   void SetClearColor(glm::vec4 clear_color) { camera_.SetClearColor(clear_color); }

@@ -22,6 +22,7 @@
 #include "core/renderer/renderer_3d.h"
 #include "core/renderer/shader.h"
 #include "core/renderer/shader_library.h"
+#include "core/renderer/skybox.h"
 #include "core/renderer/texture.h"
 #include "core/renderer/vertex_array.h"
 #include "core/time_step.h"
