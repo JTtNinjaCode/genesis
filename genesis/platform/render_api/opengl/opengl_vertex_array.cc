@@ -43,7 +43,9 @@ void OpenGLVertexArray::Bind() const { glBindVertexArray(id_); }
 
 void OpenGLVertexArray::Unbind() const { glBindVertexArray(0); }
 
-unsigned int OpenGLVertexArray::GetCount() const { return index_buffer_->GetCount(); }
+unsigned int OpenGLVertexArray::GetIndexCount() const { return index_buffer_->GetCount(); }
+
+unsigned int OpenGLVertexArray::GetVertexCount() const { return vertex_buffer_->GetSize() / total_stride_; }
 
 void OpenGLVertexArray::SetVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) {
   glVertexArrayVertexBuffer(id_, 0, vertex_buffer->GetId(), 0, total_stride_);

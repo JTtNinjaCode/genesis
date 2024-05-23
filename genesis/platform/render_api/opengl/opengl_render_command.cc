@@ -9,7 +9,11 @@ void OpenGLRenderCommand::SetClearColor(glm::vec4 color) { glClearColor(color.x,
 void OpenGLRenderCommand::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
 void OpenGLRenderCommand::DrawIndexed(const VertexArray& vertex_array) {
-  glDrawElements(GL_TRIANGLES, vertex_array.GetCount(), GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLES, vertex_array.GetIndexCount(), GL_UNSIGNED_INT, nullptr);
+}
+
+void OpenGLRenderCommand::DrawArray(const VertexArray& vertex_array) {
+  glDrawArrays(GL_TRIANGLES, 0, vertex_array.GetVertexCount());
 }
 
 void OpenGLRenderCommand::SetBlend(bool enable) {
@@ -23,9 +27,9 @@ void OpenGLRenderCommand::SetBlend(bool enable) {
 
 void OpenGLRenderCommand::SetViewport(int x, int y, int width, int height) { glViewport(x, y, width, height); }
 void OpenGLRenderCommand::SetDepthTest(bool enable) {
+  glDepthFunc(GL_LEQUAL);
   if (enable) {
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
   } else {
     glDisable(GL_DEPTH_TEST);
   }

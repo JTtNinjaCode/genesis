@@ -5,6 +5,7 @@ namespace genesis {
 OpenGLVertexBuffer::OpenGLVertexBuffer(void* vertices, size_t size) {
   glCreateBuffers(1, &id_);
   glNamedBufferData(id_, size, vertices, GL_STATIC_DRAW);
+  size_ = size;
 }
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer() { glDeleteBuffers(1, &id_); }
@@ -16,6 +17,8 @@ void OpenGLVertexBuffer::Unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 int OpenGLVertexBuffer::GetId() const { return id_; }
 
 void OpenGLVertexBuffer::SubData(void* vertices, size_t size) { glNamedBufferSubData(id_, 0, size, vertices); }
+
+size_t OpenGLVertexBuffer::GetSize() const { return size_; }
 
 OpenGLIndexBuffer::OpenGLIndexBuffer(void* vertices, size_t size) {
   glCreateBuffers(1, &id_);
