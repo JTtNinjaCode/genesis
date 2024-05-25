@@ -42,4 +42,4 @@ target_include_directories(genesis PUBLIC ${ENGINE_INCLUDE_DIRS})
 
 #include stb
 set(STB_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/stb)
-target_include_directories(genesis PRIVATE ${STB_INCLUDE_DIRS})
+target_include_directories(genesis PUBLIC ${STB_INCLUDE_DIRS})
