@@ -13,11 +13,11 @@ std::shared_ptr<Texture2D> Texture2D::Create(const std::filesystem::path& path, 
   return nullptr;
 }
 
-std::shared_ptr<Texture2D> Texture2D::Create(unsigned char* data, unsigned int channels, unsigned int width,
+std::shared_ptr<Texture2D> Texture2D::Create(unsigned char* data, TextureFormat data_format, unsigned int width,
                                              unsigned int height, TextureType texture_type) {
   switch (RendererAPI::GetAPI()) {
     case RendererAPI::API::OpenGL:
-      return std::make_shared<OpenGLTexture2D>(data, channels, width, height);
+      return std::make_shared<OpenGLTexture2D>(data, data_format, width, height);
   }
   CORE_ASSERT(false, "valid render api.");
   return nullptr;

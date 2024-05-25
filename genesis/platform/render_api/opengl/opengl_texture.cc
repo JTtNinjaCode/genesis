@@ -18,36 +18,35 @@ OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& path) {
   }
 }
 
-OpenGLTexture2D::OpenGLTexture2D(unsigned char* data, unsigned int channels, unsigned int width, unsigned int height)
+OpenGLTexture2D::OpenGLTexture2D(unsigned char* data, TextureFormat data_format, unsigned int width,
+                                 unsigned int height)
     : width_(width), height_(height) {
   glCreateTextures(GL_TEXTURE_2D, 1, &id_);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   GLenum internal_format = 0;
-  if (channels == 1) {
+  GLenum texture_format = 0;
+  if (data_format == TextureFormat::kR) {
     internal_format = GL_R8;
-  } else if (channels == 3) {
+    texture_format = GL_RED;
+  } else if (data_format == TextureFormat::kRGB) {
     internal_format = GL_RGB8;
-  } else if (channels == 4) {
+    texture_format = GL_RGB;
+  } else if (data_format == TextureFormat::kRGBA) {
     internal_format = GL_RGBA8;
+    texture_format = GL_RGBA;
   }
 
-  CORE_ASSERT(channels == 1 || channels == 3 || channels || 4, "texture format not support.");
+  CORE_ASSERT(
+      data_format == TextureFormat::kR || data_format == TextureFormat::kRGB || data_format == TextureFormat::kRGBA,
+      "texture format not support.");
 
   glTextureStorage2D(id_, 1, internal_format, width_,
                      height_);  // allocate memory
-
-  glTextureParameteri(id_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  GLenum data_format = GL_RGB;
-  if (channels == 1) {
-    data_format = GL_RED;
-  } else if (channels == 3) {
-    data_format = GL_RGB;
-  } else if (channels == 4) {
-    data_format = GL_RGBA;
-  }
-  glTextureSubImage2D(id_, 0, 0, 0, width_, height_, data_format, GL_UNSIGNED_BYTE,
+  glTextureParameteri(id_, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTextureParameteri(id_, GL_TEXTURE_WRAP_R, GL_REPEAT);
+  glTextureParameteri(id_, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTextureSubImage2D(id_, 0, 0, 0, width_, height_, texture_format, GL_UNSIGNED_BYTE,
                       data);  // transfer data to allocated memory
 }
 

@@ -30,7 +30,7 @@ __pragma(pack(pop));
 class OpenGLTexture2D : public Texture2D {
  public:
   OpenGLTexture2D(const std::filesystem::path& path);
-  OpenGLTexture2D(unsigned char* data, unsigned int channels, unsigned int width, unsigned int height);
+  OpenGLTexture2D(unsigned char* data, TextureFormat data_format, unsigned int width, unsigned int height);
   ~OpenGLTexture2D();
 
   int GetWidth() const override;
