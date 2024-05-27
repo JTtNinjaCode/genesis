@@ -83,8 +83,8 @@ Mesh Model::ProcessMesh(const aiMesh* mesh, const aiScene* scene) {
   std::vector<std::shared_ptr<Texture2D>> textures;
   if (mesh->mMaterialIndex >= 0) {
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    LoadMaterialTextures(textures, material, aiTextureType_DIFFUSE, TextureType::Diffuse);
-    LoadMaterialTextures(textures, material, aiTextureType_SPECULAR, TextureType::Specular);
+    LoadMaterialTextures(textures, material, aiTextureType_DIFFUSE, TextureType::kDiffuse);
+    LoadMaterialTextures(textures, material, aiTextureType_SPECULAR, TextureType::kSpecular);
   }
   return Mesh(std::move(vao), std::move(textures));
 }

@@ -10,10 +10,10 @@ void Mesh::Draw(Shader& shader) const {
     const auto& texture = textures_[i];
     texture->Bind(i);
     switch (texture->GetTextureType()) {
-      case TextureType::Diffuse:
+      case TextureType::kDiffuse:
         shader.SetUniform(std::string("material.diffuse") + std::to_string(diffuse_texture_counter++), i);
         break;
-      case TextureType::Specular:
+      case TextureType::kSpecular:
         shader.SetUniform(std::string("material.specular") + std::to_string(specular_texture_counter++), i);
         break;
       default:
