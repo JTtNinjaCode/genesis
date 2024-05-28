@@ -5,7 +5,6 @@
 #include <imgui_impl_opengl3.h>
 
 #include <glm/glm.hpp>
-#include <iostream>
 
 #include "core/profiler/profiler.h"
 #include "core/renderer/buffer_layout.h"
@@ -80,13 +79,18 @@ EventState Application::OnWindowClose(WindowCloseEvent& event) {
   return EventState::kHandled;
 }
 
-void Application::PushLayer(std::shared_ptr<Layer> layer) {
-  layer_stack_.PushLayer(layer);
+void Application::PushLayer(std::unique_ptr<Layer>&& layer) {
   layer->OnAttach();
+  layer_map_[layer->GetName()] = layer.get();
+  layer_stack_.PushLayer(std::move(layer));
 }
 
-void Application::PushOverLayer(std::shared_ptr<Layer> layer) {
-  layer_stack_.PushOverLayer(layer);
+void Application::PushOverLayer(std::unique_ptr<Layer>&& layer) {
   layer->OnAttach();
+  layer_map_[layer->GetName()] = layer.get();
+  layer_stack_.PushOverLayer(std::move(layer));
 }
+
+Layer& Application::GetLayer(const std::string& layer_name) { return *(layer_map_.find(layer_name)->second); }
+
 }  // namespace genesis

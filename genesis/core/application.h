@@ -1,6 +1,8 @@
 #pragma once
 #include <functional>
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 #include "core/core.h"
 #include "core/input/input.h"
@@ -16,6 +18,9 @@ namespace genesis {
 
 class DLL_API Application {
  public:
+  // LayerStack own all layers, LayerMap reference it for random access
+  using LayerMap = std::unordered_map<std::string, Layer*>;
+
   Application();
   virtual ~Application();
   static Application& GetInstance() { return *instance_; }
@@ -25,18 +30,20 @@ class DLL_API Application {
   EventState OnWindowClose(WindowCloseEvent& event);
   virtual void Run();
 
-  void PushLayer(std::shared_ptr<Layer> layer);
-  void PushOverLayer(std::shared_ptr<Layer> layer);
+  void PushLayer(std::unique_ptr<Layer>&& layer);
+  void PushOverLayer(std::unique_ptr<Layer>&& layer);
+  Layer& GetLayer(const std::string& layer_name);
 
  private:
   Timer timer;
-  static std::shared_ptr<Application> instance_;
-  bool running_ = true;
+  float last_frame_time_ = 0.0f;
+  LayerMap layer_map_;
   LayerStack layer_stack_;
 
-  std::shared_ptr<Window> window_;
+  static std::shared_ptr<Application> instance_;
+  bool running_ = true;
 
-  float last_frame_time_ = 0.0f;
+  std::shared_ptr<Window> window_;
 };
 
 Application* CreateApplication();

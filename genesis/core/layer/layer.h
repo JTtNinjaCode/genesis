@@ -19,6 +19,6 @@ class DLL_API Layer {
   const std::string& GetName() const { return layer_name_; }
 
  private:
-  std::string layer_name_;
+  const std::string layer_name_;
 };
 }  // namespace genesis

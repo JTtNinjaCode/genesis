@@ -2,20 +2,20 @@
 
 #include <vector>
 
-#include "core/layer/layer.h"
 #include "core/core.h"
+#include "core/layer/layer.h"
 
 namespace genesis {
 class DLL_API LayerStack {
-  using LayerContainer = std::vector<std::shared_ptr<Layer>>;
+  using LayerContainer = std::vector<std::unique_ptr<Layer>>;
 
  public:
   LayerStack();
 
-  void PushLayer(std::shared_ptr<Layer> layer);
-  void PopLayer(std::shared_ptr<Layer> over_layer);
-  void PushOverLayer(std::shared_ptr<Layer> layer);
-  void PopOverLayer(std::shared_ptr<Layer> over_layer);
+  void PushLayer(std::unique_ptr<Layer> &&layer);
+  void PopLayer(std::unique_ptr<Layer> &&layer);
+  void PushOverLayer(std::unique_ptr<Layer> &&layer);
+  void PopOverLayer(std::unique_ptr<Layer> &&layer);
 
   LayerContainer::iterator begin() { return layers_.begin(); }
   LayerContainer::iterator end() { return layers_.end(); }
