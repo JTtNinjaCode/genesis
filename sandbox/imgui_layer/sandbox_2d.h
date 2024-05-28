@@ -1,8 +1,9 @@
 #pragma once
 #include <genesis.h>
-#include "imgui_layer/imgui_layer.h"
 
 #include <iostream>
+
+#include "imgui_layer/imgui_layer.h"
 #pragma warning(push)
 #pragma warning(disable : 4005)
 #include <GLFW/glfw3.h>
@@ -19,7 +20,7 @@
 using namespace genesis;
 class Sandbox2D : public ImGuiLayer {
  public:
-  Sandbox2D() {
+  Sandbox2D() : ImGuiLayer("Sandbox2D") {
     float ratio =
         Application::GetInstance().GetWindow().GetWidth() / float(Application::GetInstance().GetWindow().GetHeight());
     camera_2d_controller_ = std::make_shared<OrthographicCameraController>(3.0f, ratio, 0.01f, 100.0f);

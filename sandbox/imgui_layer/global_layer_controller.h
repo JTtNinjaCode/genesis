@@ -8,9 +8,11 @@ namespace genesis {
 struct LayerContext {
   static LayerContext layer_context;
   bool grid_controller = true;
+  bool inspector = true;
 };
 class GlobalLayerController : public ImGuiLayer {
  public:
+  GlobalLayerController() : ImGuiLayer("Global Controller") {}
   void OnImguiRender() override;
 };
 }  // namespace genesis

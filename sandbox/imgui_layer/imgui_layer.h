@@ -1,11 +1,13 @@
 #pragma once
 #include <genesis.h>
+
+#include <string>
 namespace genesis {
 class ImGuiLayer : public Layer {
  public:
   static void Init();
   static void Uninit();
-  ImGuiLayer();
+  ImGuiLayer(const std::string& layer_name);
   ~ImGuiLayer();
 
   void OnAttach() override;

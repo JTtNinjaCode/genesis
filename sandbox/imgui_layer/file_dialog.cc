@@ -565,7 +565,7 @@ std::shared_ptr<genesis::Texture2D> FileDialog::GetIcon(const std::filesystem::p
 
   if (icon_info.hbmColor == nullptr) return nullptr;
 
-  DIBSECTION ds;
+  DIBSECTION ds{0};
   GetObject(icon_info.hbmColor, sizeof(ds), &ds);
   int byte_size = ds.dsBm.bmWidth * ds.dsBm.bmHeight * (ds.dsBm.bmBitsPixel / 8);
 
@@ -574,7 +574,8 @@ std::shared_ptr<genesis::Texture2D> FileDialog::GetIcon(const std::filesystem::p
   uint8_t* data = (uint8_t*)malloc(byte_size);
   GetBitmapBits(icon_info.hbmColor, byte_size, data);
 
-  icons_[path] = genesis::Texture2D::Create((unsigned char*)data, 4, ds.dsBm.bmWidth, ds.dsBm.bmHeight);
+  icons_[path] = genesis::Texture2D::Create((unsigned char*)data, genesis::TextureFormat::kRGBA, ds.dsBm.bmWidth,
+                                            ds.dsBm.bmHeight);
 
   free(data);
 
@@ -893,8 +894,8 @@ void FileDialog::RenderContent() {
     int fileId = 0;
     for (auto& entry : content_) {
       if (entry.has_icon_preview && entry.icon_preview_data != nullptr) {
-        entry.icon_preview =
-            genesis::Texture2D::Create(entry.icon_preview_data, 4, entry.icon_preview_width, entry.icon_preview_height);
+        entry.icon_preview = genesis::Texture2D::Create(entry.icon_preview_data, genesis::TextureFormat::kRGBA,
+                                                        entry.icon_preview_width, entry.icon_preview_height);
         stbi_image_free(entry.icon_preview_data);
         entry.icon_preview_data = nullptr;
       }

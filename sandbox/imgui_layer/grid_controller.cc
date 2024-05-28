@@ -1,13 +1,13 @@
-#include "grid_controller_layer.h"
+#include "grid_controller.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include "imgui_layer/global_layer_controller_layer.h"
+#include "imgui_layer/global_layer_controller.h"
 namespace genesis {
-void GridControllerLayer::OnImguiRender() {
+void GridController::OnImguiRender() {
   auto &show_grid_controller = LayerContext::layer_context.grid_controller;
   if (show_grid_controller) {
     ImGui::Begin("Grid", &show_grid_controller);

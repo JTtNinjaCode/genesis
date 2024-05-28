@@ -70,7 +70,7 @@ void ImGuiLayer::Uninit() {
   ImGui::DestroyContext();
 }
 
-ImGuiLayer::ImGuiLayer() : Layer("imgui layer") {}
+ImGuiLayer::ImGuiLayer(const std::string& layer_name) : Layer(layer_name) {}
 
 ImGuiLayer::~ImGuiLayer() {}
 

@@ -14,11 +14,11 @@ class Sandbox3D : public ImGuiLayer {
 
  private:
   std::shared_ptr<PerspectiveCameraController> camera_3d_;
-  std::shared_ptr<Shader> shader_;
-  std::shared_ptr<Shader> shader2_;
+  std::shared_ptr<Shader> model_shader_;
+  std::shared_ptr<Shader> outline_shader;
   std::shared_ptr<UniformBuffer> ubo_;
   std::shared_ptr<Texture2D> fonts_;
-  std::shared_ptr<VertexArray> vertex_array_;
+  std::shared_ptr<Texture2D> image_;
 
   Scene scene_;
 };
