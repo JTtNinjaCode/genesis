@@ -45,7 +45,59 @@ void OpenGLRenderCommand::SetDrawMode(DrawMode mode) {
     CORE_ASSERT(false, "Invalid drawmode in OpenGLRenderCommand.");
   }
 }
-void OpenGLRenderCommand::SetBackCulling(bool enable) {
+void OpenGLRenderCommand::SetPointSize(float size) { glPointSize(size); }
+void OpenGLRenderCommand::SetFrontFaceOrder(FacePointOrder face_point_order) {
+  if (face_point_order == FacePointOrder::kClockWise) {
+    glFrontFace(GL_CW);
+  } else if (face_point_order == FacePointOrder::kCounterClockWise) {
+    glFrontFace(GL_CCW);
+  }
+}
+void OpenGLRenderCommand::SetDepthMask(bool enable) {
+  if (enable) {
+    glDepthMask(0xff);
+  } else {
+    glDepthMask(0x00);
+  }
+}
+void OpenGLRenderCommand::SetStencilTest(bool enable) {
+  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+  if (enable) {
+    glEnable(GL_STENCIL_TEST);
+  } else {
+    glDisable(GL_STENCIL_TEST);
+  }
+}
+void OpenGLRenderCommand::SetStencilFunc(StencilFunc stencil_fun, int value1, int value2, CullFace cull_face) {
+  if (stencil_fun == StencilFunc::kAlways) {
+    glStencilFunc(GL_ALWAYS, value1, value2);
+  } else if (stencil_fun == StencilFunc::kEqual) {
+    glStencilFunc(GL_EQUAL, value1, value2);
+  } else if (stencil_fun == StencilFunc::kGreater) {
+    glStencilFunc(GL_GREATER, value1, value2);
+  } else if (stencil_fun == StencilFunc::kGreaterEqual) {
+    glStencilFunc(GL_GEQUAL, value1, value2);
+  } else if (stencil_fun == StencilFunc::kLessEqual) {
+    glStencilFunc(GL_LEQUAL, value1, value2);
+  } else if (stencil_fun == StencilFunc::kNever) {
+    glStencilFunc(GL_NEVER, value1, value2);
+  } else if (stencil_fun == StencilFunc::kNotEqual) {
+    glStencilFunc(GL_NOTEQUAL, value1, value2);
+  }
+}
+void OpenGLRenderCommand::SetStencilMask(bool enable, CullFace cull_face) {
+  if (enable) {
+    glStencilMask(0xff);
+  } else {
+    glStencilMask(0x00);
+  }
+}
+void OpenGLRenderCommand::SetStencilOp(bool enable, CullFace cull_face) {
+  if (enable) {
+    glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+  }
+}
+void OpenGLRenderCommand::SetBackCullTest(bool enable) {
   if (enable) {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
@@ -54,5 +106,13 @@ void OpenGLRenderCommand::SetBackCulling(bool enable) {
     glCullFace(GL_FRONT);
   }
 }
-void OpenGLRenderCommand::SetPointSize(float size) { glPointSize(size); }
+void OpenGLRenderCommand::SetBackCullFace(CullFace cull_face) {
+  if (cull_face == CullFace::kFront) {
+    glCullFace(GL_FRONT);
+  } else if (cull_face == CullFace::kBack) {
+    glCullFace(GL_BACK);
+  } else if (cull_face == CullFace::kFrontAndBack) {
+    glCullFace(GL_FRONT_AND_BACK);
+  }
+}
 }  // namespace genesis
