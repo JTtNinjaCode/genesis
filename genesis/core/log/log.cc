@@ -16,6 +16,8 @@ void Log::Init() {
   client_logger->set_level(spdlog::level::trace);
 }
 
+void Log::Uninit() {}
+
 std::shared_ptr<spdlog::logger> Log::core_logger;
 std::shared_ptr<spdlog::logger> Log::client_logger;
 };  // namespace genesis
