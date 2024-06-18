@@ -1,6 +1,7 @@
 #pragma once
+#include <glm/glm.hpp>
 #include <string>
-#include <utility>
+#include <memory>
 
 #include "core/core.h"
 namespace genesis {
@@ -10,17 +11,16 @@ enum class MouseButton;
 // singleton
 class DLL_API Input {
  public:
+  static Input& GetInstance();
+
   virtual bool IsKeyPressed(Keycode key) const = 0;
   virtual bool IsMousePressed(MouseButton mouse_button) const = 0;
   virtual std::string GetKeyCodeName(Keycode key) const = 0;
   virtual int GetMouseButton(MouseButton button) const = 0;
-  virtual std::pair<double, double> GetMousePosition() const = 0;
-  virtual double GetMousePositionX() const = 0;
-  virtual double GetMousePositionY() const = 0;
-  static Input& GetInstance();
+  virtual glm::vec2 GetMousePosition() const = 0;
 
  private:
-  static Input* instanced_;
+  static std::unique_ptr<Input> instanced_;
 };
 
 enum class Keycode {

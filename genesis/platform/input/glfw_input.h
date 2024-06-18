@@ -1,31 +1,26 @@
 #pragma once
 #include <unordered_map>
-#include <utility>
 
 #include "core/input/input.h"
 namespace genesis {
 class GLFWInput : public Input {
-  friend class Input;
-
  public:
+  GLFWInput();
+
+  bool IsKeyPressed(Keycode keycode) const override;
+  bool IsMousePressed(MouseButton mouse_button) const override;
+  int GetMouseButton(MouseButton button) const override;
+  glm::vec2 GetMousePosition() const override;
+  std::string GetKeyCodeName(Keycode key) const override;
+
   Keycode GetGenesisKeycodeFromGLFWKeycode(int keycode) const;
   int GetGLFWKeycdodeFromGenesisKeycode(Keycode keycode) const;
   MouseButton GetGenesisMouseButtonFromGLFWMouseButton(int button) const;
   int GetGLFWMouseButtonFromGenesisMouseButton(MouseButton button) const;
 
-  bool IsKeyPressed(Keycode keycode) const override;
-  bool IsMousePressed(MouseButton mouse_button) const override;
-  int GetMouseButton(MouseButton button) const override;
-  std::pair<double, double> GetMousePosition() const override;
-  double GetMousePositionX() const override;
-  double GetMousePositionY() const override;
-  std::string GetKeyCodeName(Keycode key) const override;
-
  private:
-  GLFWInput();
-
-  void initializeKeycodeTable();
-  void initializeMouseButtonTable();
+  void InitializeKeycodeTable();
+  void InitializeMouseButtonTable();
 
   std::unordered_map<int, Keycode> lookup_genesis_keycode_table;
   std::unordered_map<int, MouseButton> lookup_genesis_mouse_button_table;

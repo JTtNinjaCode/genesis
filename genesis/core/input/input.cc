@@ -2,11 +2,11 @@
 
 #include "platform/input/glfw_input.h"
 namespace genesis {
-Input* Input::instanced_ = nullptr;
+std::unique_ptr<Input> Input::instanced_ = nullptr;
 
 Input& Input::GetInstance() {
   if (!instanced_) {
-    instanced_ = new GLFWInput();
+    instanced_ = std::make_unique<GLFWInput>();
   }
   return *instanced_;
 };

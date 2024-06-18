@@ -8,8 +8,8 @@
 #include "core/application.h"
 namespace genesis {
 GLFWInput::GLFWInput() {
-  initializeKeycodeTable();
-  initializeMouseButtonTable();
+  InitializeKeycodeTable();
+  InitializeMouseButtonTable();
 }
 
 bool GLFWInput::IsKeyPressed(Keycode keycode) const {
@@ -31,22 +31,10 @@ int GLFWInput::GetMouseButton(MouseButton button) const {
                              glfw_button));
 }
 
-std::pair<double, double> GLFWInput::GetMousePosition() const {
+glm::vec2 GLFWInput::GetMousePosition() const {
   double xpos, ypos;
   glfwGetCursorPos(static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow()), &xpos, &ypos);
   return {xpos, ypos};
-}
-
-double GLFWInput::GetMousePositionX() const {
-  double xpos;
-  glfwGetCursorPos(static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow()), &xpos, nullptr);
-  return xpos;
-}
-
-double GLFWInput::GetMousePositionY() const {
-  double ypos;
-  glfwGetCursorPos(static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow()), nullptr, &ypos);
-  return ypos;
 }
 
 Keycode GLFWInput::GetGenesisKeycodeFromGLFWKeycode(int keycode) const {
@@ -88,7 +76,7 @@ int GLFWInput::GetGLFWMouseButtonFromGenesisMouseButton(MouseButton button) cons
 // TODO: GetKeyCodeName
 std::string GLFWInput::GetKeyCodeName(Keycode key) const { return ""; }
 
-void GLFWInput::initializeKeycodeTable() {
+void GLFWInput::InitializeKeycodeTable() {
   // initialize genesis keycode table
   lookup_genesis_keycode_table[GLFW_KEY_0] = Keycode::kKey0;
   lookup_genesis_keycode_table[GLFW_KEY_1] = Keycode::kKey1;
@@ -301,7 +289,7 @@ void GLFWInput::initializeKeycodeTable() {
   lookup_glfw_keycode_table[Keycode::kKeyPadEnter] = GLFW_KEY_KP_ENTER;
   lookup_glfw_keycode_table[Keycode::kKeyNumLock] = GLFW_KEY_NUM_LOCK;
 }
-void GLFWInput::initializeMouseButtonTable() {
+void GLFWInput::InitializeMouseButtonTable() {
   // initialize glfw mouse button table
   lookup_glfw_mouse_button_table[MouseButton::kButton1] = GLFW_MOUSE_BUTTON_LEFT;
   lookup_glfw_mouse_button_table[MouseButton::kButton2] = GLFW_MOUSE_BUTTON_MIDDLE;
