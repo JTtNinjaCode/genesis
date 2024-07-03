@@ -23,19 +23,21 @@ glm::mat4 Camera::GetProjection() const {
 }
 glm::mat4 Camera::GetView() const {
   auto position = GetPosition();
-  glm::mat4 view = glm::lookAtRH(position, position + direction_, glm::vec3(0, 1, 0));
+  glm::mat4 view = glm::lookAtRH(position, position + forward_, glm::vec3(0, 1, 0));
   return view;
 }
 ProjectionMode Camera::GetProjectionMode() const { return projection_mode_; }
 void Camera::SetProjectionMode(ProjectionMode projection_mode) { projection_mode_ = projection_mode; }
-float Camera::GetFov() const { return fov_; }
+
 void Camera::SetFov(float fov) { fov_ = fov; }
-float Camera::GetSize() const { return size_; }
 void Camera::SetSize(float size) { size_ = size; }
-float Camera::GetFar() const { return far_; }
 void Camera::SetFar(float far) { far_ = far; }
-float Camera::GetNear() const { return near_; }
 void Camera::SetNear(float near) { near_ = near; }
+float Camera::GetFov() const { return fov_; }
+float Camera::GetSize() const { return size_; }
+float Camera::GetFar() const { return far_; }
+float Camera::GetNear() const { return near_; }
+
 BackgroundMode Camera::GetBackgroundMode() const { return background_mode_; }
 void Camera::SetBackgroundMode(BackgroundMode background_mode) {
   if (skybox_ != nullptr && background_mode == BackgroundMode::kSkybox) {
@@ -47,11 +49,12 @@ void Camera::SetBackgroundMode(BackgroundMode background_mode) {
 void Camera::SetSkybox(std::vector<std::filesystem::path> &faces_path) {
   skybox_ = std::make_shared<Skybox>(faces_path);
 }
+glm::vec3 Camera::GetUp() const { return up_; }
 glm::vec3 Camera::GetPosition() const {
   auto transform = dynamic_cast<const Transform *>(GetGameObject()->GetConstComponent("Transform"));
   auto position = transform->GetPosition();
   return position;
 }
-glm::vec3 Camera::GetDirection() const { return direction_; }
-glm::vec4 genesis::Camera::GetClearColor() const { return clear_color_; }
+glm::vec3 Camera::GetForward() const { return forward_; }
+glm::vec4 Camera::GetClearColor() const { return clear_color_; }
 }  // namespace genesis

@@ -43,16 +43,16 @@ EventState PerspectiveCameraController::OnWindowResizeEvent(WindowResizeEvent& e
 
 EventState PerspectiveCameraController::OnMouseScrolledEvent(MouseScrolledEvent& event) {
   glm::vec3 new_position = camera_.GetPosition();
-  glm::vec3 direction = camera_.GetDirection();
+  glm::vec3 forward_dir = camera_.GetForward();
   auto& input = genesis::Input::GetInstance();
-  new_position += (float)event.GetOffsetY() * direction * 1.5f;
+  new_position += (float)event.GetOffsetY() * forward_dir * 1.5f;
   camera_.SetPosition(new_position);
   return EventState::kHandled;
 }
 
 EventState PerspectiveCameraController::OnMouseMovedEvent(MouseMovedEvent& event) {
   auto& input = genesis::Input::GetInstance();
-  glm::vec3 forward_dir = camera_.GetDirection();
+  glm::vec3 forward_dir = camera_.GetForward();
   glm::vec3 world_up_dir = glm::vec3(0, 1, 0);
   glm::vec3 right_dir = glm::normalize(glm::cross(forward_dir, world_up_dir));
   glm::vec3 up_dir = glm::normalize(glm::cross(right_dir, forward_dir));
@@ -65,7 +65,7 @@ EventState PerspectiveCameraController::OnMouseMovedEvent(MouseMovedEvent& event
         glm::angleAxis<float>(glm::radians(0.1f) * -rotation_speed_.y * event.GetDeltaY(), right_dir)};
     glm::quat quaternion_yaw{
         glm::angleAxis<float>(glm::radians(0.1f) * -rotation_speed_.x * event.GetDeltaX(), world_up_dir)};
-    camera_.SetDirection(quaternion_yaw * quaternion_pitch * forward_dir);
+    camera_.SetForward(quaternion_yaw * quaternion_pitch * forward_dir);
   }
   camera_.SetPosition(new_position);
   return EventState::kHandled;
