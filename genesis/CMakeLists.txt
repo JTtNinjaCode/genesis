@@ -5,7 +5,6 @@ project(genesis VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#build static library
 add_library(genesis STATIC)
 
 #source files
@@ -25,21 +24,17 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 #define macro
 add_compile_definitions(
-	GLFW_INCLUDE_NONE
-	GLM_ENABLE_EXPERIMENTAL
-	GENESIS_ASSERT
-	GLM_FORCE_SILENT_WARNINGS
 	GENESIS_DEBUG
+	GENESIS_ASSERT
+
+	GLM_FORCE_SILENT_WARNINGS
+	GLM_ENABLE_EXPERIMENTAL
+	GLFW_INCLUDE_NONE
 )
 
-#link library
-target_link_libraries(genesis PRIVATE glfw glad assimp RTTR::Core_Lib freetype)
-target_link_libraries(genesis PUBLIC spdlog glm easy_profiler)
+target_link_libraries(genesis PRIVATE glfw glad assimp RTTR::Core_Lib freetype stb fmod fmod_studio)
+target_link_libraries(genesis PUBLIC spdlog glm easy_profiler sol2)
 
 #include genesis
 set(ENGINE_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/genesis)
 target_include_directories(genesis PUBLIC ${ENGINE_INCLUDE_DIRS})
-
-#include stb
-set(STB_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/stb)
-target_include_directories(genesis PUBLIC ${STB_INCLUDE_DIRS})
