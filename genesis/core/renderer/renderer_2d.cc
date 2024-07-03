@@ -10,7 +10,7 @@
 
 namespace genesis {
 Renderer2D::Renderer2D() {
-  RenderCommand::GetInstance().SetBlend(true);
+  RenderCommand::GetInstance().SetBlendTest(true);
   RenderCommand::GetInstance().SetDepthTest(true);
   // clang-format off
   std::array<float, 20> data{

@@ -16,7 +16,7 @@ void OpenGLRenderCommand::DrawArray(const VertexArray& vertex_array) {
   glDrawArrays(GL_TRIANGLES, 0, vertex_array.GetVertexCount());
 }
 
-void OpenGLRenderCommand::SetBlend(bool enable) {
+void OpenGLRenderCommand::SetBlendTest(bool enable) {
   if (enable) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -41,8 +41,6 @@ void OpenGLRenderCommand::SetDrawMode(DrawMode mode) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   } else if (mode == DrawMode::kPoint) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-  } else {
-    CORE_ASSERT(false, "Invalid drawmode in OpenGLRenderCommand.");
   }
 }
 void OpenGLRenderCommand::SetPointSize(float size) { glPointSize(size); }
@@ -68,22 +66,32 @@ void OpenGLRenderCommand::SetStencilTest(bool enable) {
     glDisable(GL_STENCIL_TEST);
   }
 }
-void OpenGLRenderCommand::SetStencilFunc(StencilFunc stencil_fun, int value1, int value2, CullFace cull_face) {
-  if (stencil_fun == StencilFunc::kAlways) {
-    glStencilFunc(GL_ALWAYS, value1, value2);
-  } else if (stencil_fun == StencilFunc::kEqual) {
-    glStencilFunc(GL_EQUAL, value1, value2);
-  } else if (stencil_fun == StencilFunc::kGreater) {
-    glStencilFunc(GL_GREATER, value1, value2);
-  } else if (stencil_fun == StencilFunc::kGreaterEqual) {
-    glStencilFunc(GL_GEQUAL, value1, value2);
-  } else if (stencil_fun == StencilFunc::kLessEqual) {
-    glStencilFunc(GL_LEQUAL, value1, value2);
-  } else if (stencil_fun == StencilFunc::kNever) {
-    glStencilFunc(GL_NEVER, value1, value2);
-  } else if (stencil_fun == StencilFunc::kNotEqual) {
-    glStencilFunc(GL_NOTEQUAL, value1, value2);
+void OpenGLRenderCommand::SetStencilFunc(StencilFunc stencil_func, int ref, int mask, CullFace cull_face) {
+  GLenum func{};
+  switch (stencil_func) {
+    case StencilFunc::kAlways:
+      func = GL_ALWAYS;
+      break;
+    case StencilFunc::kEqual:
+      func = GL_EQUAL;
+      break;
+    case StencilFunc::kGreater:
+      func = GL_GREATER;
+      break;
+    case StencilFunc::kGreaterEqual:
+      func = GL_GEQUAL;
+      break;
+    case StencilFunc::kLessEqual:
+      func = GL_LEQUAL;
+      break;
+    case StencilFunc::kNever:
+      func = GL_NEVER;
+      break;
+    case StencilFunc::kNotEqual:
+      func = GL_NOTEQUAL;
+      break;
   }
+  glStencilFunc(func, ref, mask);
 }
 void OpenGLRenderCommand::SetStencilMask(bool enable, CullFace cull_face) {
   if (enable) {
@@ -94,25 +102,149 @@ void OpenGLRenderCommand::SetStencilMask(bool enable, CullFace cull_face) {
 }
 void OpenGLRenderCommand::SetStencilOp(bool enable, CullFace cull_face) {
   if (enable) {
-    glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
   }
 }
 void OpenGLRenderCommand::SetBackCullTest(bool enable) {
   if (enable) {
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
   } else {
     glDisable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
   }
 }
 void OpenGLRenderCommand::SetBackCullFace(CullFace cull_face) {
-  if (cull_face == CullFace::kFront) {
-    glCullFace(GL_FRONT);
-  } else if (cull_face == CullFace::kBack) {
-    glCullFace(GL_BACK);
-  } else if (cull_face == CullFace::kFrontAndBack) {
-    glCullFace(GL_FRONT_AND_BACK);
+  GLenum mode{};
+  switch (cull_face) {
+    case CullFace::kFront:
+      mode = GL_FRONT;
+      break;
+    case CullFace::kBack:
+      mode = GL_BACK;
+      break;
+    case CullFace::kFrontAndBack:
+      mode = GL_FRONT_AND_BACK;
+      break;
   }
+  glCullFace(mode);
 }
+void OpenGLRenderCommand::SetBlendColor(const glm::vec4& color) { glBlendColor(color.r, color.g, color.b, color.a); }
+void OpenGLRenderCommand::SetBlendFunc(BlendFactor sfactor, BlendFactor dfactor, CullFace cull_face) {
+  GLenum sfactor_gl{}, dfactor_gl{};
+
+  switch (sfactor) {
+    case BlendFactor::kZero:
+      sfactor_gl = GL_ZERO;
+      break;
+    case BlendFactor::kOne:
+      sfactor_gl = GL_ONE;
+      break;
+    case BlendFactor::kSrcColor:
+      sfactor_gl = GL_SRC_COLOR;
+      break;
+    case BlendFactor::kOneMinusSrcColor:
+      sfactor_gl = GL_ONE_MINUS_SRC_COLOR;
+      break;
+    case BlendFactor::kDstColor:
+      sfactor_gl = GL_DST_COLOR;
+      break;
+    case BlendFactor::kOneMinusDstColor:
+      sfactor_gl = GL_ONE_MINUS_DST_COLOR;
+      break;
+    case BlendFactor::kSrcAlpha:
+      sfactor_gl = GL_SRC_ALPHA;
+      break;
+    case BlendFactor::kOneMinusSrcAlpha:
+      sfactor_gl = GL_ONE_MINUS_SRC_ALPHA;
+      break;
+    case BlendFactor::kDstAlpha:
+      sfactor_gl = GL_DST_ALPHA;
+      break;
+    case BlendFactor::kOneMinusDstAlpha:
+      sfactor_gl = GL_ONE_MINUS_DST_ALPHA;
+      break;
+    case BlendFactor::kConstantColor:
+      sfactor_gl = GL_CONSTANT_COLOR;
+      break;
+    case BlendFactor::kOneMinusConstantColor:
+      sfactor_gl = GL_ONE_MINUS_CONSTANT_COLOR;
+      break;
+    case BlendFactor::kConstantAlpha:
+      sfactor_gl = GL_CONSTANT_ALPHA;
+      break;
+    case BlendFactor::kOneMinusConstantAlpha:
+      sfactor_gl = GL_ONE_MINUS_CONSTANT_ALPHA;
+      break;
+  }
+
+  switch (dfactor) {
+    case BlendFactor::kZero:
+      dfactor_gl = GL_ZERO;
+      break;
+    case BlendFactor::kOne:
+      dfactor_gl = GL_ONE;
+      break;
+    case BlendFactor::kSrcColor:
+      dfactor_gl = GL_SRC_COLOR;
+      break;
+    case BlendFactor::kOneMinusSrcColor:
+      dfactor_gl = GL_ONE_MINUS_SRC_COLOR;
+      break;
+    case BlendFactor::kDstColor:
+      dfactor_gl = GL_DST_COLOR;
+      break;
+    case BlendFactor::kOneMinusDstColor:
+      dfactor_gl = GL_ONE_MINUS_DST_COLOR;
+      break;
+    case BlendFactor::kSrcAlpha:
+      dfactor_gl = GL_SRC_ALPHA;
+      break;
+    case BlendFactor::kOneMinusSrcAlpha:
+      dfactor_gl = GL_ONE_MINUS_SRC_ALPHA;
+      break;
+    case BlendFactor::kDstAlpha:
+      dfactor_gl = GL_DST_ALPHA;
+      break;
+    case BlendFactor::kOneMinusDstAlpha:
+      dfactor_gl = GL_ONE_MINUS_DST_ALPHA;
+      break;
+    case BlendFactor::kConstantColor:
+      dfactor_gl = GL_CONSTANT_COLOR;
+      break;
+    case BlendFactor::kOneMinusConstantColor:
+      dfactor_gl = GL_ONE_MINUS_CONSTANT_COLOR;
+      break;
+    case BlendFactor::kConstantAlpha:
+      dfactor_gl = GL_CONSTANT_ALPHA;
+      break;
+    case BlendFactor::kOneMinusConstantAlpha:
+      dfactor_gl = GL_ONE_MINUS_CONSTANT_ALPHA;
+      break;
+  }
+
+  glBlendFunc(sfactor_gl, dfactor_gl);
+}
+void OpenGLRenderCommand::SetBlendEquation(BlendEquationMode mode, CullFace cull_face) {
+  GLenum mode_gl{};
+
+  switch (mode) {
+    case BlendEquationMode::kAdd:
+      mode_gl = GL_FUNC_ADD;
+      break;
+    case BlendEquationMode::kSubtract:
+      mode_gl = GL_FUNC_SUBTRACT;
+      break;
+    case BlendEquationMode::kReverseSubtract:
+      mode_gl = GL_FUNC_REVERSE_SUBTRACT;
+      break;
+    case BlendEquationMode::kMin:
+      mode_gl = GL_MIN;
+      break;
+    case BlendEquationMode::kMax:
+      mode_gl = GL_MAX;
+      break;
+  }
+
+  glBlendEquation(mode_gl);
+}
+void OpenGLRenderCommand::SetDepthRange(float near_val, float far_val) { glDepthRange(near_val, far_val); }
 }  // namespace genesis

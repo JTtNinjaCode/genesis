@@ -9,6 +9,23 @@ enum class StencilFunc { kLess, kLessEqual, kEqual, kGreaterEqual, kGreater, kNe
 enum class StencilOp { kKeep, kZero, kReplace, kIncrement, kIncrementWrap, kDecrement, kDecrementWrap, kInvert };
 enum class CullFace { kFront, kBack, kFrontAndBack, kKeep };
 enum class FacePointOrder { kClockWise, kCounterClockWise };
+enum class BlendEquationMode { kAdd, kSubtract, kReverseSubtract, kMin, kMax };
+enum class BlendFactor {
+  kZero,
+  kOne,
+  kSrcColor,
+  kOneMinusSrcColor,
+  kDstColor,
+  kOneMinusDstColor,
+  kSrcAlpha,
+  kOneMinusSrcAlpha,
+  kDstAlpha,
+  kOneMinusDstAlpha,
+  kConstantColor,
+  kOneMinusConstantColor,
+  kConstantAlpha,
+  kOneMinusConstantAlpha
+};
 
 class RenderCommand {
  public:
@@ -22,18 +39,19 @@ class RenderCommand {
   virtual void SetDrawMode(DrawMode enable) = 0;
   virtual void SetFrontFaceOrder(FacePointOrder face_point_order) = 0;
 
-  virtual void SetBlend(bool enable) = 0;
-  // virtual void SetBlendColor(bool enable) = 0;     // glBlendColor
-  // virtual void SetBlendFunc(bool enable) = 0;      // glBlendFuncSeparate
-  // virtual void SetBlendEquation(bool enable) = 0;  // glBlendFuncSeparate
+  virtual void SetBlendTest(bool enable) = 0;
+  virtual void SetBlendColor(const glm::vec4& color) = 0;  // glBlendColor
+  virtual void SetBlendFunc(BlendFactor sfactor, BlendFactor dfactor,
+                            CullFace cull_face = CullFace::kKeep) = 0;  // glBlendFuncSeparate
+  virtual void SetBlendEquation(BlendEquationMode mode,
+                                CullFace cull_face = CullFace::kKeep) = 0;  // glBlendFuncSeparate
 
   virtual void SetDepthTest(bool enable) = 0;
   virtual void SetDepthMask(bool enable) = 0;
-  // virtual void SetDepthRange(bool enable) = 0;
+  virtual void SetDepthRange(float near_val, float far_val) = 0;
 
   virtual void SetStencilTest(bool enable) = 0;
-  virtual void SetStencilFunc(StencilFunc stencil_fun, int value1, int value2,
-                              CullFace cull_face = CullFace::kKeep) = 0;
+  virtual void SetStencilFunc(StencilFunc stencil_func, int ref, int mask, CullFace cull_face = CullFace::kKeep) = 0;
   virtual void SetStencilMask(bool enable, CullFace cull_face = CullFace::kKeep) = 0;
   virtual void SetStencilOp(bool enable, CullFace cull_face = CullFace::kKeep) = 0;
 

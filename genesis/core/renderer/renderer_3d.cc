@@ -15,7 +15,7 @@ void Renderer3D::Init() {
 }
 void Renderer3D::Uninit() {}
 Renderer3D::Renderer3D() {
-  RenderCommand::GetInstance().SetBlend(true);
+  RenderCommand::GetInstance().SetBlendTest(true);
   RenderCommand::GetInstance().SetDepthTest(true);
 }
 void Renderer3D::BeginScene(const Camera3DInterface& camera) {
