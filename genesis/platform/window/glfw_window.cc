@@ -10,37 +10,22 @@
 #include "core/events/window_event.h"
 #include "core/log/log.h"
 #include "core/renderer/graphic_context.h"
+#include "platform/glfw_context.h"
 #include "platform/input/glfw_input.h"
 #include "platform/render_api/opengl/opengl_context.h"
 
 namespace genesis {
-bool GLFWWindow::is_glfw_initialized_ = false;
-
-static void GLFWErrorCallback(int error_code, const char* description) {
-  CORE_LOG_WARN("glfw Error:[{0}], {1}", error_code, description);
-}
-
 GLFWWindow::GLFWWindow(const std::string& title, unsigned int width, unsigned height) {
-  if (!is_glfw_initialized_) {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwSetErrorCallback(GLFWErrorCallback);
-    bool success = glfwInit();
-    CORE_ASSERT(success, "Failed to initialized glfw.");
-    is_glfw_initialized_ = true;
-  }
-
   window_ = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
   context_ = new OpenGLContext(window_);  // window_ contain opengl context
   context_->Init();
 
   SetVSync(false);
-  glfwSetWindowUserPointer(window_,
-                           &data_);  // set user pointer so that we can get data_
-                                     // in event handle function
 
+  // set user pointer reference window's data, so that we can get data_
+  // in event handle function and callback
+  glfwSetWindowUserPointer(window_, &data_);
   glfwSetWindowCloseCallback(window_, [](GLFWwindow* window) {
     WindowCloseEvent event;
     WindowData data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
@@ -136,22 +121,30 @@ void GLFWWindow::OnUpdate() {
 void* GLFWWindow::GetNativeWindow() { return window_; }
 
 unsigned int GLFWWindow::GetWidth() const {
-  int x;
+  int x = 0;
   glfwGetWindowSize(window_, &x, nullptr);
   return x;
 }
 
 unsigned int GLFWWindow::GetHeight() const {
-  int y;
+  int y = 0;
   glfwGetWindowSize(window_, nullptr, &y);
   return y;
 }
 
-void GLFWWindow::EnableCursor(bool open) {
-  if (open) {
+void GLFWWindow::SetCursorMode(const CursorMode cursor_mode) {
+  if (cursor_mode == CursorMode::kNormal) {
+    // visible, cursor motion is not limited in window, but limited in whole screen
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-  } else {
+  } else if (cursor_mode == CursorMode::kDisabled) {
+    // invisible, cursor motion is not limited in window and whole screen
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  } else if (cursor_mode == CursorMode::kHidden) {
+    // invisible in window, but visible in whole screen
+    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+  } else if (cursor_mode == CursorMode::kCaptured) {
+    // visible and confined in window
+    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
   }
 }
 

@@ -8,6 +8,7 @@
 #include "core/renderer/graphic_context.h"
 #include "core/window.h"
 namespace genesis {
+
 class DLL_API GLFWWindow : public Window {
  public:
   GLFWWindow(const std::string& title, unsigned int width, unsigned height);
@@ -16,11 +17,10 @@ class DLL_API GLFWWindow : public Window {
   void OnUpdate() override;
   unsigned int GetWidth() const override;
   unsigned int GetHeight() const override;
-  void EnableCursor(bool open) override;
+  void SetCursorMode(const CursorMode cursor_mode) override;
   void SetVSync(bool open) override;
   bool IsVSync() const override;
   void* GetNativeWindow() override;
-
   void SetEventListener(const EventCallbackFunc& event_listener) override { data_.event_listener_ = event_listener; }
 
  private:
@@ -32,8 +32,6 @@ class DLL_API GLFWWindow : public Window {
   struct WindowData {
     bool is_vsync_ = false;
     EventCallbackFunc event_listener_;
-  };
-
-  WindowData data_;
+  } data_;
 };
 }  // namespace genesis

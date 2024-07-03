@@ -6,16 +6,19 @@
 
 #include <glm/glm.hpp>
 
+#include "core/audio/audio.h"
 #include "core/profiler/profiler.h"
 #include "core/renderer/buffer_layout.h"
 #include "core/renderer/font.h"
 #include "core/renderer/render_command.h"
 #include "core/renderer/renderer_3d.h"
+#include "platform/glfw_context.h"
 namespace genesis {
 std::shared_ptr<Application> Application::instance_;
 
 Application::Application() {
   Log::Init();
+  GLFWContext::Init();
   window_ = std::shared_ptr<Window>(Window::Create("Genesis", 1000, 1000));
 
   CORE_ASSERT(!instance_, "Application had exist.");
@@ -23,11 +26,11 @@ Application::Application() {
 
   window_->SetEventListener(BIND_METHOD(Application::OnEventEntryPoint));
   window_->SetVSync(false);
-
   Profiler::Init();
   Renderer3D::Init();
   Font::Init();
   Skybox::Init();
+  AudioManager::Init();
 }
 
 Application::~Application() {}
