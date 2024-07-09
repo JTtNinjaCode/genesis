@@ -7,6 +7,7 @@
 
 #include "imgui_layer/file_dialog.h"
 #include "imgui_layer/global_layer_controller.h"
+using namespace ImGuiExtend;
 namespace genesis {
 void Inspector::SetGameObject(GameObject* game_object) { game_object_ = game_object; }
 void Inspector::OnImguiRender() {

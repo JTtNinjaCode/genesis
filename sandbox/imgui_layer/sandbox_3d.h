@@ -1,5 +1,7 @@
 #pragma once
 #include <genesis.h>
+#include <fmod_studio.hpp>
+
 #include "imgui_layer/imgui_layer.h"
 using namespace genesis;
 class Sandbox3D : public ImGuiLayer {
@@ -13,7 +15,7 @@ class Sandbox3D : public ImGuiLayer {
   EventState OnWindowResizeEvent(WindowResizeEvent& event);
 
  private:
-  std::shared_ptr<PerspectiveCameraController> camera_3d_;
+  std::shared_ptr<CameraController> camera_3d_;
   std::shared_ptr<Shader> model_shader_;
   std::shared_ptr<Shader> outline_shader;
   std::shared_ptr<UniformBuffer> ubo_;

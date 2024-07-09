@@ -14,6 +14,7 @@
 #define DEFAULT_ICON_SIZE 32
 #define PI 3.141592f
 
+namespace ImGuiExtend {
 bool FolderNode(const char* label, ImTextureID icon, bool& clicked) {
   ImGuiContext& g = *GImGui;
   ImGuiWindow* window = g.CurrentWindow;
@@ -1112,3 +1113,4 @@ void FileDialog::RenderFileDialog() {
       ImGui::IsKeyPressed((ImGuiKey)escapeKey))
     is_open_ = false;
 }
+}  // namespace ImGuiExtend

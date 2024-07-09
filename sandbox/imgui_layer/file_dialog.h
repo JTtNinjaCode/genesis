@@ -13,7 +13,7 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
-
+namespace ImGuiExtend {
 class FileDialog {
  public:
   static inline FileDialog& Instance() {
@@ -115,3 +115,5 @@ class FileDialog {
   std::vector<std::vector<std::string>> filter_extensions_;
   size_t filter_selection_index_;
 };
+
+}  // namespace ImGuiExtend
