@@ -6,7 +6,7 @@ class OpenGLRenderBuffer : public RenderBuffer {
   OpenGLRenderBuffer(unsigned int width, unsigned int height);
   ~OpenGLRenderBuffer();
   void Bind() const override;
-  void* GetId() const override;
+  const void* GetId() const override;
 
  private:
   unsigned int id_ = 0;

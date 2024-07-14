@@ -9,7 +9,7 @@ class Sampler {
   virtual void Bind(unsigned int slot) const = 0;
   virtual void SetSamplerFunc(unsigned int slot) const = 0;
   virtual void SetWrapFunc(unsigned int slot) const = 0;
-  virtual void* GetId() = 0;
+  virtual const void* GetId() const = 0;
 };
 
 }  // namespace genesis

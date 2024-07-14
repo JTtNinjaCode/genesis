@@ -48,12 +48,12 @@ unsigned int OpenGLVertexArray::GetIndexCount() const { return index_buffer_->Ge
 unsigned int OpenGLVertexArray::GetVertexCount() const { return vertex_buffer_->GetSize() / total_stride_; }
 
 void OpenGLVertexArray::SetVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) {
-  glVertexArrayVertexBuffer(id_, 0, (GLuint)vertex_buffer->GetId(), 0, total_stride_);
+  glVertexArrayVertexBuffer(id_, 0, *reinterpret_cast<const GLuint*>(vertex_buffer->GetId()), 0, total_stride_);
   vertex_buffer_ = vertex_buffer;
 }
 
 void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer> index_buffer) {
-  glVertexArrayElementBuffer(id_, (GLuint)index_buffer->GetId());
+  glVertexArrayElementBuffer(id_, *reinterpret_cast<const GLuint*>(index_buffer->GetId()));
   has_index_ = true;
   index_buffer_ = index_buffer;
 }

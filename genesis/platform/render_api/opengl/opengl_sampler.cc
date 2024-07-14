@@ -46,5 +46,5 @@ void OpenGLSampler::SetWrapFunc(unsigned int slot) const {
   glSamplerParameteri(id_, GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
   glSamplerParameteri(id_, GL_TEXTURE_WRAP_T, GL_MIRROR_CLAMP_TO_EDGE);
 }
-void *OpenGLSampler::GetId() { return (void *)id_; }
+const void *OpenGLSampler::GetId() const { return reinterpret_cast<const void *>(&id_); }
 }  // namespace genesis

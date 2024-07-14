@@ -10,5 +10,5 @@ OpenGLRenderBuffer::OpenGLRenderBuffer(unsigned int width, unsigned int height) 
 }
 OpenGLRenderBuffer::~OpenGLRenderBuffer() { glDeleteRenderbuffers(1, &id_); }
 void OpenGLRenderBuffer::Bind() const { glBindFramebuffer(GL_FRAMEBUFFER, id_); }
-void* OpenGLRenderBuffer::GetId() const { return (void*)id_; }
+const void* OpenGLRenderBuffer::GetId() const { return reinterpret_cast<const void*>(&id_); }
 }  // namespace genesis

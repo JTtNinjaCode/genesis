@@ -61,7 +61,7 @@ void OpenGLTexture2D::Bind(unsigned int slot) const { glBindTextureUnit(slot, id
 void OpenGLTexture2D::UnBind() const { /*glBindTexture(GL_TEXTURE_2D, 0);*/
 }
 
-const void* OpenGLTexture2D::GetID() const { return (void*)id_; }
+const void* OpenGLTexture2D::GetID() const { return reinterpret_cast<const void*>(&id_); }
 
 unsigned char* OpenGLTexture2D::LoadOriginFile(const std::filesystem::path& path) {
   using namespace std;
@@ -186,6 +186,6 @@ void OpenGLTexture3D::Bind(unsigned int slot) const { glBindTexture(GL_TEXTURE_C
 
 void OpenGLTexture3D::UnBind() const {}
 
-const void* OpenGLTexture3D::GetID() const { return (void*)id_; }
+const void* OpenGLTexture3D::GetID() const { return reinterpret_cast<const void*>(&id_); }
 
 }  // namespace genesis

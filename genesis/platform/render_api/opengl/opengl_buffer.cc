@@ -14,7 +14,7 @@ void OpenGLVertexBuffer::Bind() const { glBindBuffer(GL_ARRAY_BUFFER, id_); }
 
 void OpenGLVertexBuffer::Unbind() const { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-void* OpenGLVertexBuffer::GetId() { return (void*)id_; }
+const void* OpenGLVertexBuffer::GetId() const { return reinterpret_cast<const void*>(&id_); }
 
 void OpenGLVertexBuffer::SubData(void* vertices, size_t size) { glNamedBufferSubData(id_, 0, size, vertices); }
 
@@ -34,7 +34,7 @@ void OpenGLIndexBuffer::Bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_
 
 void OpenGLIndexBuffer::Unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
 
-void* OpenGLIndexBuffer::GetId() { return (void*)id_; }
+const void* OpenGLIndexBuffer::GetId() const { return reinterpret_cast<const void*>(&id_); }
 
 void OpenGLIndexBuffer::SubData(void* vertices, size_t size) { glNamedBufferSubData(id_, 0, size, vertices); }
 
@@ -53,7 +53,7 @@ void OpenGLUniformBuffer::Bind() const { glBindBuffer(GL_UNIFORM_BUFFER, id_); }
 
 void OpenGLUniformBuffer::Unbind() const { glBindBuffer(GL_UNIFORM_BUFFER, 0); }
 
-void* OpenGLUniformBuffer::GetId() { return (void*)id_; }
+const void* OpenGLUniformBuffer::GetId() const { return reinterpret_cast<const void*>(&id_); }
 
 void OpenGLUniformBuffer::SubData(void* vertices, size_t size, size_t begin) {
   glNamedBufferSubData(id_, begin, size, vertices);

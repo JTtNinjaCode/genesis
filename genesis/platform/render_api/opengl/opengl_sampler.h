@@ -18,7 +18,7 @@ class OpenGLSampler : public Sampler {
   OpenGLSampler();
   virtual ~OpenGLSampler();
   void Bind(unsigned int slot) const override;
-  void* GetId() override;
+  const void* GetId() const override;
   void SetSamplerFunc(unsigned int slot) const override;
   void SetWrapFunc(unsigned int slot) const override;
 

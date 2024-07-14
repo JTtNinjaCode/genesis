@@ -7,7 +7,7 @@ class OpenGLVertexBuffer : public VertexBuffer {
   ~OpenGLVertexBuffer();
   void Bind() const override;
   void Unbind() const override;
-  void *GetId() override;
+  const void *GetId() const override;
   void SubData(void *vertices, size_t size) override;
   size_t GetSize() const override;
 
@@ -23,7 +23,7 @@ class OpenGLIndexBuffer : public IndexBuffer {
   unsigned int GetCount() const override;
   void Bind() const override;
   void Unbind() const override;
-  void *GetId() override;
+  const void *GetId() const override;
   void SubData(void *vertices, size_t size) override;
 
  private:
@@ -39,7 +39,7 @@ class OpenGLUniformBuffer : public UniformBuffer {
   void BindSlot(const unsigned int slot = 0) const override;
   void Bind() const override;
   void Unbind() const override;
-  void *GetId() override;
+  const void *GetId() const override;
   void SubData(void *vertices, size_t size, size_t begin = 0) override;
 
  private:
