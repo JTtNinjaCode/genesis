@@ -78,9 +78,14 @@ void ImGuiLayer::OnAttach() {}
 
 void ImGuiLayer::OnDetach() {}
 
+void ImGuiLayer::OnPreUpdate() { OnImguiRender(); }
+
 void ImGuiLayer::OnUpdate(TimeStep time_step) {}
+
+void ImGuiLayer::OnRender() {}
+
+void ImGuiLayer::OnImguiRender() {}
 
 EventState ImGuiLayer::OnEvent(Event& event) { return EventState::kNotHandled; }
 
-void ImGuiLayer::OnRender() { OnImguiRender(); }
 }  // namespace genesis

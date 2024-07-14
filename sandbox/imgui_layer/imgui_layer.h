@@ -12,8 +12,12 @@ class ImGuiLayer : public Layer {
 
   void OnAttach() override;
   void OnDetach() override;
+
+  void OnPreUpdate() override;
   void OnUpdate(TimeStep time_step) override;
+
   void OnRender() override;
+
   EventState OnEvent(Event& event) override;
   virtual void OnImguiRender() = 0;
 };

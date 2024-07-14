@@ -818,7 +818,7 @@ void FileDialog::RenderTree(FileTreeNode* node) {
   ImGui::PopID();
 }
 void FileDialog::RenderContent() {
-  if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+  if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
     selected_file_item_ = -1;
   }
 
@@ -872,7 +872,7 @@ void FileDialog::RenderContent() {
             if ((is_dir && type_ == DialogType::kReadDirectory) || !is_dir) Select(entry.path, ImGui::GetIO().KeyCtrl);
           }
         }
-        if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) selected_file_item_ = file_id;
+        if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) selected_file_item_ = file_id;
         file_id++;
 
         // date
@@ -920,7 +920,7 @@ void FileDialog::RenderContent() {
           if ((isDir && type_ == DialogType::kReadDirectory) || !isDir) Select(entry.path, ImGui::GetIO().KeyCtrl);
         }
       }
-      if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) selected_file_item_ = fileId;
+      if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) selected_file_item_ = fileId;
       fileId++;
     }
   }

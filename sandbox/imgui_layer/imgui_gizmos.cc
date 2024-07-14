@@ -31,8 +31,8 @@
 #include "imgui_gizmos.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
-#include <glm/gtx/quaternion.hpp>
 using namespace glm;
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
@@ -1632,7 +1632,7 @@ static void DrawTranslationGizmo(OPERATION op, int type) {
 }
 
 static bool CanActivate() {
-  if (ImGui::IsMouseClicked(0) && !ImGui::IsAnyItemHovered() && !ImGui::IsAnyItemActive()) {
+  if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImGui::IsAnyItemHovered() && !ImGui::IsAnyItemActive()) {
     return true;
   }
   return false;
@@ -2083,11 +2083,8 @@ static bool HandleTranslation(float* matrix, float* deltaMatrix, OPERATION op, i
   // move
   if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID) &&
       IsTranslateType(gContext.mCurrentOperation)) {
-#if IMGUI_VERSION_NUM >= 18723
     ImGui::SetNextFrameWantCaptureMouse(true);
-#else
-    ImGui::CaptureMouseFromApp();
-#endif
+
     const float signedLength = IntersectRayPlane(gContext.mRayOrigin, gContext.mRayVector, gContext.mTranslationPlan);
     const float len = fabsf(signedLength);  // near plan
     const vec_t newPos = gContext.mRayOrigin + gContext.mRayVector * len;
@@ -2146,11 +2143,7 @@ static bool HandleTranslation(float* matrix, float* deltaMatrix, OPERATION op, i
     vec_t gizmoHitProportion;
     type = GetMoveType(op, &gizmoHitProportion);
     if (type != MT_NONE) {
-#if IMGUI_VERSION_NUM >= 18723
       ImGui::SetNextFrameWantCaptureMouse(true);
-#else
-      ImGui::CaptureMouseFromApp();
-#endif
     }
     if (CanActivate() && type != MT_NONE) {
       gContext.mbUsing = true;
@@ -2189,11 +2182,7 @@ static bool HandleScale(float* matrix, float* deltaMatrix, OPERATION op, int& ty
     // find new possible way to scale
     type = GetScaleType(op);
     if (type != MT_NONE) {
-#if IMGUI_VERSION_NUM >= 18723
       ImGui::SetNextFrameWantCaptureMouse(true);
-#else
-      ImGui::CaptureMouseFromApp();
-#endif
     }
     if (CanActivate() && type != MT_NONE) {
       gContext.mbUsing = true;
@@ -2219,11 +2208,7 @@ static bool HandleScale(float* matrix, float* deltaMatrix, OPERATION op, int& ty
   // scale
   if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID) &&
       IsScaleType(gContext.mCurrentOperation)) {
-#if IMGUI_VERSION_NUM >= 18723
     ImGui::SetNextFrameWantCaptureMouse(true);
-#else
-    ImGui::CaptureMouseFromApp();
-#endif
     const float len = IntersectRayPlane(gContext.mRayOrigin, gContext.mRayVector, gContext.mTranslationPlan);
     vec_t newPos = gContext.mRayOrigin + gContext.mRayVector * len;
     vec_t newOrigin = newPos - gContext.mRelativeOrigin * gContext.mScreenFactor;
@@ -2301,11 +2286,7 @@ static bool HandleRotation(float* matrix, float* deltaMatrix, OPERATION op, int&
     type = GetRotateType(op);
 
     if (type != MT_NONE) {
-#if IMGUI_VERSION_NUM >= 18723
       ImGui::SetNextFrameWantCaptureMouse(true);
-#else
-      ImGui::CaptureMouseFromApp();
-#endif
     }
 
     if (type == MT_ROTATE_SCREEN) {
@@ -2335,11 +2316,7 @@ static bool HandleRotation(float* matrix, float* deltaMatrix, OPERATION op, int&
   // rotation
   if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID) &&
       IsRotateType(gContext.mCurrentOperation)) {
-#if IMGUI_VERSION_NUM >= 18723
     ImGui::SetNextFrameWantCaptureMouse(true);
-#else
-    ImGui::CaptureMouseFromApp();
-#endif
     gContext.mRotationAngle = ComputeAngleOnPlan();
     if (snap) {
       float snapInRadian = snap[0] * DEG2RAD;
@@ -2388,21 +2365,21 @@ static bool HandleRotation(float* matrix, float* deltaMatrix, OPERATION op, int&
 
 // 把 model matrix 分解出 scale, rotation, translation
 void DecomposeTranslationMatrix(const mat4& matrix, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale) {
-  mat4 temp_mat = matrix;
-  scale[0] = glm::length(temp_mat[0]);
-  scale[1] = glm::length(temp_mat[1]);
-  scale[2] = glm::length(temp_mat[2]);
+  matrix_t mat = *(matrix_t*)glm::value_ptr(matrix);
 
-  temp_mat[0] = temp_mat[0] / scale[0];
-  temp_mat[1] = temp_mat[1] / scale[1];
-  temp_mat[2] = temp_mat[2] / scale[2];
+  scale[0] = mat.v.right.Length();
+  scale[1] = mat.v.up.Length();
+  scale[2] = mat.v.dir.Length();
 
-  rotation[0] = degrees(atan2f(temp_mat[1][2], temp_mat[2][2]));
-  rotation[1] =
-      degrees(atan2f(-temp_mat[0][2], sqrt(temp_mat[1][2] * temp_mat[1][2] + temp_mat[2][2] * temp_mat[2][2])));
-  rotation[2] = degrees(atan2f(temp_mat[0][1], temp_mat[0][0]));
+  mat.OrthoNormalize();
 
-  translation = matrix[3];
+  rotation[0] = RAD2DEG * atan2f(mat.m[1][2], mat.m[2][2]);
+  rotation[1] = RAD2DEG * atan2f(-mat.m[0][2], sqrtf(mat.m[1][2] * mat.m[1][2] + mat.m[2][2] * mat.m[2][2]));
+  rotation[2] = RAD2DEG * atan2f(mat.m[0][1], mat.m[0][0]);
+
+  translation[0] = mat.v.position.x;
+  translation[1] = mat.v.position.y;
+  translation[2] = mat.v.position.z;
 }
 void RecomposeMatrixFromComponents(const vec3& translation, const vec3& rotation, const vec3& scale, mat4& matrix) {
   mat4& mat = matrix;
@@ -2437,10 +2414,10 @@ void SetAxisLimit(float value) { gContext.mAxisLimit = value; }
 
 void SetPlaneLimit(float value) { gContext.mPlaneLimit = value; }
 
-bool Manipulate(const float* view, const float* projection, OPERATION operation, MODE mode, float* matrix,
+bool Manipulate(const glm::mat4& view, const glm::mat4& projection, OPERATION operation, MODE mode, glm::mat4& matrix,
                 float* deltaMatrix, const float* snap, const float* localBounds, const float* boundsSnap) {
   // Scale is always local or matrix will be skewed when applying world scale or oriented matrix
-  SetContext(view, projection, matrix, (operation & SCALE) ? LOCAL : mode);
+  SetContext(value_ptr(view), value_ptr(projection), value_ptr(matrix), (operation & SCALE) ? LOCAL : mode);
 
   // set delta to identity
   if (deltaMatrix) {
@@ -2459,14 +2436,14 @@ bool Manipulate(const float* view, const float* projection, OPERATION operation,
   bool manipulated = false;
   if (gContext.mbEnable) {
     if (!gContext.mbUsingBounds) {
-      manipulated = HandleTranslation(matrix, deltaMatrix, operation, type, snap) ||
-                    HandleScale(matrix, deltaMatrix, operation, type, snap) ||
-                    HandleRotation(matrix, deltaMatrix, operation, type, snap);
+      manipulated = HandleTranslation(value_ptr(matrix), deltaMatrix, operation, type, snap) ||
+                    HandleScale(value_ptr(matrix), deltaMatrix, operation, type, snap) ||
+                    HandleRotation(value_ptr(matrix), deltaMatrix, operation, type, snap);
     }
   }
 
   if (localBounds && !gContext.mbUsing) {
-    HandleAndDrawLocalBounds(localBounds, (matrix_t*)matrix, boundsSnap, operation);
+    HandleAndDrawLocalBounds(localBounds, (matrix_t*)value_ptr(matrix), boundsSnap, operation);
   }
 
   gContext.mOperation = operation;
@@ -2622,14 +2599,14 @@ void DrawCubes(const float* view, const float* projection, const float* matrices
   _freea(faces);
 }
 
-void ViewManipulate(float* view, const float* projection, OPERATION operation, MODE mode, float* matrix, float length,
-                    ImVec2 position, ImVec2 size, ImU32 backgroundColor) {
+void ViewManipulate(glm::mat4& view, const glm::mat4& projection, OPERATION operation, MODE mode, glm::mat4& matrix,
+                    float length, ImVec2 position, ImVec2 size, ImVec4 backgroundColor) {
   // Scale is always local or matrix will be skewed when applying world scale or oriented matrix
-  SetContext(view, projection, matrix, (operation & SCALE) ? LOCAL : mode);
+  SetContext(value_ptr(view), value_ptr(projection), value_ptr(matrix), (operation & SCALE) ? LOCAL : mode);
   ViewManipulate(view, length, position, size, backgroundColor);
 }
 
-void ViewManipulate(float* view, float length, ImVec2 position, ImVec2 size, ImU32 backgroundColor) {
+void ViewManipulate(glm::mat4& view, float length, ImVec2 position, ImVec2 size, ImVec4 backgroundColor) {
   static bool isDraging = false;
   static bool isClicking = false;
   static bool isInside = false;
@@ -2643,9 +2620,9 @@ void ViewManipulate(float* view, float length, ImVec2 position, ImVec2 size, ImU
   svgProjection = gContext.mProjectionMat;
 
   ImGuiIO& io = ImGui::GetIO();
-  gContext.mDrawList->AddRectFilled(position, position + size, backgroundColor);
+  gContext.mDrawList->AddRectFilled(position, position + size, ImGui::ColorConvertFloat4ToU32(backgroundColor));
   matrix_t viewInverse;
-  viewInverse.Inverse(*(matrix_t*)view);
+  viewInverse.Inverse(*(matrix_t*)value_ptr(view));
 
   const vec_t camTarget = viewInverse.v.position - viewInverse.v.dir * length;
 
@@ -2734,7 +2711,7 @@ void ViewManipulate(float* view, float length, ImVec2 position, ImVec2 size, ImU
                            localy < panelCorners[1].y;
         int boxCoordInt = int(boxCoord.x * 9.f + boxCoord.y * 3.f + boxCoord.z);
         IM_ASSERT(boxCoordInt < 27);
-        boxes[boxCoordInt] |= insidePanel && (!isDraging) && gContext.mbMouseOver;
+        boxes[boxCoordInt] |= insidePanel && (!ImGui::IsMouseDragging(ImGuiMouseButton_Left)) && gContext.mbMouseOver;
 
         // draw face with lighter color
         if (iPass) {
@@ -2745,7 +2722,7 @@ void ViewManipulate(float* view, float length, ImVec2 position, ImVec2 size, ImU
           if (boxes[boxCoordInt]) {
             gContext.mDrawList->AddConvexPolyFilled(faceCoordsScreen, 4, IM_COL32(0xF0, 0xA0, 0x60, 0x80));
 
-            if (io.MouseDown[0] && !isClicking && !isDraging && GImGui->ActiveId == 0) {
+            if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && GImGui->ActiveId == 0) {  // no click any widget
               overBox = boxCoordInt;
               isClicking = true;
               isDraging = true;
@@ -2766,15 +2743,15 @@ void ViewManipulate(float* view, float length, ImVec2 position, ImVec2 size, ImU
     newUp.Normalize();
     newUp = interpolationUp;
     vec_t newEye = camTarget + newDir * length;
-    LookAt(&newEye.x, &camTarget.x, &newUp.x, view);
+    LookAt(&newEye.x, &camTarget.x, &newUp.x, value_ptr(view));
   }
+  // is mouse inside right corner's gizmos
   isInside = gContext.mbMouseOver && ImRect(position, position + size).Contains(io.MousePos);
-
-  if (io.MouseDown[0] && (fabsf(io.MouseDelta[0]) || fabsf(io.MouseDelta[1])) && isClicking) {
+  if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && (fabsf(io.MouseDelta.x) || fabsf(io.MouseDelta.y)) && isClicking) {
     isClicking = false;
   }
 
-  if (!io.MouseDown[0]) {
+  if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
     if (isClicking) {
       // apply new view direction
       int cx = overBox / 9;
@@ -2825,7 +2802,7 @@ void ViewManipulate(float* view, float length, ImVec2 position, ImVec2 size, ImU
     }
 
     vec_t newEye = camTarget + newDir * length;
-    LookAt(&newEye.x, &camTarget.x, &referenceUp.x, view);
+    LookAt(&newEye.x, &camTarget.x, &referenceUp.x, value_ptr(view));
   }
 
   // restore view/projection because it was used to compute ray

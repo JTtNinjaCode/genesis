@@ -18,6 +18,9 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 # add macro
 add_compile_definitions(
     GLM_ENABLE_EXPERIMENTAL
+
+    _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
+	_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS
 )
 
 target_sources(sandbox
@@ -27,6 +30,7 @@ target_sources(sandbox
     ${SOURCES}
 )
 
+target_compile_options(sandbox PRIVATE /WX)
 target_link_libraries(sandbox PRIVATE genesis imgui -WHOLEARCHIVE:$<TARGET_FILE:genesis>)
 target_include_directories(sandbox PRIVATE .)
 

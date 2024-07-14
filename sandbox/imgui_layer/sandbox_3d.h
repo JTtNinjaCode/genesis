@@ -9,9 +9,9 @@ class Sandbox3D : public ImGuiLayer {
   Sandbox3D();
 
   void OnUpdate(TimeStep time_step) override;
+  void OnRender() override;
   void OnImguiRender() override;
   EventState OnEvent(Event& event) override;
-  EventState OnMouseButtonPressedEvent(MouseButtonPressedEvent& event);
   EventState OnWindowResizeEvent(WindowResizeEvent& event);
 
  private:
