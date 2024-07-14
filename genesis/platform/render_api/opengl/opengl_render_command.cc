@@ -4,23 +4,110 @@
 
 #include "core/log/log.h"
 namespace genesis {
+
+static void GLAPIENTRY OpenGLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity,
+                                                  GLsizei length, const GLchar* message, const void* userParam) {
+  // ignore non-significant error/warning codes
+  if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
+
+  CORE_LOG_ERROR("---------------");
+  CORE_LOG_ERROR("Debug message {}:{}", id, message);
+
+  switch (source) {
+    case GL_DEBUG_SOURCE_API:
+      CORE_LOG_ERROR("Source: API");
+      break;
+    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+      CORE_LOG_ERROR("Source: Window System");
+      break;
+    case GL_DEBUG_SOURCE_SHADER_COMPILER:
+      CORE_LOG_ERROR("Source: Shader Compiler");
+      break;
+    case GL_DEBUG_SOURCE_THIRD_PARTY:
+      CORE_LOG_ERROR("Source: Third Party");
+      break;
+    case GL_DEBUG_SOURCE_APPLICATION:
+      CORE_LOG_ERROR("Source: Application");
+      break;
+    case GL_DEBUG_SOURCE_OTHER:
+      CORE_LOG_ERROR("Source: Other");
+      break;
+  }
+
+  switch (type) {
+    case GL_DEBUG_TYPE_ERROR:
+      CORE_LOG_ERROR("Type: Error");
+      break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+      CORE_LOG_ERROR("Type: Deprecated Behaviour");
+      break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+      CORE_LOG_ERROR("Type: Undefined Behaviour");
+      break;
+    case GL_DEBUG_TYPE_PORTABILITY:
+      CORE_LOG_ERROR("Type: Portability");
+      break;
+    case GL_DEBUG_TYPE_PERFORMANCE:
+      CORE_LOG_ERROR("Type: Performance");
+      break;
+    case GL_DEBUG_TYPE_MARKER:
+      CORE_LOG_ERROR("Type: Marker");
+      break;
+    case GL_DEBUG_TYPE_PUSH_GROUP:
+      CORE_LOG_ERROR("Type: Push Group");
+      break;
+    case GL_DEBUG_TYPE_POP_GROUP:
+      CORE_LOG_ERROR("Type: Pop Group");
+      break;
+    case GL_DEBUG_TYPE_OTHER:
+      CORE_LOG_ERROR("Type: Other");
+      break;
+  }
+
+  switch (severity) {
+    case GL_DEBUG_SEVERITY_HIGH:
+      CORE_LOG_ERROR("Severity: high");
+      break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+      CORE_LOG_ERROR("Severity: medium");
+      break;
+    case GL_DEBUG_SEVERITY_LOW:
+      CORE_LOG_ERROR("Severity: low");
+      break;
+    case GL_DEBUG_SEVERITY_NOTIFICATION:
+      CORE_LOG_ERROR("Severity: notification");
+      break;
+  }
+}
+
 void OpenGLRenderCommand::SetClearColor(glm::vec4 color) { glClearColor(color.x, color.y, color.z, color.w); }
+
+void OpenGLRenderCommand::OpenDebugMessage(bool open) {
+  glEnable(GL_DEBUG_OUTPUT);
+  glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+  glDebugMessageCallback(OpenGLDebugMessageCallback, 0);
+  glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+}
 
 void OpenGLRenderCommand::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
 void OpenGLRenderCommand::DrawIndex(const VertexArray& vertex_array) {
+  vertex_array.Bind();
   glDrawElements(topology_type, vertex_array.GetIndexCount(), GL_UNSIGNED_INT, nullptr);
 }
 
 void OpenGLRenderCommand::DrawIndexInstanced(const VertexArray& vertex_array, const int count) {
+  vertex_array.Bind();
   glDrawElementsInstanced(topology_type, vertex_array.GetIndexCount(), GL_UNSIGNED_INT, nullptr, count);
 }
 
 void OpenGLRenderCommand::DrawArray(const VertexArray& vertex_array) {
+  vertex_array.Bind();
   glDrawArrays(topology_type, 0, vertex_array.GetVertexCount());
 }
 
 void OpenGLRenderCommand::DrawArrayInstanced(const VertexArray& vertex_array, const int count) {
+  vertex_array.Bind();
   glDrawArraysInstanced(topology_type, 0, vertex_array.GetVertexCount(), count);
 }
 

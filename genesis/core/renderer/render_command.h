@@ -34,6 +34,7 @@ class RenderCommand {
 
   virtual void SetClearColor(glm::vec4 color) = 0;
   virtual void Clear() = 0;
+  virtual void OpenDebugMessage(bool open) = 0;
 
   virtual void DrawIndex(const VertexArray& vertex_array) = 0;
   virtual void DrawIndexInstanced(const VertexArray& vertex_array, const int count) = 0;

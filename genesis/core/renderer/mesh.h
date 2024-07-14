@@ -14,8 +14,8 @@ class Mesh {
   Mesh(std::shared_ptr<VertexArray>& vao, std::vector<std::shared_ptr<Texture2D>>&& textures)
       : vao_(std::move(vao)), textures_(std::move(textures)) {}
 
-  void Draw(Shader& shader) const;
-  void DrawInstanced(Shader& shader, unsigned int count) const;
+  const VertexArray& GetVAO() const;
+  const std::vector<std::shared_ptr<Texture2D>>& GetTextures() const;
 
  private:
   std::shared_ptr<VertexArray> vao_;

@@ -64,14 +64,14 @@ void EditTransform(glm::mat4& view_matrix, const glm::mat4& projection_matrix, g
     ImGui::InputFloat("Rotate Snap", &rotate_snap);
     ImGui::InputFloat("Scale Snap", &scale_snap);
 
-    //ImGui::Checkbox("Bound Sizing", &boundSizing);
-    //if (boundSizing) {
-    //  ImGui::PushID(3);
-    //  ImGui::Checkbox("##BoundSizing", &boundSizingSnap);
-    //  ImGui::SameLine();
-    //  ImGui::InputFloat3("Snap", boundsSnap);
-    //  ImGui::PopID();
-    //}
+    // ImGui::Checkbox("Bound Sizing", &boundSizing);
+    // if (boundSizing) {
+    //   ImGui::PushID(3);
+    //   ImGui::Checkbox("##BoundSizing", &boundSizingSnap);
+    //   ImGui::SameLine();
+    //   ImGui::InputFloat3("Snap", boundsSnap);
+    //   ImGui::PopID();
+    // }
   }
 
   ImGuiIO& io = ImGui::GetIO();
@@ -116,6 +116,7 @@ using namespace genesis;
 Sandbox3D::Sandbox3D() : ImGuiLayer("Sandbox3D") {
   auto& app = Application::GetInstance();
   auto& window = app.GetWindow();
+  RenderCommand::GetInstance().OpenDebugMessage(true);
 
   LayerManager::SetBeginRoundCallback([]() {
     ImGui_ImplOpenGL3_NewFrame();

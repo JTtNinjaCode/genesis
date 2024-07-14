@@ -75,6 +75,29 @@ void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& mod
       shader.SetUniform("u_skybox", *reinterpret_cast<int*>(skybox->GetTextureID()));
     }
   }
-  model.Draw(shader);
+
+  const auto& meshes = model.GetMeshes();
+  for (const auto& mesh : meshes) {
+    const auto& textures = mesh.GetTextures();
+    // TODO:texture dispatch
+    unsigned int diffuse_texture_counter = 1;
+    unsigned int specular_texture_counter = 1;
+    for (int i = 0; i < textures.size(); i++) {
+      const auto& texture = textures[i];
+      texture->Bind(i);
+      switch (texture->GetTextureType()) {
+        case TextureType::kDiffuse:
+          shader.SetUniform(std::string("material.diffuse") + std::to_string(diffuse_texture_counter++), i);
+          break;
+        case TextureType::kSpecular:
+          shader.SetUniform(std::string("material.specular") + std::to_string(specular_texture_counter++), i);
+          break;
+        default:
+          CORE_ASSERT(false, "invalid texture type.");
+      }
+    }
+
+    RenderCommand::GetInstance().DrawIndex(mesh.GetVAO());
+  }
 }
 }  // namespace genesis

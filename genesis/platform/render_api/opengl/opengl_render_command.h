@@ -7,6 +7,7 @@ class OpenGLRenderCommand : public RenderCommand {
  public:
   void SetClearColor(glm::vec4 color) override;
   void Clear() override;
+  void OpenDebugMessage(bool open) override;
 
   void DrawIndex(const VertexArray& vertex_array) override;
   void DrawIndexInstanced(const VertexArray& vertex_array, const int count) override;
