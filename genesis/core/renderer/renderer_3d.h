@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "core/component/light.h"
-#include "core/renderer/camera/perspective_camera.h"
+#include "core/renderer/camera/camera.h"
 #include "core/renderer/grid.h"
 #include "core/renderer/model.h"
 #include "core/renderer/renderer_api.h"
@@ -17,9 +17,9 @@ class Renderer3D {
   void BeginScene(const Camera3DInterface& camera);
   void EndScene();
   void Submit(Shader& shader, const VertexArray& vertex_array, const glm::mat4& model_matrix = {1.0f},
-              const Light* light = nullptr, const PerspectiveCamera* camera = nullptr);
+              const Light* light = nullptr, const CameraData* camera = nullptr);
   void Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix = {1.0f}, const Light* light = nullptr,
-              const PerspectiveCamera* camera = nullptr);
+              const CameraData* camera = nullptr);
 
  private:
   const Camera3DInterface* camera_ = nullptr;

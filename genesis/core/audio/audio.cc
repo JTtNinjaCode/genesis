@@ -56,5 +56,4 @@ void AudioManager::SetEventAttribute(const std::string& event_name, const FMOD_3
 void AudioManager::SetListenerAttribute(const int listener, const FMOD_3D_ATTRIBUTES& attribute) {
   FMOD_ERROR_CHECK(system->setListenerAttributes(listener, &attribute));
 }
-
 }  // namespace genesis

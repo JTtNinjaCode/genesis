@@ -10,11 +10,19 @@ class DLL_API Layer {
  public:
   Layer(const std::string& layer_name);
   virtual ~Layer();
-  virtual void OnAttach() = 0;
-  virtual void OnDetach() = 0;
-  virtual void OnUpdate(TimeStep time_step) = 0;
-  virtual EventState OnEvent(Event& event) = 0;
-  virtual void OnRender() = 0;
+
+  virtual void OnAttach() {}
+  virtual void OnDetach() {}
+
+  virtual void OnPreUpdate() {}
+  virtual void OnUpdate(TimeStep time_step) {}
+  virtual void OnPostUpdate() {}
+
+  virtual void OnRender() {}
+  virtual void OnPreRender() {}
+  virtual void OnPostRender() {}
+
+  virtual EventState OnEvent(Event& event) { return EventState::kNotHandled; }
 
   const std::string& GetName() const { return layer_name_; }
 

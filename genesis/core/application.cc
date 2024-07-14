@@ -1,8 +1,6 @@
 #include "core/application.h"
 
 #include <GLFW/glfw3.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
 #include <glm/glm.hpp>
 
@@ -40,30 +38,19 @@ void Application::Run() {
   while (running_) {
     TimeStep duration = timer.GetDurationFromLastCall();
 
-    // update every layer
+    LayerManager::RunBeginCallback();
     for (auto& layer : layer_stack_) {
+      layer->OnPreUpdate();
       layer->OnUpdate(duration);
+      layer->OnPostUpdate();
     }
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
     for (auto& layer : layer_stack_) {
+      layer->OnPreRender();
       layer->OnRender();
+      layer->OnPostRender();
     }
-    // Rendering
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    //// Update and Render additional Platform Windows, if use multi viewport, use these code
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-      GLFWwindow* backup_current_context = glfwGetCurrentContext();
-      ImGui::UpdatePlatformWindows();
-      ImGui::RenderPlatformWindowsDefault();
-      glfwMakeContextCurrent(backup_current_context);
-    }
-    window_->OnUpdate();
+    LayerManager::RunEndCallback();
   }
 }
 

@@ -44,9 +44,9 @@ class DLL_API Log {
 #ifdef GENESIS_ASSERT
 #define CORE_ASSERT(x, ...)      \
   if (!(x)) {                    \
-    CORE_LOG_ERROR(__VA_ARGS__); \
+    CORE_LOG_ERROR("Assert Failed:{} {}:{}", __VA_ARGS__, __FILE__, __LINE__); \
     __debugbreak();              \
   }
 #else
-#define CORE_ASSERT(x, msg)
+#define CORE_ASSERT(x, ...)
 #endif

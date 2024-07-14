@@ -1,6 +1,7 @@
 #include "camera.h"
 
 #include <glm/gtx/transform.hpp>
+#include <core/log/log.h>
 
 #include "core/component/game_object.h"
 #include "core/component/transform.h"
@@ -20,6 +21,8 @@ glm::mat4 Camera::GetProjection() const {
       return orthographics;
       break;
   }
+  CORE_ASSERT(false, "Not a appropriate ProjectionMode.");
+  return glm::mat4(1.0f);
 }
 glm::mat4 Camera::GetView() const {
   auto position = GetPosition();

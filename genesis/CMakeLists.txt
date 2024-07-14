@@ -30,8 +30,12 @@ add_compile_definitions(
 	GLM_FORCE_SILENT_WARNINGS
 	GLM_ENABLE_EXPERIMENTAL
 	GLFW_INCLUDE_NONE
+
+	_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
+	_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS
 )
 
+target_compile_options(genesis PRIVATE /WX)
 target_link_libraries(genesis PRIVATE glfw glad assimp RTTR::Core_Lib freetype stb fmod fmod_studio)
 target_link_libraries(genesis PUBLIC spdlog glm easy_profiler sol2)
 

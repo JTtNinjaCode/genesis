@@ -13,7 +13,7 @@ enum BackgroundMode { kSkybox, kColor };
 
 class Camera : public Component, Camera3DInterface {
  public:
-  Camera(GameObject *game_object) : Component(game_object) {}
+  Camera(GameObject* game_object) : Component(game_object) {}
   glm::mat4 GetProjection() const override;
   glm::mat4 GetView() const override;
   glm::vec3 GetPosition() const override;
@@ -34,7 +34,7 @@ class Camera : public Component, Camera3DInterface {
 
   BackgroundMode GetBackgroundMode() const;
   void SetBackgroundMode(BackgroundMode background_mode);
-  void SetSkybox(std::vector<std::filesystem::path> &faces_path);
+  void SetSkybox(std::vector<std::filesystem::path>& faces_path);
   std::shared_ptr<const Skybox> GetSkybox() const { return skybox_; };
   // bool OnEvent();
 

@@ -38,7 +38,7 @@ class DLL_API Application {
   Timer timer;
   float last_frame_time_ = 0.0f;
   LayerMap layer_map_;
-  LayerStack layer_stack_;
+  LayerManager layer_stack_;
 
   static std::shared_ptr<Application> instance_;
   bool running_ = true;

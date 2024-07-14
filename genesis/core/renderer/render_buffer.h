@@ -7,7 +7,7 @@ class RenderBuffer {
 
   virtual ~RenderBuffer() {}
   virtual void Bind() const = 0;
-  virtual void* GetId() const = 0;
+  virtual const void* GetId() const = 0;
 };
 
 }  // namespace genesis

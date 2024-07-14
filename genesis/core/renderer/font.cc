@@ -38,7 +38,7 @@ void Font::Init() {
 }
 
 void Font::Uninit() {
-  for (auto face : faces_) {
+  for (auto& face : faces_) {
     FT_Done_Face(face.second);
   }
   FT_Done_FreeType(library);
@@ -68,7 +68,7 @@ void Font::LoadFont(const std::filesystem::path& file_path, const std::string& f
   FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
   FT_Bitmap bitmap = slot->bitmap;
   FT_Pos advance = slot->advance.x;
-  texture2d_ = Texture2D::Create(bitmap.buffer, 1, bitmap.width, bitmap.rows, TextureType::Diffuse);
+  texture2d_ = Texture2D::Create(bitmap.buffer, TextureFormat::kR, bitmap.width, bitmap.rows, TextureType::kDiffuse);
   faces_[font_name] = face;
 }
 

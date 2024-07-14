@@ -1,10 +1,5 @@
 #include "platform/window/glfw_window.h"
 
-#pragma warning(push)
-#pragma warning(disable : 4005)
-#include <glad/glad.h>
-#pragma warning(pop)
-
 #include "core/events/key_event.h"
 #include "core/events/mouse_event.h"
 #include "core/events/window_event.h"
@@ -114,6 +109,7 @@ GLFWWindow::GLFWWindow(const std::string& title, unsigned int width, unsigned he
 GLFWWindow::~GLFWWindow() { glfwDestroyWindow(window_); }
 
 void GLFWWindow::OnUpdate() {
+  glfwMakeContextCurrent(window_);
   glfwPollEvents();
   context_->SwapBuffers();
 }
@@ -139,12 +135,6 @@ void GLFWWindow::SetCursorMode(const CursorMode cursor_mode) {
   } else if (cursor_mode == CursorMode::kDisabled) {
     // invisible, cursor motion is not limited in window and whole screen
     glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  } else if (cursor_mode == CursorMode::kHidden) {
-    // invisible in window, but visible in whole screen
-    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-  } else if (cursor_mode == CursorMode::kCaptured) {
-    // visible and confined in window
-    glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
   }
 }
 

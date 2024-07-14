@@ -6,10 +6,8 @@
 #include "events/event.h"
 namespace genesis {
 enum class CursorMode {
-  kHidden,
   kNormal,
   kDisabled,
-  kCaptured,
 };
 class DLL_API Window {
  public:
