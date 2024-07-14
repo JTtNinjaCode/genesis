@@ -8,7 +8,7 @@ class VertexBuffer {
   virtual ~VertexBuffer() {}
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
-  virtual void *GetId() = 0;
+  virtual const void *GetId() const = 0;
   virtual size_t GetSize() const = 0;
   virtual void SubData(void *vertices, size_t size) = 0;
 };
@@ -20,7 +20,7 @@ class IndexBuffer {
   virtual unsigned int GetCount() const = 0;
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
-  virtual void *GetId() = 0;
+  virtual const void *GetId() const = 0;
   virtual void SubData(void *vertices, size_t size) = 0;
 };
 
@@ -32,7 +32,7 @@ class UniformBuffer {
   virtual void BindSlot(const unsigned int slot) const = 0;
   virtual void Bind() const = 0;
   virtual void Unbind() const = 0;
-  virtual void *GetId() = 0;
+  virtual const void *GetId() const = 0;
   virtual void SubData(void *vertices, size_t size, size_t begin = 0) = 0;
 };
 

@@ -9,9 +9,10 @@
 #include "camera_3d_interface.h"
 
 namespace genesis {
-class PerspectiveCamera : public Camera3DInterface {
+enum class CameraMode { Perspective, Orthographic };
+class CameraData : public Camera3DInterface {
  public:
-  PerspectiveCamera(float field_of_view, float ratio, float near, float far, glm::vec3 position, glm::vec3 target)
+  CameraData(float field_of_view, float ratio, float near, float far, glm::vec3 position, glm::vec3 target)
       : position_(position),
         forward_(glm::normalize(target - position)),
         field_of_view_(field_of_view),
@@ -28,19 +29,22 @@ class PerspectiveCamera : public Camera3DInterface {
   glm::vec3 GetForward() const override { return forward_; }
   glm::vec3 GetUp() const override { return up_; }
   glm::mat4 GetProjection() const override { return glm::perspective(field_of_view_, ratio_, near_, far_); }
-  glm::mat4 GetView() const override { return glm::lookAtRH(position_, position_ + forward_, up_); };
+  glm::mat4 GetView() const override { return glm::lookAtRH(position_, position_ + forward_, glm::vec3(0, 1, 0)); };
   glm::vec4 GetClearColor() const override { return clear_color_; }
+  CameraMode GetMode() const { return mode_; }
 
   void SetPosition(glm::vec3 position) { position_ = position; }
   void SetForward(glm::vec3 forward) { forward_ = glm::normalize(forward); }
-  void SetUp(glm::vec3 up) { up_ = up; }
+  void SetUp(glm::vec3 up) { up_ = glm::normalize(up); }
 
   void SetClearColor(glm::vec4 clear_color) { clear_color_ = clear_color; }
   void SetFieldOfView(float field_of_view) { field_of_view_ = field_of_view; }
   void SetRatio(float ratio) { ratio_ = ratio; }
   void SetNear(float near_plane) { near_ = near_plane; }
   void SetFar(float far_plane) { far_ = far_plane; }
-  void LookAt(glm::vec3 target) { forward_ = glm::vec3(target - position_); }
+  void SetMode(CameraMode mode) { mode_ = mode; }
+
+  void LookAt(glm::vec3 target) { forward_ = glm::normalize(target - position_); }
   std::shared_ptr<const Skybox> GetSkybox() const { return skybox_; };
   void SetSkybox(const std::vector<std::filesystem::path>& faces_path) {
     skybox_ = std::make_shared<Skybox>(faces_path);
@@ -51,6 +55,7 @@ class PerspectiveCamera : public Camera3DInterface {
   glm::vec3 forward_ = glm::vec3(0.0f, 0.0f, 1.0f);
   glm::vec3 up_ = glm::vec3(0.0f, 1.0f, 0.0f);
 
+  CameraMode mode_ = CameraMode::Perspective;
   float field_of_view_;
   float ratio_;
   float near_;
