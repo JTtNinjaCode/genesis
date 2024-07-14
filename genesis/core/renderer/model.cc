@@ -8,16 +8,6 @@
 #include "core/renderer/vertex_format/vertex_pnt.h"
 
 namespace genesis {
-void Model::Draw(Shader& shader) const {
-  for (auto& mesh : meshes_) {
-    mesh.Draw(shader);
-  }
-}
-
-void Model::DrawInstanced(Shader& shader, unsigned int count) const {
-  for (auto& mesh : meshes_) mesh.DrawInstanced(shader, count);
-}
-
 void Model::LoadModel(const std::filesystem::path& path) {
   Assimp::Importer importer;
   const aiScene* scene =
@@ -30,6 +20,8 @@ void Model::LoadModel(const std::filesystem::path& path) {
   ProcessNode(scene->mRootNode, scene);
   CORE_LOG_TRACE("Success to load object by assimp: {0}", path.string());
 }
+
+const std::vector<Mesh>& Model::GetMeshes() const { return meshes_; }
 
 void Model::ProcessNode(const aiNode* node, const aiScene* scene) {
   for (int i = 0; i < node->mNumMeshes; i++) {

@@ -9,7 +9,7 @@ class OpenGLFrameBuffer : public FrameBuffer {
   void BindTexture(const std::shared_ptr<Texture>& texture) override;
   void BindRendererBuffer(const std::shared_ptr<RenderBuffer>& render_buffer) override;
   void Bind() const override;
-  void* GetId() const override;
+  const void* GetId() const override;
 
  private:
   unsigned int id_ = 0;

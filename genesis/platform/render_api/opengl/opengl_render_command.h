@@ -1,12 +1,18 @@
 #pragma once
+#include <glad/glad.h>
+
 #include "core/renderer/render_command.h"
 namespace genesis {
 class OpenGLRenderCommand : public RenderCommand {
  public:
   void SetClearColor(glm::vec4 color) override;
   void Clear() override;
-  void DrawIndexed(const VertexArray& vertex_array) override;
+
+  void DrawIndex(const VertexArray& vertex_array) override;
+  void DrawIndexInstanced(const VertexArray& vertex_array, const int count) override;
   void DrawArray(const VertexArray& vertex_array) override;
+  void DrawArrayInstanced(const VertexArray& vertex_array, const int count) override;
+
   void SetViewport(int x, int y, int width, int height) override;
   void SetDrawMode(DrawMode mode) override;
   void SetFrontFaceOrder(FacePointOrder face_point_order) override;
@@ -28,5 +34,9 @@ class OpenGLRenderCommand : public RenderCommand {
   void SetBackCullFace(CullFace cull_face) override;
   void SetPointSize(float size) override;
 
+  void SetTopolgy(Topology topology) override;
+
+ private:
+  GLuint topology_type = GL_TRIANGLES;
 };
 }  // namespace genesis

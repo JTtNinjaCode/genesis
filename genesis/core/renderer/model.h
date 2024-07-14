@@ -16,8 +16,7 @@ class Model{
   Model(const std::filesystem::path& path) { LoadModel(path.string()); }
   void LoadModel(const std::filesystem::path& path);
 
-  void Draw(Shader& shader) const;
-  void DrawInstanced(Shader& shader, unsigned int count) const;
+  const std::vector<Mesh>& GetMeshes() const;
 
  private:
   void ProcessNode(const aiNode* node, const aiScene* scene);

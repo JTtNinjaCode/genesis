@@ -53,7 +53,7 @@ void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const g
     light->GetUniform()->BindSlot(2);
     shader.SetUniformBlock("u_light", 2);
   }
-  RenderCommand::GetInstance().DrawIndexed(vertex_array);
+  RenderCommand::GetInstance().DrawIndex(vertex_array);
 }
 void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix, const Light* light,
                         const CameraData* camera) {

@@ -8,12 +8,20 @@ void OpenGLRenderCommand::SetClearColor(glm::vec4 color) { glClearColor(color.x,
 
 void OpenGLRenderCommand::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
-void OpenGLRenderCommand::DrawIndexed(const VertexArray& vertex_array) {
-  glDrawElements(GL_TRIANGLES, vertex_array.GetIndexCount(), GL_UNSIGNED_INT, nullptr);
+void OpenGLRenderCommand::DrawIndex(const VertexArray& vertex_array) {
+  glDrawElements(topology_type, vertex_array.GetIndexCount(), GL_UNSIGNED_INT, nullptr);
+}
+
+void OpenGLRenderCommand::DrawIndexInstanced(const VertexArray& vertex_array, const int count) {
+  glDrawElementsInstanced(topology_type, vertex_array.GetIndexCount(), GL_UNSIGNED_INT, nullptr, count);
 }
 
 void OpenGLRenderCommand::DrawArray(const VertexArray& vertex_array) {
-  glDrawArrays(GL_TRIANGLES, 0, vertex_array.GetVertexCount());
+  glDrawArrays(topology_type, 0, vertex_array.GetVertexCount());
+}
+
+void OpenGLRenderCommand::DrawArrayInstanced(const VertexArray& vertex_array, const int count) {
+  glDrawArraysInstanced(topology_type, 0, vertex_array.GetVertexCount(), count);
 }
 
 void OpenGLRenderCommand::SetBlendTest(bool enable) {
@@ -26,6 +34,7 @@ void OpenGLRenderCommand::SetBlendTest(bool enable) {
 }
 
 void OpenGLRenderCommand::SetViewport(int x, int y, int width, int height) { glViewport(x, y, width, height); }
+
 void OpenGLRenderCommand::SetDepthTest(bool enable) {
   glDepthFunc(GL_LEQUAL);
   if (enable) {
@@ -34,6 +43,7 @@ void OpenGLRenderCommand::SetDepthTest(bool enable) {
     glDisable(GL_DEPTH_TEST);
   }
 }
+
 void OpenGLRenderCommand::SetDrawMode(DrawMode mode) {
   if (mode == DrawMode::kLine) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -43,7 +53,9 @@ void OpenGLRenderCommand::SetDrawMode(DrawMode mode) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
   }
 }
+
 void OpenGLRenderCommand::SetPointSize(float size) { glPointSize(size); }
+
 void OpenGLRenderCommand::SetFrontFaceOrder(FacePointOrder face_point_order) {
   if (face_point_order == FacePointOrder::kClockWise) {
     glFrontFace(GL_CW);
@@ -51,6 +63,7 @@ void OpenGLRenderCommand::SetFrontFaceOrder(FacePointOrder face_point_order) {
     glFrontFace(GL_CCW);
   }
 }
+
 void OpenGLRenderCommand::SetDepthMask(bool enable) {
   if (enable) {
     glDepthMask(0xff);
@@ -58,6 +71,7 @@ void OpenGLRenderCommand::SetDepthMask(bool enable) {
     glDepthMask(0x00);
   }
 }
+
 void OpenGLRenderCommand::SetStencilTest(bool enable) {
   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
   if (enable) {
@@ -66,6 +80,7 @@ void OpenGLRenderCommand::SetStencilTest(bool enable) {
     glDisable(GL_STENCIL_TEST);
   }
 }
+
 void OpenGLRenderCommand::SetStencilFunc(StencilFunc stencil_func, int ref, int mask, CullFace cull_face) {
   GLenum func{};
   switch (stencil_func) {
@@ -93,6 +108,7 @@ void OpenGLRenderCommand::SetStencilFunc(StencilFunc stencil_func, int ref, int 
   }
   glStencilFunc(func, ref, mask);
 }
+
 void OpenGLRenderCommand::SetStencilMask(bool enable, CullFace cull_face) {
   if (enable) {
     glStencilMask(0xff);
@@ -100,11 +116,13 @@ void OpenGLRenderCommand::SetStencilMask(bool enable, CullFace cull_face) {
     glStencilMask(0x00);
   }
 }
+
 void OpenGLRenderCommand::SetStencilOp(bool enable, CullFace cull_face) {
   if (enable) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
   }
 }
+
 void OpenGLRenderCommand::SetBackCullTest(bool enable) {
   if (enable) {
     glEnable(GL_CULL_FACE);
@@ -112,6 +130,7 @@ void OpenGLRenderCommand::SetBackCullTest(bool enable) {
     glDisable(GL_CULL_FACE);
   }
 }
+
 void OpenGLRenderCommand::SetBackCullFace(CullFace cull_face) {
   GLenum mode{};
   switch (cull_face) {
@@ -127,7 +146,9 @@ void OpenGLRenderCommand::SetBackCullFace(CullFace cull_face) {
   }
   glCullFace(mode);
 }
+
 void OpenGLRenderCommand::SetBlendColor(const glm::vec4& color) { glBlendColor(color.r, color.g, color.b, color.a); }
+
 void OpenGLRenderCommand::SetBlendFunc(BlendFactor sfactor, BlendFactor dfactor, CullFace cull_face) {
   GLenum sfactor_gl{}, dfactor_gl{};
 
@@ -223,6 +244,7 @@ void OpenGLRenderCommand::SetBlendFunc(BlendFactor sfactor, BlendFactor dfactor,
 
   glBlendFunc(sfactor_gl, dfactor_gl);
 }
+
 void OpenGLRenderCommand::SetBlendEquation(BlendEquationMode mode, CullFace cull_face) {
   GLenum mode_gl{};
 
@@ -246,5 +268,29 @@ void OpenGLRenderCommand::SetBlendEquation(BlendEquationMode mode, CullFace cull
 
   glBlendEquation(mode_gl);
 }
+
 void OpenGLRenderCommand::SetDepthRange(float near_val, float far_val) { glDepthRange(near_val, far_val); }
+
+void OpenGLRenderCommand::SetTopolgy(Topology topology) {
+  switch (topology) {
+    case Topology::kPoint:
+      topology_type = GL_POINT;
+      break;
+    case Topology::kLines:
+      topology_type = GL_LINES;
+      break;
+    case Topology::kLineStrip:
+      topology_type = GL_LINE_STRIP;
+      break;
+    case Topology::kTriangle:
+      topology_type = GL_TRIANGLES;
+      break;
+    case Topology::kTrangleStrip:
+      topology_type = GL_TRIANGLE_STRIP;
+      break;
+    default:
+      CORE_ASSERT(false, "Invalid Topology Type.");
+      break;
+  }
+}
 }  // namespace genesis

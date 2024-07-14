@@ -26,6 +26,7 @@ enum class BlendFactor {
   kConstantAlpha,
   kOneMinusConstantAlpha
 };
+enum class Topology { kPoint, kLines, kLineStrip, kTriangle, kTrangleStrip };
 
 class RenderCommand {
  public:
@@ -33,8 +34,12 @@ class RenderCommand {
 
   virtual void SetClearColor(glm::vec4 color) = 0;
   virtual void Clear() = 0;
-  virtual void DrawIndexed(const VertexArray& vertex_array) = 0;
+
+  virtual void DrawIndex(const VertexArray& vertex_array) = 0;
+  virtual void DrawIndexInstanced(const VertexArray& vertex_array, const int count) = 0;
   virtual void DrawArray(const VertexArray& vertex_array) = 0;
+  virtual void DrawArrayInstanced(const VertexArray& vertex_array, const int count) = 0;
+
   virtual void SetViewport(int x, int y, int width, int height) = 0;
   virtual void SetDrawMode(DrawMode enable) = 0;
   virtual void SetFrontFaceOrder(FacePointOrder face_point_order) = 0;
@@ -58,6 +63,8 @@ class RenderCommand {
   virtual void SetBackCullTest(bool enable) = 0;
   virtual void SetBackCullFace(CullFace cull_face) = 0;
   virtual void SetPointSize(float size) = 0;
+
+  virtual void SetTopolgy(Topology topology) = 0;
 
  private:
   static std::unique_ptr<RenderCommand> render_command_;

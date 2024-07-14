@@ -15,6 +15,6 @@ class FrameBuffer {
   // render buffer, cant be accessed from shader
   virtual void BindRendererBuffer(const std::shared_ptr<RenderBuffer> &render_buffer) = 0;
   virtual void Bind() const = 0;
-  virtual void *GetId() const = 0;
+  virtual const void *GetId() const = 0;
 };
 }  // namespace genesis

@@ -12,7 +12,7 @@ void OpenGLFrameBuffer::BindTexture(const std::shared_ptr<Texture>& texture) {
 }
 
 void OpenGLFrameBuffer::Bind() const { glBindFramebuffer(GL_FRAMEBUFFER, id_); }
-void* OpenGLFrameBuffer::GetId() const { return (void*)&id_; }
+const void* OpenGLFrameBuffer::GetId() const { return reinterpret_cast<const void*>(&id_); }
 void OpenGLFrameBuffer::BindRendererBuffer(const std::shared_ptr<RenderBuffer>& render_buffer) {
   render_buffer->Bind();  // TODO: why use 10?
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id_, 0);
