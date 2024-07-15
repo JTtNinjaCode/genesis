@@ -5,6 +5,7 @@
 namespace genesis {
 class OpenGLRenderCommand : public RenderCommand {
  public:
+  void BindDefaultFrameBuffer() override;
   void SetClearColor(glm::vec4 color) override;
   void Clear() override;
   void OpenDebugMessage(bool open) override;

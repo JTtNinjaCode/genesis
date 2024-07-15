@@ -80,6 +80,8 @@ static void GLAPIENTRY OpenGLDebugMessageCallback(GLenum source, GLenum type, GL
   }
 }
 
+void OpenGLRenderCommand::BindDefaultFrameBuffer() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+
 void OpenGLRenderCommand::SetClearColor(glm::vec4 color) { glClearColor(color.x, color.y, color.z, color.w); }
 
 void OpenGLRenderCommand::OpenDebugMessage(bool open) {
@@ -89,7 +91,7 @@ void OpenGLRenderCommand::OpenDebugMessage(bool open) {
   glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 }
 
-void OpenGLRenderCommand::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+void OpenGLRenderCommand::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
 
 void OpenGLRenderCommand::DrawIndex(const VertexArray& vertex_array) {
   vertex_array.Bind();

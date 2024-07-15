@@ -6,8 +6,9 @@ class OpenGLFrameBuffer : public FrameBuffer {
   static void BindDefaultFrameBuffer();
   OpenGLFrameBuffer();
   ~OpenGLFrameBuffer();
-  void BindTexture(const std::shared_ptr<Texture>& texture) override;
-  void BindRendererBuffer(const std::shared_ptr<RenderBuffer>& render_buffer) override;
+  void BindTexture(const Texture2D& texture, unsigned int index, AttachmentType attachment_type) override;
+  void BindRendererBuffer(const RenderBuffer& render_buffer, unsigned int index,
+                          AttachmentType attachment_type) override;
   void Bind() const override;
   const void* GetId() const override;
 
