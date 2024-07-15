@@ -70,7 +70,28 @@ void ImGuiLayer::Uninit() {
   ImGui::DestroyContext();
 }
 
-ImGuiLayer::ImGuiLayer(const std::string& layer_name) : Layer(layer_name) {}
+ImGuiLayer::ImGuiLayer(const std::string& layer_name) : Layer(layer_name) {
+  auto& window = Application::GetInstance().GetWindow();
+
+  LayerManager::SetBeginRoundCallback([]() {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+  });
+
+  LayerManager::SetEndRoundCallback([&]() {
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    // Update and Render additional Platform Windows, if use multi viewport, use these code
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+      ImGui::UpdatePlatformWindows();
+      ImGui::RenderPlatformWindowsDefault();
+    }
+    window.OnUpdate();
+  });
+}
 
 ImGuiLayer::~ImGuiLayer() {}
 

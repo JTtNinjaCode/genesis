@@ -1,6 +1,5 @@
 #include "sandbox_3d.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include <core/audio/audio.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -118,25 +117,6 @@ Sandbox3D::Sandbox3D() : ImGuiLayer("Sandbox3D") {
   auto& window = app.GetWindow();
   RenderCommand::GetInstance().OpenDebugMessage(true);
 
-  LayerManager::SetBeginRoundCallback([]() {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-  });
-
-  LayerManager::SetEndRoundCallback([&]() {
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    // Update and Render additional Platform Windows, if use multi viewport, use these code
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-      ImGui::UpdatePlatformWindows();
-      ImGui::RenderPlatformWindowsDefault();
-    }
-    window.OnUpdate();
-  });
-
   float ratio = float(window.GetWidth()) / window.GetHeight();
   window.SetCursorMode(CursorMode::kNormal);
 
@@ -157,7 +137,9 @@ Sandbox3D::Sandbox3D() : ImGuiLayer("Sandbox3D") {
       "./assets/textures/skybox/back.jpg",
   });
   model_shader_ = Shader::Create("./assets/shaders/model.vert", "./assets/shaders/model.frag");
-  outline_shader = Shader::Create("./assets/shaders/outline.vert", "./assets/shaders/outline.frag");
+  outline_shader_ = Shader::Create("./assets/shaders/outline.vert", "./assets/shaders/outline.frag");
+  post_processing_shader_ =
+      Shader::Create("./assets/shaders/post_processing.vert", "./assets/shaders/post_processing.frag");
 
   camera_3d_ = std::make_shared<CameraController>(glm::radians(60.0f), ratio, 0.01f, 300.0f, glm::vec3(0, 5, 10),
                                                   glm::vec3(0, 0, 0));
@@ -177,6 +159,12 @@ Sandbox3D::Sandbox3D() : ImGuiLayer("Sandbox3D") {
   light->SetColor({1.0f, 1.0f, 1.0f});
   light->SetDirection({1.0f, 1.0f, 1.0f});
   light->SetLightType(LightType::Point);
+
+  post_texture_color_ = Texture2D::Create(nullptr, TextureFormat::kRGBA, window.GetWidth(), window.GetHeight());
+  post_texture_depth_ = Texture2D::Create(nullptr, TextureFormat::kDepthStencil, window.GetWidth(), window.GetHeight());
+  frame_buffer_ = FrameBuffer::Create();
+  frame_buffer_->BindTexture(*post_texture_color_, 0, AttachmentType::kColor);
+  frame_buffer_->BindTexture(*post_texture_depth_, 0, AttachmentType::kDepthStencil);
 
   Font::LoadFont("./assets/fonts/SedanSC-Regular.ttf", "SedanSC-Regular", 16);
 }
@@ -208,9 +196,14 @@ void Sandbox3D::OnUpdate(TimeStep time_step) {
 }
 
 void Sandbox3D::OnRender() {
+  RenderCommand::GetInstance().BindDefaultFrameBuffer();
+  RenderCommand::GetInstance().Clear();
+  frame_buffer_->Bind();
+  RenderCommand::GetInstance().Clear();
+
   auto& renderer_3d = Renderer3D();
   auto& camera = camera_3d_->GetCamera();
-  renderer_3d.BeginScene(camera);
+  renderer_3d.BeginScene(camera);  // draw sky in here
 
   auto& model_ = scene_.GetGameObject("robot");
   auto& light_ = scene_.GetGameObject("light");
@@ -228,26 +221,40 @@ void Sandbox3D::OnRender() {
   auto component_light = dynamic_cast<const Light*>(light_.GetComponent("Light"));
 
   auto& render_command = RenderCommand::GetInstance();
-  render_command.SetDrawMode(DrawMode::kFill);
-
-  render_command.SetStencilTest(true);
-  render_command.SetStencilFunc(StencilFunc::kAlways, 1, 0xff);
-  render_command.SetStencilMask(true);
-  renderer_3d.Submit(*model_shader_, component_model->GetModel(), model, component_light, &camera);
-  render_command.SetStencilFunc(StencilFunc::kNotEqual, 1, 0xff);
-  render_command.SetStencilMask(false);
-
-  render_command.SetDepthTest(false);
-  renderer_3d.Submit(*outline_shader, component_model->GetModel(), model, nullptr, nullptr);
-  render_command.SetStencilMask(true);
-  render_command.SetStencilFunc(StencilFunc::kAlways, 0, 0xff);
+  frame_buffer_->Bind();
   render_command.SetDepthTest(true);
+  renderer_3d.Submit(*model_shader_, component_model->GetModel(), model, component_light, &camera);
+
+  // render_command.SetStencilTest(true);
+  // render_command.SetStencilMask(true);
+  // renderer_3d.Submit(*model_shader_, component_model->GetModel(), model, component_light, &camera);
+  // render_command.SetStencilFunc(StencilFunc::kNotEqual, 1, 0xff);
+  // render_command.SetStencilMask(false);
+
+  // render_command.SetDepthTest(false);
+  // renderer_3d.Submit(*outline_shader_, component_model->GetModel(), model, nullptr, nullptr);
+  // render_command.SetStencilMask(true);
+  // render_command.SetStencilFunc(StencilFunc::kAlways, 0, 0xff);
+  // render_command.SetDepthTest(true);
 
   auto& grid = Grid::GetInstance();
   grid.GetShader().Bind();
   grid.GetShader().SetUniform("u_grid_opacity", grid.GetOpacity());
   grid.GetShader().SetUniform("u_grid_plane_mode", (int)grid.GetGridMode());
   renderer_3d.Submit(grid.GetShader(), grid.GetVertexArray(), {1.0f}, nullptr, &camera);
+
+  // post processing
+  RenderCommand::GetInstance().BindDefaultFrameBuffer();
+  render_command.SetDepthTest(false);
+  static float quadVertices[] = {-1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f};
+  static std::shared_ptr<VertexBuffer> vb = VertexBuffer::Create(quadVertices, sizeof(quadVertices));
+  static const BufferLayout bl({MathDataType::kFloat2});
+  static std::shared_ptr<VertexArray> va = VertexArray::Create(bl);
+  va->SetVertexBuffer(vb);
+  post_texture_color_->Bind(0);
+  post_processing_shader_->Bind();
+  post_processing_shader_->SetUniform("u_origin_texture", 0);
+  renderer_3d.Submit(*post_processing_shader_, *va, glm::mat4{1.0f}, nullptr, nullptr);
 
   renderer_3d.EndScene();
 }

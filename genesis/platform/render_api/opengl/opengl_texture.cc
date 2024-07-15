@@ -34,11 +34,10 @@ OpenGLTexture2D::OpenGLTexture2D(unsigned char* data, TextureFormat data_format,
   } else if (data_format == TextureFormat::kRGBA) {
     internal_format = GL_RGBA8;
     texture_format = GL_RGBA;
+  } else if (data_format == TextureFormat::kDepthStencil) {
+    internal_format = GL_DEPTH24_STENCIL8;
+    texture_format = GL_DEPTH_STENCIL;
   }
-
-  CORE_ASSERT(
-      data_format == TextureFormat::kR || data_format == TextureFormat::kRGB || data_format == TextureFormat::kRGBA,
-      "texture format not support.");
 
   glTextureStorage2D(id_, 1, internal_format, width_,
                      height_);  // allocate memory
@@ -46,8 +45,15 @@ OpenGLTexture2D::OpenGLTexture2D(unsigned char* data, TextureFormat data_format,
   glTextureParameteri(id_, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTextureParameteri(id_, GL_TEXTURE_WRAP_R, GL_REPEAT);
   glTextureParameteri(id_, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTextureSubImage2D(id_, 0, 0, 0, width_, height_, texture_format, GL_UNSIGNED_BYTE,
-                      data);  // transfer data to allocated memory
+  if (data != nullptr) {
+    if (data_format != TextureFormat::kDepthStencil) {
+      glTextureSubImage2D(id_, 0, 0, 0, width_, height_, texture_format, GL_UNSIGNED_BYTE,
+                          data);  // transfer data to allocated memory
+    } else {
+      glTextureSubImage2D(id_, 0, 0, 0, width_, height_, texture_format, GL_UNSIGNED_INT_24_8,
+                          data);  // transfer data to allocated memory
+    }
+  }
 }
 
 OpenGLTexture2D::~OpenGLTexture2D() { glDeleteTextures(1, &id_); }
