@@ -41,19 +41,26 @@ void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const g
                         const Light* light, const CameraData* camera) {
   vertex_array.Bind();
   shader.Bind();
-  shader.SetUniform("u_projection", camera_->GetProjection());
-  shader.SetUniform("u_view", camera_->GetView());
   shader.SetUniform("u_model", model_matrix);
-  shader.SetUniform("u_camera_position", camera->GetPosition());
-  shader.SetUniform("u_camera_far", camera->GetFar());
-  shader.SetUniform("u_camera_near", camera->GetNear());
+  if (camera != nullptr) {
+    shader.SetUniform("u_projection", camera_->GetProjection());
+    shader.SetUniform("u_view", camera_->GetView());
+    shader.SetUniform("u_camera_position", camera->GetPosition());
+    shader.SetUniform("u_camera_far", camera->GetFar());
+    shader.SetUniform("u_camera_near", camera->GetNear());
+  }
 
   // set light uniform
   if (light != nullptr) {
     light->GetUniform()->BindSlot(2);
     shader.SetUniformBlock("u_light", 2);
   }
-  RenderCommand::GetInstance().DrawIndex(vertex_array);
+
+  if (vertex_array.HasIndex()) {
+    RenderCommand::GetInstance().DrawIndex(vertex_array);
+  } else {
+    RenderCommand::GetInstance().DrawArray(vertex_array);
+  }
 }
 void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix, const Light* light,
                         const CameraData* camera) {

@@ -4,7 +4,7 @@
 #include <string>
 namespace genesis {
 enum class TextureType { kSpecular, kDiffuse };
-enum class TextureFormat { kRGB, kRGBA, kBGRA, kR };
+enum class TextureFormat { kRGB, kRGBA, kBGRA, kR, kDepthStencil };
 
 class Texture {
  public:
