@@ -23,6 +23,5 @@ class Renderer3D {
 
  private:
   const Camera3DInterface* camera_ = nullptr;
-  static std::shared_ptr<Shader> skybox_shader_;
 };
 }  // namespace genesis

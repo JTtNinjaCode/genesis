@@ -11,6 +11,7 @@
 #include <limits>
 
 #include "core/renderer/font.h"
+#include "core/renderer/shader_library.h"
 #include "imgui_gizmos.h"
 #include "imgui_layer/file_dialog.h"
 #include "imgui_layer/inspector.h"
@@ -136,10 +137,11 @@ Sandbox3D::Sandbox3D() : ImGuiLayer("Sandbox3D") {
       "./assets/textures/skybox/front.jpg",
       "./assets/textures/skybox/back.jpg",
   });
-  model_shader_ = Shader::Create("./assets/shaders/model.vert", "./assets/shaders/model.frag");
-  outline_shader_ = Shader::Create("./assets/shaders/outline.vert", "./assets/shaders/outline.frag");
-  post_processing_shader_ =
-      Shader::Create("./assets/shaders/post_processing.vert", "./assets/shaders/post_processing.frag");
+
+  ShaderLibrary::AddShader("model_shader", "./assets/shaders/model.vert", "./assets/shaders/model.frag");
+  ShaderLibrary::AddShader("outline_shader", "./assets/shaders/outline.vert", "./assets/shaders/outline.frag");
+  ShaderLibrary::AddShader("post_processing_shader", "./assets/shaders/post_processing.vert",
+                           "./assets/shaders/post_processing.frag");
 
   camera_3d_ = std::make_shared<CameraController>(glm::radians(60.0f), ratio, 0.01f, 300.0f, glm::vec3(0, 5, 10),
                                                   glm::vec3(0, 0, 0));
@@ -223,7 +225,8 @@ void Sandbox3D::OnRender() {
   auto& render_command = RenderCommand::GetInstance();
   frame_buffer_->Bind();
   render_command.SetDepthTest(true);
-  renderer_3d.Submit(*model_shader_, component_model->GetModel(), model, component_light, &camera);
+  renderer_3d.Submit(ShaderLibrary::GetShader("model_shader"), component_model->GetModel(), model, component_light,
+                     &camera);
 
   // render_command.SetStencilTest(true);
   // render_command.SetStencilMask(true);
@@ -252,9 +255,10 @@ void Sandbox3D::OnRender() {
   static std::shared_ptr<VertexArray> va = VertexArray::Create(bl);
   va->SetVertexBuffer(vb);
   post_texture_color_->Bind(0);
-  post_processing_shader_->Bind();
-  post_processing_shader_->SetUniform("u_origin_texture", 0);
-  renderer_3d.Submit(*post_processing_shader_, *va, glm::mat4{1.0f}, nullptr, nullptr);
+  auto& post_processing_shader = ShaderLibrary::GetShader("post_processing_shader");
+  post_processing_shader.Bind();
+  post_processing_shader.SetUniform("u_origin_texture", 0);
+  renderer_3d.Submit(post_processing_shader, *va, glm::mat4{1.0f}, nullptr, nullptr);
 
   renderer_3d.EndScene();
 }
