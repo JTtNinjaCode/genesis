@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
-project(sandbox VERSION 0.1.0)
+project(editor VERSION 0.1.0)
 
 #force to use c++ 17, or failed to build
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(sandbox ${SRC})
+add_executable(editor ${SRC})
 
 #source files
 file(GLOB_RECURSE SOURCES "./**/*.cc")
@@ -23,16 +23,16 @@ add_compile_definitions(
 	_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS
 )
 
-target_sources(sandbox
+target_sources(editor
     PRIVATE
     source.cc
     ${HEADERS}
     ${SOURCES}
 )
 
-target_compile_options(sandbox PRIVATE /WX)
-target_link_libraries(sandbox PRIVATE genesis imgui -WHOLEARCHIVE:$<TARGET_FILE:genesis>)
-target_include_directories(sandbox PRIVATE .)
+target_compile_options(editor PRIVATE /WX)
+target_link_libraries(editor PRIVATE genesis imgui -WHOLEARCHIVE:$<TARGET_FILE:genesis>)
+target_include_directories(editor PRIVATE .)
 
 #include imgui
 set(IMGUI_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/third_party/imgui)

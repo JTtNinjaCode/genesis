@@ -12,7 +12,7 @@
 
 #include "core/renderer/font.h"
 #include "core/renderer/shader_library.h"
-#include "imgui_gizmos.h"
+#include "imgui_layer/imgui_gizmos.h"
 #include "imgui_layer/file_dialog.h"
 #include "imgui_layer/inspector.h"
 
