@@ -17,6 +17,7 @@ class OpenGLVertexArray : public VertexArray {
   void Unbind() const override;
   unsigned int GetIndexCount() const override;
   unsigned int GetVertexCount() const override;
+  const void* GetId() const override;
 
   void SetVertexBuffer(const std::shared_ptr<VertexBuffer> vertex_buffer) override;
   void SetIndexBuffer(const std::shared_ptr<IndexBuffer> index_buffer) override;

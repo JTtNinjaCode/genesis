@@ -14,7 +14,8 @@ class Mesh {
   Mesh(std::shared_ptr<VertexArray>& vao, std::vector<std::shared_ptr<Texture2D>>&& textures)
       : vao_(std::move(vao)), textures_(std::move(textures)) {}
 
-  const VertexArray& GetVAO() const;
+  const VertexArray& GetConstVAO() const;
+  VertexArray& GetVAO() const;
   const std::vector<std::shared_ptr<Texture2D>>& GetTextures() const;
 
  private:

@@ -28,7 +28,7 @@ void Playground::OnRender() {
   test.SetUniform("u_origin_texture", 0);
   test.SetUniform("u_resolution", glm::vec2(1000, 1000));
   test.SetUniform("u_time", ms.count() / 1000.0f);
-  renderer_3d.Submit(test, *va, glm::mat4{1.0f}, nullptr, nullptr);
+  renderer_3d.Submit(test, *va, glm::mat4{1.0f}, nullptr);
 }
 
 void Playground::OnImguiRender() {}

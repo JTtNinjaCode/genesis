@@ -59,4 +59,25 @@ void OpenGLUniformBuffer::SubData(void* vertices, size_t size, size_t begin) {
   glNamedBufferSubData(id_, begin, size, vertices);
 }
 
+OpenGLShaderStorageBuffer::OpenGLShaderStorageBuffer(void* vertices, size_t size) {
+  glCreateBuffers(1, &id_);
+  glNamedBufferData(id_, size, vertices, GL_STATIC_DRAW);
+}
+
+OpenGLShaderStorageBuffer::~OpenGLShaderStorageBuffer() { glDeleteBuffers(1, &id_); }
+
+void OpenGLShaderStorageBuffer::BindSlot(const unsigned int slot) const {
+  glBindBufferBase(GL_SHADER_STORAGE_BUFFER, slot, id_);
+}
+
+void OpenGLShaderStorageBuffer::Bind() const { glBindBuffer(GL_SHADER_STORAGE_BUFFER, id_); }
+
+void OpenGLShaderStorageBuffer::Unbind() const { glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); }
+
+const void* OpenGLShaderStorageBuffer::GetId() const { return reinterpret_cast<const void*>(&id_); }
+
+void OpenGLShaderStorageBuffer::SubData(void* vertices, size_t size, size_t begin) {
+  glBufferSubData(GL_SHADER_STORAGE_BUFFER, begin, size, vertices);
+}
+
 }  // namespace genesis

@@ -46,4 +46,18 @@ class OpenGLUniformBuffer : public UniformBuffer {
   unsigned int id_ = 0;
   unsigned int count_ = 0;
 };
+
+class OpenGLShaderStorageBuffer : public ShaderStorageBuffer {
+ public:
+  OpenGLShaderStorageBuffer(void *vertices, size_t size);
+  ~OpenGLShaderStorageBuffer();
+  void BindSlot(const unsigned int slot = 0) const override;
+  void Bind() const override;
+  void Unbind() const override;
+  const void *GetId() const override;
+  void SubData(void *vertices, size_t size, size_t begin = 0) override;
+
+ private:
+  unsigned int id_ = 0;
+};
 }  // namespace genesis

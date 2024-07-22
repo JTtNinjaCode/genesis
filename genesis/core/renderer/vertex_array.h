@@ -15,6 +15,7 @@ class VertexArray {
   virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer> index_buffer) = 0;
   virtual VertexBuffer& GetVertexBuffer() const = 0;
   virtual IndexBuffer& GetIndexBuffer() const = 0;
+  virtual const void* GetId() const = 0;
   virtual unsigned int GetIndexCount() const = 0;
   virtual unsigned int GetVertexCount() const = 0;
 

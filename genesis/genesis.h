@@ -19,7 +19,6 @@
 #include "core/renderer/frame_buffer.h"
 #include "core/renderer/model.h"
 #include "core/renderer/render_command.h"
-#include "core/renderer/renderer_2d.h"
 #include "core/renderer/renderer_3d.h"
 #include "core/renderer/render_buffer.h"
 #include "core/renderer/shader.h"

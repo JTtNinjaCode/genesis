@@ -2,11 +2,10 @@
 
 #include <glad/glad.h>
 
+#include <filesystem>
 #include <fstream>
-#include <iostream>
 
 #include "core/log/log.h"
-#include "core/renderer/shader_header_path.h"
 namespace genesis {
 std::unordered_map<std::string, std::shared_ptr<Shader>> ShaderLibrary::shaders_;
 

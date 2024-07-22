@@ -70,6 +70,7 @@ void Font::LoadFont(const std::filesystem::path& file_path, const std::string& f
   FT_Pos advance = slot->advance.x;
   texture2d_ = Texture2D::Create(bitmap.buffer, TextureFormat::kR, bitmap.width, bitmap.rows, TextureType::kDiffuse);
   faces_[font_name] = face;
+  CORE_LOG_TRACE("Load Font:{}", file_path.string().c_str());
 }
 
 }  // namespace genesis

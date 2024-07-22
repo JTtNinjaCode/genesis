@@ -4,6 +4,7 @@
 #include "imgui_layer/global_layer_controller.h"
 #include "imgui_layer/grid_controller.h"
 #include "imgui_layer/inspector.h"
+#include "sandbox/playground.h"
 #include "sandbox/sandbox_3d.h"
 
 using namespace genesis;

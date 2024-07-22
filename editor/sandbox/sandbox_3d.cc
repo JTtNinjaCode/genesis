@@ -8,12 +8,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/transform.hpp>
 #include <limits>
 
 #include "core/renderer/font.h"
 #include "core/renderer/shader_library.h"
-#include "imgui_layer/imgui_gizmos.h"
 #include "imgui_layer/file_dialog.h"
+#include "imgui_layer/imgui_gizmos.h"
 #include "imgui_layer/inspector.h"
 
 bool useWindow = false;
@@ -149,13 +150,18 @@ Sandbox3D::Sandbox3D() : ImGuiLayer("Sandbox3D") {
   camera_3d_->SetClearColor({1.0f, 1.0f, 1.0f, 1.0f});
 
   scene_.AddGameObject("robot");
+  scene_.AddGameObject("building");
   scene_.AddGameObject("light");
 
   auto& model_ = scene_.GetGameObject("robot");
-  auto& light_ = scene_.GetGameObject("light");
   auto* mesh_filter = dynamic_cast<MeshFilter*>(model_.AddComponent("Mesh Filter"));
   mesh_filter->SetModel("./assets/models/Nanosuit/nanosuit.obj");
 
+  auto& model2_ = scene_.GetGameObject("building");
+  auto* mesh_filter2 = dynamic_cast<MeshFilter*>(model2_.AddComponent("Mesh Filter"));
+  mesh_filter2->SetModel("./assets/models/House2/building_04.obj");
+
+  auto& light_ = scene_.GetGameObject("light");
   auto* light = dynamic_cast<Light*>(light_.AddComponent("Light"));
   light->SetPosition({0.0f, 30.0f, 30.0f});
   light->SetColor({1.0f, 1.0f, 1.0f});
@@ -207,17 +213,20 @@ void Sandbox3D::OnRender() {
   auto& camera = camera_3d_->GetCamera();
   renderer_3d.BeginScene(camera);  // draw sky in here
 
-  auto& model_ = scene_.GetGameObject("robot");
+  auto& model_ = scene_.GetGameObject("building");
   auto& light_ = scene_.GetGameObject("light");
 
   auto* light = dynamic_cast<Light*>(light_.GetComponent("Light"));
   light->SetPosition({20.0f, 0.0f, 20.0f});
 
   auto transform = dynamic_cast<Transform*>(model_.GetComponent("Transform"));
-  if (!transform) {
-    return;
-  }
-  glm::mat4 model = transform->GetModel();
+
+  // glm::mat4 model = transform->GetModel();
+
+  static glm::mat4 models[3] = {glm::translate(glm::mat4(1.0f), glm::vec3(0.0f)),
+                                glm::translate(glm::mat4(1.0f), glm::vec3(5.0f, 0.0f, 2.0f)),
+                                glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0.0f, 2.0f))};
+  static std::shared_ptr<VertexBuffer> vbo = VertexBuffer::Create(models, sizeof(models));
 
   auto component_model = dynamic_cast<const MeshFilter*>(model_.GetComponent("Mesh Filter"));
   auto component_light = dynamic_cast<const Light*>(light_.GetComponent("Light"));
@@ -225,8 +234,9 @@ void Sandbox3D::OnRender() {
   auto& render_command = RenderCommand::GetInstance();
   frame_buffer_->Bind();
   render_command.SetDepthTest(true);
-  renderer_3d.Submit(ShaderLibrary::GetShader("model_shader"), component_model->GetModel(), model, component_light,
-                     &camera);
+
+  // draw 1000 instance
+  renderer_3d.Submit(ShaderLibrary::GetShader("model_shader"), component_model->GetModel(), *vbo, 3, component_light);
 
   // render_command.SetStencilTest(true);
   // render_command.SetStencilMask(true);
@@ -244,7 +254,7 @@ void Sandbox3D::OnRender() {
   grid.GetShader().Bind();
   grid.GetShader().SetUniform("u_grid_opacity", grid.GetOpacity());
   grid.GetShader().SetUniform("u_grid_plane_mode", (int)grid.GetGridMode());
-  renderer_3d.Submit(grid.GetShader(), grid.GetVertexArray(), {1.0f}, nullptr, &camera);
+  renderer_3d.Submit(grid.GetShader(), grid.GetVertexArray(), {1.0f}, nullptr);
 
   // post processing
   RenderCommand::GetInstance().BindDefaultFrameBuffer();
@@ -258,7 +268,7 @@ void Sandbox3D::OnRender() {
   auto& post_processing_shader = ShaderLibrary::GetShader("post_processing_shader");
   post_processing_shader.Bind();
   post_processing_shader.SetUniform("u_origin_texture", 0);
-  renderer_3d.Submit(post_processing_shader, *va, glm::mat4{1.0f}, nullptr, nullptr);
+  renderer_3d.Submit(post_processing_shader, *va, glm::mat4{1.0f}, nullptr);
 
   renderer_3d.EndScene();
 }

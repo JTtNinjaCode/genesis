@@ -36,4 +36,15 @@ class UniformBuffer {
   virtual void SubData(void *vertices, size_t size, size_t begin = 0) = 0;
 };
 
+class ShaderStorageBuffer {
+ public:
+  static std::shared_ptr<ShaderStorageBuffer> Create(void *vertices, size_t size);
+  virtual ~ShaderStorageBuffer() {}
+  virtual void BindSlot(const unsigned int slot) const = 0;
+  virtual void Bind() const = 0;
+  virtual void Unbind() const = 0;
+  virtual const void *GetId() const = 0;
+  virtual void SubData(void *vertices, size_t size, size_t begin = 0) = 0;
+};
+
 }  // namespace genesis

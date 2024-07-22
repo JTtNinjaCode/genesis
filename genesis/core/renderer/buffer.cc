@@ -35,4 +35,14 @@ std::shared_ptr<UniformBuffer> UniformBuffer::Create(void* vertices, size_t size
   }
   return nullptr;
 }
+std::shared_ptr<ShaderStorageBuffer> ShaderStorageBuffer::Create(void* vertices, size_t size) {
+  switch (RendererAPI::GetAPI()) {
+    case RendererAPI::API::OpenGL:
+      return std::make_shared<OpenGLShaderStorageBuffer>(vertices, size);
+      break;
+    default:
+      CORE_ASSERT(false, "Not Valid RenderAPI.");
+  }
+  return nullptr;
+}
 }  // namespace genesis
