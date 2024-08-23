@@ -7,6 +7,8 @@
 #include "core/renderer/shader_library.h"
 
 namespace genesis {
+const Camera3DInterface* Renderer3D::camera_ = nullptr;
+
 void Renderer3D::Init() {
   CORE_LOG_TRACE("Start to init Renderer3D's Context.");
   ShaderLibrary::Init();
@@ -14,13 +16,12 @@ void Renderer3D::Init() {
 
   // include shader lib.
   CORE_LOG_TRACE("Finish to init Renderer3D's Context.");
-}
 
-void Renderer3D::Uninit() {}
-Renderer3D::Renderer3D() {
   RenderCommand::GetInstance().SetBlendTest(true);
   RenderCommand::GetInstance().SetDepthTest(true);
 }
+
+void Renderer3D::Uninit() {}
 
 void Renderer3D::BeginScene(const Camera3DInterface& camera) {
   camera_ = &camera;
@@ -48,6 +49,7 @@ void Renderer3D::EndScene() {}
 void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const glm::mat4& model_matrix,
                         const Light* light) {
   shader.Bind();
+  shader.SetUniform("u_instance_mode", false);
   shader.SetUniform("u_model", model_matrix);
 
   if (camera_ != nullptr) {
@@ -71,6 +73,7 @@ void Renderer3D::Submit(Shader& shader, const VertexArray& vertex_array, const V
 
 void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& model_matrix, const Light* light) {
   shader.Bind();
+  shader.SetUniform("u_instance_mode", false);
   shader.SetUniform("u_model", model_matrix);
 
   if (camera_ != nullptr) {
@@ -87,6 +90,7 @@ void Renderer3D::Submit(Shader& shader, const Model& model, const glm::mat4& mod
 void Renderer3D::Submit(Shader& shader, const Model& model, const VertexBuffer& model_matrices,
                         const int instance_count, const Light* light) {
   shader.Bind();
+  shader.SetUniform("u_instance_mode", true);
 
   if (camera_ != nullptr) {
     SetCameraUniform(shader, *camera_);
@@ -117,22 +121,24 @@ void Renderer3D::Submit(Shader& shader, const Model& model, const VertexBuffer& 
       }
     }
     model_matrices.Bind();
+
     auto& vao = mesh.GetVAO();
+    vao.Bind();
     // quick and dirty
     auto vao_id = *(GLuint*)vao.GetId();
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(4 * sizeof(float)));
     glEnableVertexAttribArray(5);
-    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(8 * sizeof(float)));
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(6);
-    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(12 * sizeof(float)));
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(4 * sizeof(float)));
+    glEnableVertexAttribArray(7);
+    glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(8 * sizeof(float)));
+    glEnableVertexAttribArray(8);
+    glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void*)(12 * sizeof(float)));
 
-    glVertexAttribDivisor(3, 1);
-    glVertexAttribDivisor(4, 1);
     glVertexAttribDivisor(5, 1);
     glVertexAttribDivisor(6, 1);
+    glVertexAttribDivisor(7, 1);
+    glVertexAttribDivisor(8, 1);
     RenderCommand::GetInstance().DrawIndexInstanced(mesh.GetVAO(), instance_count);
   }
 }

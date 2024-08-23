@@ -57,7 +57,7 @@ void Skybox::Init() {
   // clang-format on
 
   vbo_ = VertexBuffer::Create(vertices_data, sizeof(vertices_data));
-  BufferLayout layout({MathDataType::kFloat3});
+  BufferLayout layout({{MathDataType::kFloat3, 0}});
   vao_ = VertexArray::Create(layout);
   vao_->SetVertexBuffer(vbo_);
   CORE_LOG_TRACE("Finish to init Skybox's Context");

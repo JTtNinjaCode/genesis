@@ -6,19 +6,20 @@
 
 namespace genesis {
 struct BufferLayoutAttribute {
-  BufferLayoutAttribute(MathDataType math_data_type)
+  BufferLayoutAttribute(MathDataType math_data_type, unsigned int attrib_index)
       : type(math_data_type),
         size(Math::GetMathDataTypeSize(type)),
-        count(Math::GetMathDataTypeComponentCount(type)) {}
+        count(Math::GetMathDataTypeComponentCount(type)),
+        attrib_index(attrib_index) {}
   MathDataType type;
   size_t size;
   unsigned int count;
+  unsigned int attrib_index;
 };
 
 class BufferLayout {
  public:
-  BufferLayout(const std::initializer_list<BufferLayoutAttribute>& init_list)
-      : layout_(init_list) {
+  BufferLayout(const std::initializer_list<BufferLayoutAttribute>& init_list) : layout_(init_list) {
     // calculate total stride
     for (const auto& element : layout_) {
       total_stride_ += element.size;
@@ -26,9 +27,7 @@ class BufferLayout {
   }
   std::vector<BufferLayoutAttribute>::const_iterator begin() const;
   std::vector<BufferLayoutAttribute>::const_iterator end() const;
-  const std::vector<BufferLayoutAttribute>& GetLayout() const {
-    return layout_;
-  }
+  const std::vector<BufferLayoutAttribute>& GetLayout() const { return layout_; }
   size_t GetTotalStride() const { return total_stride_; }
 
  private:

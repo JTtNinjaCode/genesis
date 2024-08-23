@@ -7,6 +7,7 @@ namespace genesis {
 std::shared_ptr<Texture2D> Texture2D::Create(const std::filesystem::path& path, TextureType texture_type) {
   switch (RendererAPI::GetAPI()) {
     case RendererAPI::API::OpenGL:
+      CORE_LOG_TRACE("Open texture:{}", path.string().c_str());
       return std::make_shared<OpenGLTexture2D>(path);
   }
   CORE_ASSERT(false, "valid render api.");

@@ -30,7 +30,7 @@ Grid::Grid() : shader_(Shader::Create("./assets/shaders/inf.vert", "./assets/sha
   static unsigned int vertices_index[6] = {0, 1, 2, 2, 3, 0};
   static auto vbo = VertexBuffer::Create(vertices_data, sizeof(vertices_data));
   static auto ebo = IndexBuffer::Create(vertices_index, sizeof(vertices_index));
-  vertex_array_ = VertexArray::Create({MathDataType::kFloat2});
+  vertex_array_ = VertexArray::Create({{MathDataType::kFloat2, 0}});
   vertex_array_->SetVertexBuffer(vbo);
   vertex_array_->SetIndexBuffer(ebo);
 }
