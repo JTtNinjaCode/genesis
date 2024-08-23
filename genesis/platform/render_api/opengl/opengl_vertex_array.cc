@@ -26,14 +26,13 @@ OpenGLVertexArray::OpenGLVertexArray(const BufferLayout& buffer_layout)
     : total_stride_(buffer_layout.GetTotalStride()) {
   CORE_ASSERT(!buffer_layout.GetLayout().empty(), "Buffer layout is empty.");
   glCreateVertexArrays(1, &id_);
-  int index = 0;
   size_t offset = 0;
   for (const auto& element : buffer_layout) {
-    glEnableVertexArrayAttrib(id_, index);
-    glVertexArrayAttribBinding(id_, index, 0);
-    glVertexArrayAttribFormat(id_, index, element.count, MathDataTypeToOpenGLBaseType(element.type), GL_FALSE, offset);
+    glEnableVertexArrayAttrib(id_, element.attrib_index);
+    glVertexArrayAttribBinding(id_, element.attrib_index, 0);
+    glVertexArrayAttribFormat(id_, element.attrib_index, element.count, MathDataTypeToOpenGLBaseType(element.type),
+                              GL_FALSE, offset);
     offset += element.size;
-    index++;
   }
 }
 

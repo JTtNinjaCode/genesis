@@ -64,8 +64,7 @@ int OpenGLTexture2D::GetHeight() const { return height_; }
 
 void OpenGLTexture2D::Bind(unsigned int slot) const { glBindTextureUnit(slot, id_); }
 
-void OpenGLTexture2D::UnBind() const { /*glBindTexture(GL_TEXTURE_2D, 0);*/
-}
+void OpenGLTexture2D::UnBind() const { glBindTexture(GL_TEXTURE_2D, 0); }
 
 const void* OpenGLTexture2D::GetID() const { return reinterpret_cast<const void*>(&id_); }
 
